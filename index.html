@@ -264,6 +264,11 @@
   .mk-wrap{background:none!important;border:0!important}
   .mk{display:block;width:13px;height:13px;border-radius:3px;background:var(--mkc);transform:rotate(45deg);box-shadow:0 0 0 1.5px #faf6ec,0 1px 4px rgba(38,34,25,.45);transition:transform .15s ease}
   .mk:hover{transform:rotate(45deg) scale(1.2)}
+  /* per-day itinerary maps */
+  .day-map{height:200px;width:100%;border:1px solid var(--line-2);border-radius:4px;margin:1rem 0 .3rem;z-index:1;background:var(--surface-2)}
+  .day-map .leaflet-tile-pane{filter:sepia(.22) saturate(.78) brightness(1.03) contrast(.95)}
+  .map-cap{font-family:var(--mono);font-size:.68rem;letter-spacing:.03em;color:var(--ink-3);margin:0}
+  .mk-num{display:flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-family:var(--mono);font-size:.74rem;font-weight:600;color:#faf6ec;background:var(--mkc);box-shadow:0 0 0 1.5px #faf6ec,0 1px 4px rgba(38,34,25,.4)}
   /* hero ceremony + accessibility */
   @keyframes hanIn{from{opacity:0;filter:blur(7px)}to{opacity:1;filter:blur(0)}}
   .han-city{animation:hanIn .8s ease both}
@@ -418,6 +423,8 @@
             <li>First dinner: <strong>Siji Minfu (四季民福)</strong> near Wangfujing — roast duck done properly, no frills, beloved on Xiaohongshu. Queue or book on Dianping.</li>
             <li>Download and set up Dianping, Amap, and confirm Alipay is working</li>
           </ul>
+          <div class="day-map" id="dmap-bj-3"></div>
+          <p class="map-cap">Tap a marker for directions</p>
         </div>
       </div>
     </div>
@@ -434,6 +441,8 @@
             <li>Afternoon: <strong>Beijing APM</strong> or nearby Shin Kong Place if you want more retail</li>
             <li>Evening: ramen or hand-pulled noodles in the area — ask Dianping for what's rated nearby</li>
           </ul>
+          <div class="day-map" id="dmap-bj-4"></div>
+          <p class="map-cap">Tap a marker for directions</p>
         </div>
       </div>
     </div>
@@ -451,6 +460,8 @@
             <li>Afternoon: <strong>Jingshan Park (景山公园)</strong> — the hill directly behind the Forbidden City gives the iconic aerial view. ¥2 entry.</li>
             <li>Evening: hutong dinner — <strong>Gulou area</strong>, walk Nanluoguxiang and pick a spot on Dianping</li>
           </ul>
+          <div class="day-map" id="dmap-bj-5"></div>
+          <p class="map-cap">Tap a marker for directions</p>
         </div>
       </div>
     </div>
@@ -468,6 +479,8 @@
             <li>Dinner: <strong>Xin Rong Ji (新荣记)</strong>, Xinyuan South Road flagship — Beijing's only Michelin three-star, premium Taizhou seafood, in the Sanlitun / Workers' Stadium area. Reserve well ahead.</li>
             <li>Evening: <strong>Workers' Stadium night market (工体夜市)</strong> — summer street food around the redeveloped 工体, with Sanlitun's bars nearby.</li>
           </ul>
+          <div class="day-map" id="dmap-bj-6"></div>
+          <p class="map-cap">Tap a marker for directions</p>
         </div>
       </div>
     </div>
@@ -486,6 +499,8 @@
             <li>Dinner: near the hotel — keep it easy after a long day.</li>
             <li>Evening: sleep — rest up.</li>
           </ul>
+          <div class="day-map" id="dmap-bj-7"></div>
+          <p class="map-cap">Tap a marker for directions</p>
         </div>
       </div>
     </div>
@@ -504,6 +519,8 @@
             <li>Dinner: walk around the area and see what catches your eye.</li>
             <li>Evening: back to the hotel and chill — pack for tomorrow's train.</li>
           </ul>
+          <div class="day-map" id="dmap-bj-8"></div>
+          <p class="map-cap">Tap a marker for directions</p>
         </div>
       </div>
     </div>
@@ -532,6 +549,8 @@
         <div class="day-sub">Check in · neighbourhood explore</div>
         <div class="day-body">
           <p>Arrive Hongqiao 18:32. Metro Line 2 or 10 to your hotel (or Didi). Check in, freshen up. Dinner near the hotel — keep it simple tonight. <strong>Jia Jia Tang Bao (佳家汤包)</strong> for soup dumplings if there's one nearby, or a local ramen spot on Dianping.</p>
+          <div class="day-map" id="dmap-sh-9"></div>
+          <p class="map-cap">Tap a marker for directions</p>
         </div>
       </div>
     </div>
@@ -548,6 +567,8 @@
             <li><strong>Xintiandi (新天地)</strong> — renovated Shikumen houses, upscale dining and shopping. Great for afternoon coffee and people-watching.</li>
             <li>Evening: French Concession dinner. <strong>Jesse Restaurant (吉士酒家)</strong> for classic Shanghainese — red-braised pork, drunken chicken. Book ahead on Dianping.</li>
           </ul>
+          <div class="day-map" id="dmap-sh-10"></div>
+          <p class="map-cap">Tap a marker for directions</p>
           <p class="goto-line"><a href="#" data-goto="shopping">→ Full Shanghai shopping guide &amp; map</a></p>
         </div>
       </div>
@@ -566,6 +587,8 @@
             <li>Afternoon: <strong>Yu Garden &amp; Old Town (豫园)</strong> — classical Ming garden, surrounding bazaar. Touristy but the garden itself is genuinely beautiful.</li>
             <li>Evening: Bund rooftop bar for skyline views — <strong>Bar Rouge</strong> or <strong>New Heights</strong> at Three on the Bund.</li>
           </ul>
+          <div class="day-map" id="dmap-sh-11"></div>
+          <p class="map-cap">Tap a marker for directions</p>
         </div>
       </div>
     </div>
@@ -584,6 +607,8 @@
             <li><strong>Pingjiang Road (平江路)</strong> — the canal-lined old street; afternoon wander before the return train.</li>
             <li>Back in Shanghai by 19:00. Light dinner.</li>
           </ul>
+          <div class="day-map" id="dmap-sh-12"></div>
+          <p class="map-cap">Tap a marker for directions · Suzhou day trip</p>
         </div>
       </div>
     </div>
@@ -602,6 +627,8 @@
             <li>Afternoon: walk the West Bund waterfront. Much quieter than the Bund, great views.</li>
             <li>Evening: dinner in the Jing'an area — <strong>Jing'an Kerry Centre</strong> area has good options across price points.</li>
           </ul>
+          <div class="day-map" id="dmap-sh-13"></div>
+          <p class="map-cap">Tap a marker for directions</p>
         </div>
       </div>
     </div>
@@ -618,6 +645,8 @@
             <li>Walk along the Pudong waterfront for the reverse Bund view — best at dusk.</li>
             <li>Evening: dinner in Pudong or back in Puxi (Bund side). <strong>Ultraviolet by Paul Pairet</strong> if you booked months ago; otherwise <strong>Hakkasan</strong> or any of the Bund-adjacent restaurants.</li>
           </ul>
+          <div class="day-map" id="dmap-sh-14"></div>
+          <p class="map-cap">Tap a marker for directions</p>
         </div>
       </div>
     </div>
@@ -633,6 +662,8 @@
             <li><strong>Option B – Rest day</strong>: revisit your favourite neighbourhood, pick up any last gifts, spa afternoon.</li>
             <li>Final dinner: make it a good one. <strong>Ultraviolet</strong> (if booked), or a Shanghainese feast — try <strong>Fuli (福里)</strong> or <strong>The Lost Heaven</strong> for Yunnan cuisine as a different note to end on.</li>
           </ul>
+          <div class="day-map" id="dmap-sh-15"></div>
+          <p class="map-cap">Tap a marker for directions · Zhujiajiao (Option A)</p>
           <p class="goto-line"><a href="#" data-goto="shopping">→ Last-minute gifts? See the Shopping guide</a></p>
         </div>
       </div>
@@ -1168,6 +1199,110 @@
   }
   const shopTabBtn = document.querySelector('.tab[data-tab="shopping"]');
   if (shopTabBtn) shopTabBtn.addEventListener('click', () => setTimeout(initShopMap, 80));
+
+  // ---- Per-day itinerary maps (Beijing & Shanghai; travel days excluded) ----
+  const DAY_MAPS = {
+    'bj-3':{z:14,p:[
+      {n:"Siji Minfu 四季民福",lat:39.9163,lng:116.4118,q:"四季民福 王府井 北京"}
+    ]},
+    'bj-4':{p:[
+      {n:"Oriental Plaza 东方广场",lat:39.9089,lng:116.4109,q:"东方广场 王府井 北京"},
+      {n:"Wangfujing Snack Street 王府井小吃街",lat:39.9150,lng:116.4095,q:"王府井小吃街 北京"},
+      {n:"Beijing APM",lat:39.9156,lng:116.4107,q:"北京apm 王府井"}
+    ]},
+    'bj-5':{p:[
+      {n:"Tiananmen Square 天安门广场",lat:39.9055,lng:116.3976,q:"天安门广场 北京"},
+      {n:"Forbidden City 故宫",lat:39.9163,lng:116.3972,q:"故宫博物院 北京"},
+      {n:"Jingshan Park 景山公园",lat:39.9281,lng:116.3958,q:"景山公园 北京"},
+      {n:"Nanluoguxiang 南锣鼓巷",lat:39.9370,lng:116.4030,q:"南锣鼓巷 北京"}
+    ]},
+    'bj-6':{p:[
+      {n:"Fuding Coffee 福顶咖啡",lat:39.9447,lng:116.4120,q:"福顶咖啡 五道营胡同 北京"},
+      {n:"Confucius Temple & Imperial College 国子监",lat:39.9462,lng:116.4087,q:"国子监 孔庙 北京"},
+      {n:"Hanlin Shuyuan 翰林书院",lat:39.9460,lng:116.4090,q:"翰林书院 国子监 北京"},
+      {n:"Lama Temple 雍和宫",lat:39.9475,lng:116.4172,q:"雍和宫 北京"},
+      {n:"Xin Rong Ji 新荣记",lat:39.9530,lng:116.4555,q:"新荣记 新源南路 北京"},
+      {n:"Workers' Stadium 工体",lat:39.9290,lng:116.4470,q:"工人体育场 北京"}
+    ]},
+    'bj-7':{z:12,p:[
+      {n:"Mutianyu Great Wall 慕田峪长城",lat:40.4319,lng:116.5704,q:"慕田峪长城"}
+    ]},
+    'bj-8':{p:[
+      {n:"Shichahai 什刹海",lat:39.9400,lng:116.3830,q:"什刹海 北京"},
+      {n:"Tangfang Coffee 糖房咖啡",lat:39.9355,lng:116.3870,q:"糖房咖啡 什刹海 北京"},
+      {n:"Nanluoguxiang 南锣鼓巷",lat:39.9370,lng:116.4030,q:"南锣鼓巷 北京"},
+      {n:"Prince Gong's Mansion 恭王府",lat:39.9389,lng:116.3815,q:"恭王府 北京"}
+    ]},
+    'sh-9':{z:12,p:[
+      {n:"Shanghai Hongqiao Station 上海虹桥站",lat:31.1948,lng:121.3200,q:"上海虹桥站"},
+      {n:"Jia Jia Tang Bao 佳家汤包",lat:31.2335,lng:121.4720,q:"佳家汤包 黄河路 上海"}
+    ]},
+    'sh-10':{p:[
+      {n:"Wukang Road 武康路",lat:31.2103,lng:121.4262,q:"武康路 上海"},
+      {n:"Anfu Road 安福路",lat:31.2155,lng:121.4345,q:"安福路 上海"},
+      {n:"Changle Road 长乐路",lat:31.2160,lng:121.4500,q:"长乐路 上海"},
+      {n:"Xintiandi 新天地",lat:31.2206,lng:121.4755,q:"新天地 上海"},
+      {n:"Jesse Restaurant 吉士酒家",lat:31.2070,lng:121.4385,q:"吉士酒家 天平路 上海"}
+    ]},
+    'sh-11':{p:[
+      {n:"Nanjing Road 南京路步行街",lat:31.2353,lng:121.4757,q:"南京路步行街 上海"},
+      {n:"The Bund 外滩",lat:31.2397,lng:121.4900,q:"外滩 上海"},
+      {n:"Yang's Fry-Dumpling 小杨生煎",lat:31.2330,lng:121.4730,q:"小杨生煎 人民广场 上海"},
+      {n:"Yu Garden 豫园",lat:31.2270,lng:121.4920,q:"豫园 上海"}
+    ]},
+    'sh-12':{z:12,p:[
+      {n:"Humble Administrator's Garden 拙政园",lat:31.3260,lng:120.6290,q:"拙政园 苏州"},
+      {n:"Tiger Hill 虎丘",lat:31.3320,lng:120.5760,q:"虎丘 苏州"},
+      {n:"Pingjiang Road 平江路",lat:31.3210,lng:120.6280,q:"平江路 苏州"}
+    ]},
+    'sh-13':{p:[
+      {n:"West Bund 西岸",lat:31.1830,lng:121.4600,q:"西岸 龙腾大道 上海"},
+      {n:"Long Museum West Bund 龙美术馆",lat:31.1735,lng:121.4660,q:"龙美术馆 西岸 上海"},
+      {n:"Yuz Museum 余德耀美术馆",lat:31.1700,lng:121.4530,q:"余德耀美术馆 上海"},
+      {n:"Tank Shanghai 油罐艺术中心",lat:31.1640,lng:121.4560,q:"油罐艺术中心 上海"},
+      {n:"Jing'an Kerry Centre 静安嘉里中心",lat:31.2230,lng:121.4450,q:"静安嘉里中心 上海"}
+    ]},
+    'sh-14':{p:[
+      {n:"Shanghai Museum East 上海博物馆东馆",lat:31.2030,lng:121.5470,q:"上海博物馆东馆"},
+      {n:"Shanghai Tower 上海中心",lat:31.2335,lng:121.5055,q:"上海中心大厦"},
+      {n:"Lujiazui Riverside 陆家嘴滨江",lat:31.2400,lng:121.4990,q:"陆家嘴滨江 上海"}
+    ]},
+    'sh-15':{z:12,p:[
+      {n:"Zhujiajiao Water Town 朱家角",lat:31.1110,lng:121.0510,q:"朱家角古镇 上海"}
+    ]}
+  };
+
+  const dayMapState = {};
+  function initDayMaps(city){
+    if (typeof L === 'undefined') return;
+    const accent = city === 'bj' ? '#9c3327' : '#5d8470';
+    Object.keys(DAY_MAPS).forEach(id => {
+      if (id.indexOf(city + '-') !== 0) return;
+      const el = document.getElementById('dmap-' + id);
+      if (!el) return;
+      if (dayMapState[id]){ setTimeout(() => dayMapState[id].invalidateSize(), 60); return; }
+      const cfg = DAY_MAPS[id];
+      const map = L.map(el,{scrollWheelZoom:false,attributionControl:false}).setView([cfg.p[0].lat,cfg.p[0].lng], cfg.z || 13);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19}).addTo(map);
+      const bounds = [];
+      cfg.p.forEach((pt,i) => {
+        const maps = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(pt.q);
+        const html = '<strong>' + (i+1) + '. ' + pt.n + '</strong>' +
+          '<br><a href="' + maps + '" target="_blank" rel="noopener" style="font-size:.85em"><span class="ix ix-pin"></span>Directions</a>';
+        const icon = L.divIcon({className:'mk-wrap',html:'<span class="mk-num" style="--mkc:'+accent+'">'+(i+1)+'</span>',iconSize:[22,22],iconAnchor:[11,11],popupAnchor:[0,-11]});
+        L.marker([pt.lat,pt.lng],{icon:icon}).bindPopup(html).addTo(map);
+        bounds.push([pt.lat,pt.lng]);
+      });
+      if (bounds.length > 1) map.fitBounds(bounds,{padding:[28,28],maxZoom:15});
+      map.on('click', () => { if (!map.scrollWheelZoom.enabled()) map.scrollWheelZoom.enable(); });
+      dayMapState[id] = map;
+      setTimeout(() => map.invalidateSize(), 60);
+    });
+  }
+  const bjTabBtn = document.querySelector('.tab[data-tab="beijing"]');
+  if (bjTabBtn) bjTabBtn.addEventListener('click', () => setTimeout(() => initDayMaps('bj'), 80));
+  const shTabBtn = document.querySelector('.tab[data-tab="shanghai"]');
+  if (shTabBtn) shTabBtn.addEventListener('click', () => setTimeout(() => initDayMaps('sh'), 80));
 </script>
 </body>
 </html>
