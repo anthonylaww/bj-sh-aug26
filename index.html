@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#F4F2EC">
+<title>Beijing &amp; Shanghai · 3–16 August 2026</title>
+<style>
+  :root{
+    --paper:#F4F2EC;--surface:#FBFAF6;--surface-2:#F0EDE4;
+    --ink:#211C16;--ink-2:#6B6459;--ink-3:#9A9286;
+    --line:#E3DED2;--line-2:#D6D0C2;
+    --bj:#BC3B2A;--bj-deep:#9A2A1C;--bj-soft:#F6E7E2;
+    --sh:#15706B;--sh-deep:#0D544F;--sh-soft:#E0EEEC;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,system-ui,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --maxw:940px;--pad:clamp(1.1rem,4vw,2.2rem);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,h4{margin:0;font-weight:600}
+  p{margin:0}a{color:inherit}
+  /* TOPBAR */
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(244,242,236,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .topbar-in{max-width:var(--maxw);margin:0 auto;padding:.6rem var(--pad);display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:.5rem;font-weight:700;font-size:.95rem;white-space:nowrap}
+  .brand span{font-weight:400;color:var(--ink-2)}
+  .seals{display:flex;gap:3px}
+  .seals i{display:block;width:10px;height:10px;border-radius:50%;background:var(--bj)}
+  .seals i:last-child{background:var(--sh)}
+  .tabs{display:flex;gap:.2rem;flex-wrap:wrap}
+  .tab{background:none;border:none;cursor:pointer;padding:.35rem .75rem;border-radius:6px;font-size:.85rem;font-family:var(--sans);color:var(--ink-2);transition:background .15s,color .15s}
+  .tab:hover{background:var(--surface-2);color:var(--ink)}
+  .tab.active{background:var(--ink);color:var(--paper)}
+  /* PANELS */
+  .panel{display:none;max-width:var(--maxw);margin:0 auto;padding:2rem var(--pad) 4rem}
+  .panel.is-active{display:block}
+  /* HERO */
+  .hero{text-align:center;padding:3rem 1rem 2.5rem;border-bottom:1px solid var(--line);margin-bottom:2.5rem}
+  .eyebrow{display:block;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:.75rem}
+  .hero h1{font-family:var(--serif);font-size:clamp(2.2rem,6vw,3.8rem);font-weight:400;line-height:1.1;margin-bottom:1rem}
+  .hero h1 .amp{color:var(--ink-3)}
+  .lede{font-size:1.05rem;color:var(--ink-2);max-width:540px;margin:0 auto 2rem}
+  /* ROUTE */
+  .route{display:flex;align-items:stretch;gap:0;justify-content:center;margin:0 auto 1.5rem;max-width:580px}
+  .stop{display:flex;flex-direction:column;align-items:center;gap:.3rem}
+  .city{font-family:var(--serif);font-size:1.6rem;font-weight:400}
+  .city.bj{color:var(--bj)}
+  .city.sh{color:var(--sh)}
+  .dates{font-size:.75rem;color:var(--ink-3);font-family:var(--mono)}
+  .leg{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 1rem;gap:.2rem}
+  .ln{width:80px;height:2px;background:var(--line-2);position:relative}
+  .ln::after{content:"→";position:absolute;right:-8px;top:-10px;color:var(--ink-3);font-size:.85rem}
+  .train-lbl{font-size:.7rem;color:var(--ink-3);font-family:var(--mono);white-space:nowrap}
+  /* QUICK STATS */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.75rem;margin-top:1.5rem}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.9rem 1rem;text-align:center}
+  .stat .n{font-family:var(--serif);font-size:1.8rem;font-weight:400;line-height:1}
+  .stat .n.bj{color:var(--bj)}.stat .n.sh{color:var(--sh)}
+  .stat .l{font-size:.75rem;color:var(--ink-3);margin-top:.25rem}
+  /* SECTION HEADINGS */
+  .sec-head{display:flex;align-items:baseline;gap:.75rem;margin:2.5rem 0 1.25rem}
+  .sec-head h2{font-family:var(--serif);font-size:1.4rem;font-weight:400}
+  .sec-head .pill{font-size:.7rem;padding:.2rem .6rem;border-radius:20px;font-family:var(--mono);letter-spacing:.04em}
+  .pill.bj{background:var(--bj-soft);color:var(--bj-deep)}
+  .pill.sh{background:var(--sh-soft);color:var(--sh-deep)}
+  .pill.neu{background:var(--surface-2);color:var(--ink-2)}
+  /* CARDS */
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:1.25rem 1.4rem;margin-bottom:.75rem}
+  .card h3{font-size:1rem;margin-bottom:.4rem}
+  .card p,.card li{font-size:.9rem;color:var(--ink-2)}
+  .card ul{margin:.4rem 0 0 1rem;padding:0}
+  .card li{margin-bottom:.2rem}
+  .badge{display:inline-block;font-size:.7rem;padding:.15rem .5rem;border-radius:4px;font-family:var(--mono);margin-bottom:.5rem}
+  .badge.warn{background:#FEF3CD;color:#7A5C00}
+  .badge.tip{background:var(--sh-soft);color:var(--sh-deep)}
+  .badge.note{background:var(--surface-2);color:var(--ink-2)}
+  /* DAY TIMELINE */
+  .timeline{position:relative;padding-left:3.5rem}
+  .timeline::before{content:'';position:absolute;left:1.15rem;top:.5rem;bottom:.5rem;width:2px;background:var(--line)}
+  .day-block{position:relative;margin-bottom:1.75rem}
+  .chop{position:absolute;left:-3.5rem;top:0;width:2.3rem;height:2.3rem;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
+  .chop.bj{background:var(--bj);color:#fff}
+  .chop.sh{background:var(--sh);color:#fff}
+  .chop.transit{background:var(--ink);color:#fff}
+  .chop .d{font-family:var(--serif);font-size:1.05rem;font-weight:400}
+  .chop .m{font-size:.55rem;letter-spacing:.05em;text-transform:uppercase;opacity:.8}
+  .day-inner{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:1.1rem 1.3rem}
+  .day-inner h3{font-size:1rem;margin-bottom:.15rem;display:flex;align-items:center;gap:.5rem}
+  .pace{font-size:.65rem;padding:.15rem .45rem;border-radius:3px;font-family:var(--mono);font-weight:400}
+  .pace.easy{background:var(--sh-soft);color:var(--sh-deep)}
+  .pace.active{background:var(--bj-soft);color:var(--bj-deep)}
+  .day-sub{font-size:.78rem;color:var(--ink-3);margin-bottom:.6rem}
+  .day-body{font-size:.88rem;color:var(--ink-2);line-height:1.65}
+  .day-body strong{color:var(--ink)}
+  .day-body ul{margin:.4rem 0 0 1rem;padding:0}
+  .day-body li{margin-bottom:.2rem}
+  /* SPOTS TABLE */
+  .spots-grid{display:grid;gap:.65rem}
+  .spot-card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:1rem 1.2rem;display:grid;grid-template-columns:1fr auto;gap:.25rem .75rem;align-items:start}
+  .spot-name{font-weight:600;font-size:.92rem}
+  .spot-cn{font-size:.8rem;color:var(--ink-3)}
+  .spot-desc{font-size:.83rem;color:var(--ink-2);grid-column:1/-1}
+  .spot-tag{font-size:.68rem;padding:.15rem .45rem;border-radius:4px;font-family:var(--mono);align-self:start;white-space:nowrap}
+  .spot-tag.food{background:#FEF3CD;color:#7A5C00}
+  .spot-tag.sight{background:var(--bj-soft);color:var(--bj-deep)}
+  .spot-tag.art{background:var(--sh-soft);color:var(--sh-deep)}
+  .spot-tag.shop{background:var(--surface-2);color:var(--ink-2)}
+  .skip{border-left:3px solid var(--bj);padding-left:.75rem;margin:.5rem 0;font-size:.85rem;color:var(--ink-2)}
+  /* CHECKLIST */
+  .checklist{list-style:none;padding:0;margin:0}
+  .checklist li{display:flex;align-items:flex-start;gap:.65rem;padding:.6rem 0;border-bottom:1px solid var(--line);font-size:.9rem}
+  .checklist li:last-child{border-bottom:none}
+  .checklist input[type=checkbox]{margin-top:.15rem;accent-color:var(--bj);width:1rem;height:1rem;flex-shrink:0}
+  .checklist .cl-label{color:var(--ink-2)}
+  .checklist .cl-label strong{color:var(--ink)}
+  /* ESSENTIALS GRID */
+  .ess-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.75rem}
+  /* TRANSIT STRIP */
+  .transit-strip{background:var(--ink);color:var(--paper);border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:1.75rem;font-size:.88rem}
+  .transit-strip h3{color:#fff;font-size:.95rem;margin-bottom:.35rem}
+  .transit-strip p{color:rgba(255,255,255,.75);line-height:1.6}
+  /* RESPONSIVE */
+  @media(max-width:600px){
+    .route{flex-direction:column;align-items:stretch;gap:.2rem}
+    .leg{flex-direction:row;width:100%;justify-content:flex-start;gap:.5rem;padding:.15rem .1rem}
+    .leg .ln{width:34px;height:1px}
+    .leg .ln::after{content:"↓";right:auto;left:13px;top:-.7em}
+    .stop{flex-direction:row;align-items:baseline;justify-content:space-between;padding:.45rem .1rem}
+    .stop .city{font-size:1.25rem}
+    .timeline{padding-left:3rem}
+    .chop{left:-3rem;width:2rem;height:2rem}
+    .chop .d{font-size:.95rem}
+    .chop .m{font-size:.5rem}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand">
+      <span class="seals" aria-hidden="true"><i></i><i></i></span>
+      <b>BJ→SH&nbsp;<span>· Aug 2026</span></b>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-tab="home">Home</button>
+      <button class="tab" data-tab="essentials">Essentials</button>
+      <button class="tab" data-tab="beijing">Beijing</button>
+      <button class="tab" data-tab="shanghai">Shanghai</button>
+      <button class="tab" data-tab="spots">Spots</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- HOME -->
+<section class="panel is-active" id="home">
+  <div class="hero">
+    <span class="eyebrow">3–16 August 2026 · a trip for two</span>
+    <h1>Beijing <span class="amp">&amp;</span> Shanghai</h1>
+    <p class="lede">A balanced-pace fortnight built around food, history, and art — picks pulled from what locals actually rate, not the tourist-trap defaults.</p>
+    <div class="route">
+      <div class="stop">
+        <span class="city bj">Beijing</span>
+        <span class="dates">3 – 8 Aug</span>
+      </div>
+      <div class="leg">
+        <div class="ln"></div>
+        <span class="train-lbl">🚄 14:00 bullet train</span>
+        <span class="train-lbl">BJS → SHA 18:32</span>
+      </div>
+      <div class="stop">
+        <span class="city sh">Shanghai</span>
+        <span class="dates">9 – 16 Aug</span>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="n bj">6</div><div class="l">nights Beijing</div></div>
+      <div class="stat"><div class="n sh">7</div><div class="l">nights Shanghai</div></div>
+      <div class="stat"><div class="n">2</div><div class="l">day trips</div></div>
+      <div class="stat"><div class="n">0</div><div class="l">visas needed</div></div>
+    </div>
+  </div>
+
+  <div class="sec-head"><h2>Trip shape</h2><span class="pill neu">at a glance</span></div>
+  <div class="card">
+    <p style="font-size:.9rem;color:var(--ink-2)">Mondays (3 Aug arrival, 9 Aug train day) are deliberately light — most major museums close Mondays, so that's when you rest, shop, or eat. Beijing alternates easy/active from Day 2. Shanghai mirrors the same rhythm: two shopping days to settle in off the train, then active/easy to the end.</p>
+  </div>
+
+  <div class="sec-head"><h2>Book-ahead checklist</h2><span class="pill warn">time-sensitive</span></div>
+  <ul class="checklist" id="checklist">
+    <li><input type="checkbox" id="c1"><label for="c1" class="cl-label"><strong>Forbidden City tickets</strong> — release 7 days before your visit at 20:00 Beijing time. Book on bookingticket.dpm.org.cn (passport required). Also book Tiananmen Square separately (free).</label></li>
+    <li><input type="checkbox" id="c2"><label for="c2" class="cl-label"><strong>Bullet train BJS→SHA</strong> — book on Trip.com or 12306.cn. 3 Aug + 60 days ≈ opens around 2 Jul. Second class fine; it's a fast 4.5 hr ride.</label></li>
+    <li><input type="checkbox" id="c3"><label for="c3" class="cl-label"><strong>Suzhou gardens</strong> — Humble Administrator's Garden and Tiger Hill both have daily caps. Book on the Suzhou tourism app or Trip.com 1–3 days out.</label></li>
+    <li><input type="checkbox" id="c4"><label for="c4" class="cl-label"><strong>Shanghai Museum East</strong> — timed entry; reserve on the museum's WeChat mini-programme or website. Closed Mondays.</label></li>
+    <li><input type="checkbox" id="c5"><label for="c5" class="cl-label"><strong>Alipay / WeChat Pay</strong> — link a UK Visa/Mastercard before landing. This is how you pay for everything including street food.</label></li>
+    <li><input type="checkbox" id="c6"><label for="c6" class="cl-label"><strong>China eSIM with VPN</strong> — buy before travel. Google, WhatsApp, Instagram blocked without it.</label></li>
+    <li><input type="checkbox" id="c7"><label for="c7" class="cl-label"><strong>Summer Palace</strong> — no advance booking required but go early (before 09:00) in August to beat heat and crowds.</label></li>
+    <li><input type="checkbox" id="c8"><label for="c8" class="cl-label"><strong>Dianping app</strong> — install and practice navigating before landing. Use for restaurant queues, ratings, and table booking.</label></li>
+  </ul>
+</section>
+
+<!-- ESSENTIALS -->
+<section class="panel" id="essentials">
+  <div class="sec-head"><h2>Before you go</h2><span class="pill neu">must-read</span></div>
+
+  <div class="ess-grid">
+    <div class="card">
+      <span class="badge tip">✓ No visa needed</span>
+      <h3>Entry — UK passports</h3>
+      <p>UK ordinary passport holders enter China visa-free for up to 30 days (tourism) through 31 Dec 2026. Passport must be valid 6+ months beyond entry with 2 blank pages. Fill the free online arrival card before flying. If either of you holds a non-UK passport, check that nationality separately.</p>
+    </div>
+    <div class="card">
+      <span class="badge warn">⚠ Set up before landing</span>
+      <h3>Phone, payments &amp; maps</h3>
+      <ul>
+        <li><strong>eSIM with built-in VPN</strong> — Google, WhatsApp, Instagram all blocked without it</li>
+        <li><strong>Alipay or WeChat Pay</strong> — link a UK card; this is how you pay everywhere including street stalls</li>
+        <li><strong>Maps</strong> — Apple Maps (accurate in China) or Amap 高德; Google Maps pins are wrong</li>
+        <li><strong>Dianping 大众点评</strong> — China's Yelp; essential for food, queues, booking</li>
+        <li><strong>Download offline translation</strong> pack; menus often aren't in English</li>
+      </ul>
+    </div>
+    <div class="card">
+      <span class="badge warn">⚠ Book 7 days out exactly</span>
+      <h3>Forbidden City</h3>
+      <p>Walk-up tickets are gone. Daily cap is 40,000 and sells out minutes after release. Tickets open at <strong>20:00 Beijing time, exactly 7 days before your visit</strong>. Book at bookingticket.dpm.org.cn (English, passport number, no Chinese phone needed) or via Klook. Book Tiananmen Square separately (free but also requires reservation). Bring the physical passport you booked with — it's your entry scan. Closed Mondays.</p>
+    </div>
+    <div class="card">
+      <span class="badge note">🌡 August weather</span>
+      <h3>Climate &amp; packing</h3>
+      <p>Beijing: 28–35°C, humid, afternoon thunderstorms possible. Shanghai: 30–38°C, very humid, typhoon season. Both cities: build in midday rests (13:00–15:00). Pack light breathable clothes, a compact umbrella, and sunscreen. Most indoor spaces are heavily air-conditioned — a light layer helps.</p>
+    </div>
+    <div class="card">
+      <h3>Getting around</h3>
+      <ul>
+        <li><strong>Didi</strong> — the Chinese Uber. Works with Alipay. Essential for anything not on the metro.</li>
+        <li><strong>Metro</strong> — both cities have excellent, cheap, English-signed metros. Buy on Alipay.</li>
+        <li><strong>Bullet train BJS→SHA</strong> — Beijing South (南站) at 14:00, arrives Shanghai Hongqiao 18:32. 4.5 hrs. Book on Trip.com.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Dietary notes</h3>
+      <ul>
+        <li>Beijing is heavy on lamb, duck, and pork. Spicy options widely available.</li>
+        <li>Shanghai leans sweeter (Shanghainese cuisine uses sugar). Seafood dominant.</li>
+        <li>Vegetarian options exist but ask explicitly — stock-based broths are common even in "vegetable" dishes.</li>
+        <li>Dianping photos + pointing works well for ordering without language.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- BEIJING -->
+<section class="panel" id="beijing">
+  <div class="sec-head"><h2>Beijing</h2><span class="pill bj">3 – 9 Aug · 6 nights</span></div>
+
+  <div class="timeline">
+
+    <div class="day-block">
+      <div class="chop bj"><span class="d">3</span><span class="m">Mon</span></div>
+      <div class="day-inner">
+        <h3>Arrival day <span class="pace easy">easy</span></h3>
+        <div class="day-sub">Check in · recover · first meal out</div>
+        <div class="day-body">
+          <p>Flight lands, clear customs, get to the hotel. Most museums close Mondays — don't plan sights. Instead:</p>
+          <ul>
+            <li>Walk the immediate neighbourhood, get your bearings</li>
+            <li>First dinner: <strong>Siji Minfu (四季民福)</strong> near Wangfujing — roast duck done properly, no frills, beloved on Xiaohongshu. Queue or book on Dianping.</li>
+            <li>Download and set up Dianping, Amap, and confirm Alipay is working</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="chop bj"><span class="d">4</span><span class="m">Tue</span></div>
+      <div class="day-inner">
+        <h3>Oriental Plaza &amp; Wangfujing <span class="pace easy">easy</span></h3>
+        <div class="day-sub">Shopping · street food · city centre ease</div>
+        <div class="day-body">
+          <ul>
+            <li><strong>Oriental Plaza (东方广场)</strong> — high-end mall anchoring Wangfujing; good for browsing, AC, and coffee</li>
+            <li><strong>Wangfujing Snack Street</strong> — chaotic and fun, street snacks, scorpions on sticks (you don't have to eat them)</li>
+            <li>Afternoon: <strong>Beijing APM</strong> or nearby Shin Kong Place if you want more retail</li>
+            <li>Evening: ramen or hand-pulled noodles in the area — ask Dianping for what's rated nearby</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="chop bj"><span class="d">5</span><span class="m">Wed</span></div>
+      <div class="day-inner">
+        <h3>Forbidden City &amp; Tiananmen <span class="pace active">active</span></h3>
+        <div class="day-sub">Pre-book tickets · enter at Meridian Gate (south)</div>
+        <div class="day-body">
+          <ul>
+            <li><strong>Tiananmen Square</strong> (pre-booked, free) — arrive early before the heat</li>
+            <li><strong>Forbidden City (故宫)</strong> — 2–3 hrs minimum; focus on the central axis and Imperial Garden. Audio guide in English available.</li>
+            <li>Midday rest — exit north, find lunch in Jingshan Park area</li>
+            <li>Afternoon: <strong>Jingshan Park (景山公园)</strong> — the hill directly behind the Forbidden City gives the iconic aerial view. ¥2 entry.</li>
+            <li>Evening: hutong dinner — <strong>Gulou area</strong>, walk Nanluoguxiang and pick a spot on Dianping</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="chop bj"><span class="d">6</span><span class="m">Thu</span></div>
+      <div class="day-inner">
+        <h3>Shichahai Lakes &amp; Pure Teahouse <span class="pace easy">easy</span></h3>
+        <div class="day-sub">Hutong wander · lake scenery · tea ceremony</div>
+        <div class="day-body">
+          <ul>
+            <li>Morning: walk <strong>Shichahai (什刹海)</strong> — the lakes and willow-lined lanes that give old Beijing its feel</li>
+            <li><strong>Yandai Xiejie</strong> (烟袋斜街) — small hutong street with vintage shops and cafés</li>
+            <li>Afternoon: <strong>Pure Lotus Teahouse (净莲漫茶)</strong> or another of the lakeside teahouses — sit, slow down, order a proper gaiwan service</li>
+            <li>Evening: hotpot in the area. <strong>Haidilao</strong> is the reliable crowd-pleaser; local Sichuan places on Dianping for more adventurous options.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="chop bj"><span class="d">7</span><span class="m">Fri</span></div>
+      <div class="day-inner">
+        <h3>Great Wall at Mutianyu <span class="pace active">active</span></h3>
+        <div class="day-sub">Full day · cable car up · toboggan optional</div>
+        <div class="day-body">
+          <ul>
+            <li>Leave by 07:30 to beat crowds and heat. Shared van (book via hotel or Klook ~¥300pp return) or Didi + public bus.</li>
+            <li><strong>Mutianyu (慕田峪)</strong> — the best-preserved, least crowded stretch with forest backdrop. Cable car up, toboggan down (¥100, genuinely fun).</li>
+            <li>Allow 3–4 hrs on the wall. Bring water, sunscreen, and sturdy shoes.</li>
+            <li>Back in Beijing by 17:00. Rest, then light evening dinner — <strong>Baodu Feng (爆肚冯)</strong> near Gulou for offal hot pot, or noodles.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="chop bj"><span class="d">8</span><span class="m">Sat</span></div>
+      <div class="day-inner">
+        <h3>Lama Temple, Guozijian &amp; Fuding Coffee <span class="pace easy">easy</span></h3>
+        <div class="day-sub">Culture · Michelin lunch · rooftop coffee</div>
+        <div class="day-body">
+          <ul>
+            <li>Morning: <strong>Yonghe Gong (雍和宫 Lama Temple)</strong> — Beijing's most atmospheric functioning temple. Incense, monks, incredible interiors. Go early before tour groups.</li>
+            <li>Walk <strong>Guozijian Street (国子监街)</strong> — the old Imperial College street, lined with scholar trees and small book/antique shops</li>
+            <li>Lunch: <strong>翰林书院 Hanlin Shuyuan</strong> — Michelin-recommended, housed in a restored courtyard near the temple. Reserve on Dianping.</li>
+            <li>Coffee: <strong>福顶咖啡 Fuding Coffee</strong> — rooftop overlooking the Lama Temple. Wildly photogenic; popular on Xiaohongshu.</li>
+            <li>Evening: free. Pack for tomorrow's train.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="chop transit"><span class="d">9</span><span class="m">Sun</span></div>
+      <div class="transit-strip">
+        <h3>🚄 Beijing → Shanghai</h3>
+        <p>Check out in the morning. Light lunch near hotel. Didi to <strong>Beijing South Station (北京南站)</strong> — allow 60 min from central Beijing. Train departs <strong>14:00</strong>, arrives <strong>Shanghai Hongqiao 18:32</strong>. Check in, settle, dinner near the hotel. Rest.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SHANGHAI -->
+<section class="panel" id="shanghai">
+  <div class="sec-head"><h2>Shanghai</h2><span class="pill sh">9 – 16 Aug · 7 nights</span></div>
+
+  <div class="timeline">
+
+    <div class="day-block">
+      <div class="chop sh"><span class="d">9</span><span class="m">Sun</span></div>
+      <div class="day-inner">
+        <h3>Arrive Shanghai <span class="pace easy">easy</span></h3>
+        <div class="day-sub">Check in · neighbourhood explore</div>
+        <div class="day-body">
+          <p>Arrive Hongqiao 18:32. Metro Line 2 or 10 to your hotel (or Didi). Check in, freshen up. Dinner near the hotel — keep it simple tonight. <strong>Jia Jia Tang Bao (佳家汤包)</strong> for soup dumplings if there's one nearby, or a local ramen spot on Dianping.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="chop sh"><span class="d">10</span><span class="m">Mon</span></div>
+      <div class="day-inner">
+        <h3>French Concession shopping <span class="pace easy">easy</span></h3>
+        <div class="day-sub">Wukang Road · boutiques · café crawl</div>
+        <div class="day-body">
+          <ul>
+            <li><strong>Wukang Road (武康路)</strong> — the most photographed street in Shanghai; plane trees, Art Deco villas, independent boutiques. Best mid-morning before crowds.</li>
+            <li><strong>Anfu Road</strong> and <strong>Changle Road</strong> — vintage shops, designer coffee, the kind of places that go viral on Xiaohongshu</li>
+            <li><strong>Xintiandi (新天地)</strong> — renovated Shikumen houses, upscale dining and shopping. Great for afternoon coffee and people-watching.</li>
+            <li>Evening: French Concession dinner. <strong>Jesse Restaurant (吉士酒家)</strong> for classic Shanghainese — red-braised pork, drunken chicken. Book ahead on Dianping.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="chop sh"><span class="d">11</span><span class="m">Tue</span></div>
+      <div class="day-inner">
+        <h3>Nanjing Road, the Bund &amp; Old Town <span class="pace easy">easy</span></h3>
+        <div class="day-sub">Iconic waterfront · old city · street food</div>
+        <div class="day-body">
+          <ul>
+            <li>Morning: <strong>Nanjing Road Pedestrian Street (南京路步行街)</strong> — the main shopping drag. Crowded but worth seeing once; pick up local snacks.</li>
+            <li><strong>The Bund (外滩)</strong> — best in the morning before the heat peaks. The colonial-era riverside façade with Pudong skyline behind it. Walk the full promenade.</li>
+            <li>Lunch: <strong>Yang's Fry-Dumpling (小杨生煎)</strong> near People's Square — pan-fried dumplings, famously crispy bottoms. Queue is part of the experience.</li>
+            <li>Afternoon: <strong>Yu Garden &amp; Old Town (豫园)</strong> — classical Ming garden, surrounding bazaar. Touristy but the garden itself is genuinely beautiful.</li>
+            <li>Evening: Bund rooftop bar for skyline views — <strong>Bar Rouge</strong> or <strong>New Heights</strong> at Three on the Bund.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="chop sh"><span class="d">12</span><span class="m">Wed</span></div>
+      <div class="day-inner">
+        <h3>Suzhou day trip <span class="pace active">active</span></h3>
+        <div class="day-sub">Classical gardens · canals · day return</div>
+        <div class="day-body">
+          <ul>
+            <li>Bullet train from Shanghai Hongqiao or Shanghai Railway Station — 25–35 min. First train ~07:00, last return ~21:00. Book the night before on Trip.com.</li>
+            <li><strong>Humble Administrator's Garden (拙政园)</strong> — the largest and most celebrated classical garden in China. Pre-book timed entry.</li>
+            <li><strong>Tiger Hill (虎丘)</strong> — leaning pagoda, rock gardens, less polished than the formal gardens but more atmospheric. Book timed entry.</li>
+            <li>Lunch: <strong>Suzhou noodles</strong> — braised duck or squirrel-shaped mandarin fish. Ask Dianping for what's rated near Tiger Hill.</li>
+            <li><strong>Pingjiang Road (平江路)</strong> — the canal-lined old street; afternoon wander before the return train.</li>
+            <li>Back in Shanghai by 19:00. Light dinner.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="chop sh"><span class="d">13</span><span class="m">Thu</span></div>
+      <div class="day-inner">
+        <h3>West Bund art corridor <span class="pace easy">easy</span></h3>
+        <div class="day-sub">Galleries · Long Museum · riverside walk</div>
+        <div class="day-body">
+          <ul>
+            <li><strong>West Bund (西岸)</strong> — Shanghai's answer to London's Southbank. A string of art institutions along the Huangpu river.</li>
+            <li><strong>Long Museum West Bund (龙美术馆)</strong> — impressive contemporary Chinese art collection in a brutalist former coal facility. Check current exhibition before visiting.</li>
+            <li><strong>Yuz Museum</strong> — international contemporary art, design focus.</li>
+            <li><strong>Tank Shanghai (油罐艺术中心)</strong> — five converted oil tanks; art, a park, and great coffee. Very Instagrammable.</li>
+            <li>Afternoon: walk the West Bund waterfront. Much quieter than the Bund, great views.</li>
+            <li>Evening: dinner in the Jing'an area — <strong>Jing'an Kerry Centre</strong> area has good options across price points.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="chop sh"><span class="d">14</span><span class="m">Fri</span></div>
+      <div class="day-inner">
+        <h3>Pudong: Shanghai Museum East &amp; skyline <span class="pace active">active</span></h3>
+        <div class="day-sub">New museum · tower views · Lujiazui</div>
+        <div class="day-body">
+          <ul>
+            <li><strong>Shanghai Museum East (上海博物馆东馆)</strong> — the vast new branch in Pudong, opened 2024. Ancient Chinese art and artefacts. Timed entry via WeChat mini-programme. Closed Mondays.</li>
+            <li>Afternoon: <strong>Lujiazui skyline</strong> — the cluster of towers. Go up <strong>Shanghai Tower (上海中心)</strong> observation deck (135F, 632m) for the city view. Book online to avoid queues.</li>
+            <li>Walk along the Pudong waterfront for the reverse Bund view — best at dusk.</li>
+            <li>Evening: dinner in Pudong or back in Puxi (Bund side). <strong>Ultraviolet by Paul Pairet</strong> if you booked months ago; otherwise <strong>Hakkasan</strong> or any of the Bund-adjacent restaurants.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="chop sh"><span class="d">15</span><span class="m">Sat</span></div>
+      <div class="day-inner">
+        <h3>Slow last day (Zhujiajiao optional) <span class="pace easy">easy</span></h3>
+        <div class="day-sub">Water town · or rest · final dinner</div>
+        <div class="day-body">
+          <ul>
+            <li><strong>Option A – Zhujiajiao (朱家角)</strong>: the most accessible water town from central Shanghai (~1 hr by bus or Didi). Stone bridges, canals, boat rides. Works as a half-day; leave by 09:00, back by 14:00.</li>
+            <li><strong>Option B – Rest day</strong>: revisit your favourite neighbourhood, pick up any last gifts, spa afternoon.</li>
+            <li>Final dinner: make it a good one. <strong>Ultraviolet</strong> (if booked), or a Shanghainese feast — try <strong>Fuli (福里)</strong> or <strong>The Lost Heaven</strong> for Yunnan cuisine as a different note to end on.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="chop transit"><span class="d">16</span><span class="m">Sun</span></div>
+      <div class="transit-strip">
+        <h3>✈ Fly home to London</h3>
+        <p>Check out, Didi or Metro to <strong>Pudong (PVG)</strong> or <strong>Hongqiao (SHA)</strong> — confirm which airport your flight uses. Allow 2 hrs for international check-in. Safe flight.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SPOTS -->
+<section class="panel" id="spots">
+  <div class="sec-head"><h2>Beijing spots</h2><span class="pill bj">food &amp; places</span></div>
+
+  <div class="spots-grid">
+    <div class="spot-card">
+      <span class="spot-name">Siji Minfu 四季民福</span>
+      <span class="spot-tag food">Peking Duck</span>
+      <span class="spot-cn">Near Wangfujing / Forbidden City</span>
+      <span class="spot-desc">The Xiaohongshu-approved roast duck spot. Proper duck, proper price, no tourist theatre. Book on Dianping or queue.</span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">Baodu Feng 爆肚冯</span>
+      <span class="spot-tag food">Traditional</span>
+      <span class="spot-cn">Gulou area</span>
+      <span class="spot-desc">Famous for lamb offal hot pot — tripe, stomach, the works. Old Beijing institution. Not for the faint-hearted but genuinely local.</span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">Hanlin Shuyuan 翰林书院</span>
+      <span class="spot-tag food">Michelin</span>
+      <span class="spot-cn">Near Lama Temple</span>
+      <span class="spot-desc">Michelin-recommended courtyard restaurant near Yonghe Gong. Refined Beijing cuisine in a restored setting. Book ahead.</span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">Fuding Coffee 福顶咖啡</span>
+      <span class="spot-tag food">Café</span>
+      <span class="spot-cn">Overlooking Lama Temple</span>
+      <span class="spot-desc">Rooftop café with unobstructed views over Yonghe Gong. Very popular on Xiaohongshu. Go mid-morning on a weekday.</span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">Yonghe Gong 雍和宫</span>
+      <span class="spot-tag sight">Temple</span>
+      <span class="spot-cn">Dongcheng District</span>
+      <span class="spot-desc">Beijing's most atmospheric working Tibetan Buddhist temple. Five halls, incense courtyards, 18m sandalwood Buddha. Go early.</span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">Mutianyu Great Wall 慕田峪</span>
+      <span class="spot-tag sight">Day trip</span>
+      <span class="spot-cn">~90 min from central Beijing</span>
+      <span class="spot-desc">Best-preserved section, forest setting, far fewer crowds than Badaling. Cable car up, optional toboggan down.</span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">Shichahai 什刹海</span>
+      <span class="spot-tag sight">Lakes</span>
+      <span class="spot-cn">Xicheng District</span>
+      <span class="spot-desc">Three interconnected lakes ringed by willows and old hutong lanes. Best in the morning. Hire a paddle boat or just walk.</span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">Wudaoying Hutong 五道营胡同</span>
+      <span class="spot-tag shop">Shopping</span>
+      <span class="spot-cn">Near Lama Temple</span>
+      <span class="spot-desc">The cooler, less touristy hutong strip. Independent cafés, vintage clothing, ceramics. Better than Nanluoguxiang for actual shopping.</span>
+    </div>
+  </div>
+
+  <div class="skip">
+    <strong>Skip the hype — Beijing:</strong> Quanjude duck (overrated, tourist pricing, mediocre quality vs Siji Minfu). Nanluoguxiang for shopping (too commercial; Wudaoying is better).
+  </div>
+
+  <div class="sec-head"><h2>Shanghai spots</h2><span class="pill sh">food &amp; places</span></div>
+
+  <div class="spots-grid">
+    <div class="spot-card">
+      <span class="spot-name">Jia Jia Tang Bao 佳家汤包</span>
+      <span class="spot-tag food">Soup Dumplings</span>
+      <span class="spot-cn">Multiple locations</span>
+      <span class="spot-desc">The soup dumpling (xiaolongbao) spot that locals and Dianping users rate above Din Tai Fung. Thin skin, intense broth. Always a queue — go early.</span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">Yang's Fry-Dumpling 小杨生煎</span>
+      <span class="spot-tag food">Pan-fried</span>
+      <span class="spot-cn">Near People's Square</span>
+      <span class="spot-desc">Shanghai's most famous shengjian bao. Crispy base, juicy pork, broth burst. Order at the window, eat standing up. Queue is the norm.</span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">Jesse Restaurant 吉士酒家</span>
+      <span class="spot-tag food">Shanghainese</span>
+      <span class="spot-cn">French Concession</span>
+      <span class="spot-desc">Classic Shanghainese cooking — red-braised pork, drunken chicken, smoked fish. A local institution, not a tourist trap. Book on Dianping.</span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">Wukang Road 武康路</span>
+      <span class="spot-tag shop">Street</span>
+      <span class="spot-cn">French Concession</span>
+      <span class="spot-desc">The most photographed street in Shanghai. Art Deco villas, plane trees, independent boutiques and cafés. Peak Xiaohongshu territory.</span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">West Bund Art Corridor 西岸</span>
+      <span class="spot-tag art">Galleries</span>
+      <span class="spot-cn">Xuhui Riverside</span>
+      <span class="spot-desc">Long Museum, Yuz Museum, Tank Shanghai — all within walking distance along the Huangpu river. A full afternoon's worth of contemporary art.</span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">Tank Shanghai 油罐艺术中心</span>
+      <span class="spot-tag art">Art Park</span>
+      <span class="spot-cn">West Bund</span>
+      <span class="spot-desc">Five converted oil tanks turned gallery/park/café. Architecturally striking, great coffee, popular with locals on weekends.</span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">Shanghai Museum East 上海博物馆东馆</span>
+      <span class="spot-tag art">Museum</span>
+      <span class="spot-cn">Pudong, Huamu Road</span>
+      <span class="spot-desc">The stunning new Pudong branch (opened 2024). Ancient Chinese bronzes, ceramics, jades. Timed entry required. Closed Mondays.</span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">Suzhou day trip</span>
+      <span class="spot-tag sight">Day trip</span>
+      <span class="spot-cn">25–35 min by bullet train</span>
+      <span class="spot-desc">Humble Administrator's Garden + Tiger Hill + Pingjiang Road canal walk. Pre-book garden timed entries. Easy full-day return.</span>
+    </div>
+  </div>
+
+  <div class="skip">
+    <strong>Skip the hype — Shanghai:</strong> The 13DE MARZO bear drink (30-min queue for an average matcha; go elsewhere). Din Tai Fung (fine but overpriced and always packed; Jia Jia is better and cheaper). The Bund at midday in August (brutal heat; go morning or evening).
+  </div>
+</section>
+
+</main>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.panel');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.tab;
+      tabs.forEach(t => t.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('is-active'));
+      tab.classList.add('active');
+      document.getElementById(target).classList.add('is-active');
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+  });
+
+  // Persist checklist state
+  const checkboxes = document.querySelectorAll('#checklist input[type=checkbox]');
+  checkboxes.forEach(cb => {
+    const saved = localStorage.getItem(cb.id);
+    if (saved === 'true') cb.checked = true;
+    cb.addEventListener('change', () => localStorage.setItem(cb.id, cb.checked));
+  });
+</script>
+</body>
+</html>
