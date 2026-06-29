@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#F4F2EC">
 <title>Beijing &amp; Shanghai · 3–16 August 2026</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" crossorigin="" />
 <style>
   :root{
     --paper:#F4F2EC;--surface:#FBFAF6;--surface-2:#F0EDE4;
@@ -134,6 +135,36 @@
     .chop .d{font-size:.95rem}
     .chop .m{font-size:.5rem}
   }
+  /* SHOPPING */
+  .shop-intro{font-size:.9rem;color:var(--ink-2)}
+  .legend{display:flex;flex-wrap:wrap;gap:.45rem 1.1rem;margin:.4rem 0 .55rem;font-size:.78rem;color:var(--ink-2)}
+  .legend span{display:inline-flex;align-items:center;gap:.4rem}
+  .legend i{width:11px;height:11px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--line-2)}
+  .mapfilters{display:flex;flex-wrap:wrap;gap:.3rem;margin:.1rem 0 .8rem}
+  .mapfilters button{font-family:var(--sans);font-size:.78rem;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);padding:.3rem .7rem;border-radius:20px;transition:background .15s,color .15s}
+  .mapfilters button:hover{background:var(--surface-2);color:var(--ink)}
+  .mapfilters button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  #shopmap{height:420px;width:100%;border:1px solid var(--line);border-radius:12px;margin-bottom:.4rem;z-index:1;background:var(--surface-2)}
+  .map-fallback{display:none;padding:.9rem 1.2rem;font-size:.85rem;color:var(--ink-2);background:var(--surface);border:1px dashed var(--line-2);border-radius:12px;margin-bottom:.4rem}
+  .map-note{font-size:.74rem;color:var(--ink-3);margin:.1rem 0 1.4rem}
+  .shop-cat{display:flex;align-items:center;gap:.65rem;margin:2rem 0 .5rem}
+  .shop-cat h3{font-family:var(--serif);font-size:1.2rem;font-weight:400}
+  .shop-cat .accent{width:32px;height:3px;border-radius:3px;flex-shrink:0}
+  .shop-sub{font-size:.72rem;color:var(--ink-3);text-transform:uppercase;letter-spacing:.1em;margin:1.1rem 0 .5rem;font-family:var(--mono)}
+  .spot-card .spot-price{font-size:.78rem;font-family:var(--mono);color:var(--ink-2);align-self:start}
+  .spot-card.budget-out .spot-price{color:var(--bj-deep)}
+  .spot-links{grid-column:1/-1;display:flex;gap:.7rem;margin-top:.35rem}
+  .spot-links a{font-size:.76rem;font-family:var(--mono);text-decoration:none;color:var(--sh-deep);border-bottom:1px solid var(--sh-soft)}
+  .spot-links a:hover{border-color:var(--sh)}
+  .spot-tag.cat-jw{background:#F0E6C8;color:#7A5C00}
+  .spot-tag.cat-ac{background:var(--sh-soft);color:var(--sh-deep)}
+  .spot-tag.cat-bg{background:#E5E1F0;color:#4A3F78}
+  .spot-tag.g-w{background:#F6E7E2;color:#9A2A1C}
+  .spot-tag.g-m{background:#E0EEEC;color:#0D544F}
+  .spot-tag.g-u{background:var(--surface-2);color:var(--ink-2)}
+  .goto-line{margin-top:.6rem;font-size:.82rem}
+  .goto-line a{color:var(--sh-deep);font-weight:600;text-decoration:none;border-bottom:1px solid var(--sh-soft)}
+  .goto-line a:hover{border-color:var(--sh)}
 </style>
 </head>
 <body>
@@ -149,6 +180,7 @@
       <button class="tab" data-tab="essentials">Essentials</button>
       <button class="tab" data-tab="beijing">Beijing</button>
       <button class="tab" data-tab="shanghai">Shanghai</button>
+      <button class="tab" data-tab="shopping">Shopping</button>
       <button class="tab" data-tab="spots">Spots</button>
     </nav>
   </div>
@@ -398,6 +430,7 @@
             <li><strong>Xintiandi (新天地)</strong> — renovated Shikumen houses, upscale dining and shopping. Great for afternoon coffee and people-watching.</li>
             <li>Evening: French Concession dinner. <strong>Jesse Restaurant (吉士酒家)</strong> for classic Shanghainese — red-braised pork, drunken chicken. Book ahead on Dianping.</li>
           </ul>
+          <p class="goto-line"><a href="#" data-goto="shopping">→ Full Shanghai shopping guide &amp; map</a></p>
         </div>
       </div>
     </div>
@@ -482,6 +515,7 @@
             <li><strong>Option B – Rest day</strong>: revisit your favourite neighbourhood, pick up any last gifts, spa afternoon.</li>
             <li>Final dinner: make it a good one. <strong>Ultraviolet</strong> (if booked), or a Shanghainese feast — try <strong>Fuli (福里)</strong> or <strong>The Lost Heaven</strong> for Yunnan cuisine as a different note to end on.</li>
           </ul>
+          <p class="goto-line"><a href="#" data-goto="shopping">→ Last-minute gifts? See the Shopping guide</a></p>
         </div>
       </div>
     </div>
@@ -494,6 +528,288 @@
       </div>
     </div>
 
+  </div>
+</section>
+
+<!-- SHOPPING -->
+<section class="panel" id="shopping">
+  <div class="sec-head"><h2>Shanghai shopping</h2><span class="pill sh">fashion · affordable</span></div>
+
+  <div class="card">
+    <p class="shop-intro">Homegrown labels, concept clusters and vintage streets for <strong>smart-casual, minimalist &amp; Y2K</strong> in the <strong>£20–£200</strong> band — ranked by what locals rate on Xiaohongshu, Douyin &amp; Dianping, with tourist hype filtered out. Priority order: <strong>clothes › jewellery › accessories › bags</strong>. Rough guide: ~¥9 ≈ £1.</p>
+  </div>
+
+  <div class="sec-head" style="margin-top:1.75rem"><h2>Map</h2><span class="pill neu">tap a pin</span></div>
+  <div class="legend">
+    <span><i style="background:#C2563B"></i>Clothes</span>
+    <span><i style="background:#B08900"></i>Jewellery</span>
+    <span><i style="background:#15706B"></i>Accessories</span>
+    <span><i style="background:#6B5CA5"></i>Bags</span>
+    <span><i style="background:#6B6459"></i>Districts &amp; markets</span>
+  </div>
+  <div class="mapfilters">
+    <button data-f="all" class="on">All</button>
+    <button data-f="cl">Clothes</button>
+    <button data-f="jw">Jewellery</button>
+    <button data-f="ac">Accessories</button>
+    <button data-f="bg">Bags</button>
+    <button data-f="ar">Districts</button>
+  </div>
+  <div id="shopmap"></div>
+  <div class="map-fallback">The map needs an internet connection. Every shop below also has a 📍 Map link you can open in Amap or Google Maps instead.</div>
+  <p class="map-note">Pins are approximate — China's map datum offsets Western coordinates by a few hundred metres. Navigate by the street address / Chinese name in <strong>Amap (高德)</strong> or <strong>Dianping</strong>, which also show live opening hours.</p>
+
+  <!-- DISTRICTS -->
+  <div class="shop-cat"><span class="accent" style="background:#6B6459"></span><h3>Where to go — districts &amp; clusters</h3></div>
+  <p class="shop-intro" style="margin-bottom:.6rem">The former French Concession grid (Anfu / Wukang / Changle / Fumin) plus three concept clusters — <strong>Xian Suo</strong>, <strong>In the Park</strong> and <strong>JULU 758</strong> — are the spine. <em>Day 10 of the itinerary already routes you through Wukang &amp; Anfu.</em></p>
+  <div class="spots-grid">
+    <div class="spot-card">
+      <span class="spot-name">Anfu Road 安福路</span><span class="spot-tag shop">Street</span>
+      <span class="spot-cn">FFC · boutiques + vintage</span>
+      <span class="spot-desc">The hyped epicentre — Lost In Echo, LOOKNOW, Duozhuayu used-clothing. Go on a weekday to dodge the street-photo crowds.</span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Anfu%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">Wukang Road 武康路</span><span class="spot-tag shop">Street</span>
+      <span class="spot-cn">FFC · café + browse</span>
+      <span class="spot-desc">Scenic Art-Deco extension of Anfu (To Summer, LOOKNOW). Already on your Day 10 route — pair the two.</span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Wukang%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">JULU 758 巨鹿路758</span><span class="spot-tag shop">Cluster</span>
+      <span class="spot-cn">Jing'an · designer triangle</span>
+      <span class="spot-desc">Concept park holding FREITAG's China-first store plus buyer/lifestyle shops. Best for discovery.</span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Julu%20Road%20758%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">Xian Suo 现所</span><span class="spot-tag shop">Cluster</span>
+      <span class="spot-cn">Jing'an · 50+ brands</span>
+      <span class="spot-desc">The locals' current favourite cluster — quieter than Anfu, with the XC273 buyer store and design accessories.</span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Xian%20Suo%20Yanping%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">In the Park 公园里</span><span class="spot-tag shop">Mall</span>
+      <span class="spot-cn">Jing'an · concept mini-mall</span>
+      <span class="spot-desc">ZUCZUG (素然) brands and streetwear on 1F, a whole hats-and-jewellery floor on 2F. Beside Xian Suo.</span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=In%20the%20Park%20Jiaozhou%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">Yongkang Road 永康路</span><span class="spot-tag shop">Vintage</span>
+      <span class="spot-cn">FFC · 中古 / 古着</span>
+      <span class="spot-desc">"Shanghai's vintage street" — Swing Vintage for Y2K, 宇宙无限 for men's Americana (pieces from ~¥100). A real local scene.</span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Yongkang%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">Lingshi Road Market 灵石路</span><span class="spot-tag shop">Market</span>
+      <span class="spot-cn">Jing'an north · cheapest</span>
+      <span class="spot-desc">Bulk vintage bargains ("¥720 for 16 items" hauls); bargaining expected. Inspect and wash everything.</span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Lingshi%20Road%20clothing%20market%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">Xintiandi 新天地</span><span class="spot-tag shop">Mall</span>
+      <span class="spot-cn">Huangpu · polished</span>
+      <span class="spot-desc">MARITHÉ's first store, MAIA ACTIVE flagship, DOE, ROARINGWILD, HARMAY. Pricier but central and easy.</span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Xintiandi%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">Huaihai Middle Road 淮海中路</span><span class="spot-tag shop">Street</span>
+      <span class="spot-cn">Xuhui · malls</span>
+      <span class="spot-desc">The locals' high street — bosie flagship, HEFANG (iapm), and TX Huaihai for Y2K/streetwear.</span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Huaihai%20Middle%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">Zhangyuan 张园</span><span class="spot-tag shop">Optional</span>
+      <span class="spot-cn">Jing'an · photo walk</span>
+      <span class="spot-desc">Beautifully restored shikumen but luxury-only and quiet for actual buying. Worth a stroll, not a shop.</span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Zhangyuan%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">Tianzifang 田子坊</span><span class="spot-tag shop">Skippable</span>
+      <span class="spot-cn">Huangpu · souvenirs</span>
+      <span class="spot-desc">Tourist arts-and-crafts maze; dated and souvenir-focused per local platforms. Skip unless you want trinkets.</span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Tianzifang%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+  </div>
+
+  <div class="skip">
+    <strong>Skip the hype — shopping:</strong> Tianzifang (souvenir maze), the Hongqiao &amp; Yu Garden pearl-and-jade markets (tourist-priced — haggle hard or skip) and Zhangyuan (gorgeous but luxury-only) all rate low with locals for actual fashion buys.
+  </div>
+
+  <!-- CLOTHES -->
+  <div class="shop-cat"><span class="accent" style="background:#C2563B"></span><h3>Clothes <span style="font-size:.8rem;color:var(--ink-3)">— top priority</span></h3></div>
+
+  <p class="shop-sub">Womenswear</p>
+  <div class="spots-grid">
+    <div class="spot-card">
+      <span class="spot-name">W.Management 万莫</span><span class="spot-tag g-w">Womens</span>
+      <span class="spot-cn">Y2K · warehouse · multiple branches</span><span class="spot-price">¥89–¥200 · in budget</span>
+      <span class="spot-desc">The viral warehouse-Y2K chain — great value, campus/K-pop looks. Fast-fashion; sizes S/M/L/F.</span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=W.Management%20WM%20store%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">Basement FG</span><span class="spot-tag g-w">Womens</span>
+      <span class="spot-cn">Y2K · American street · size-inclusive</span><span class="spot-price">~¥100–¥300 · in budget</span>
+      <span class="spot-desc">Oversize street womenswear, more size-inclusive than BM. A "Taobao IRL" favourite — check nearest branch on Dianping.</span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Basement%20FG%20store%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">ONE MOMENT</span><span class="spot-tag g-w">Womens</span>
+      <span class="spot-cn">Y2K · gothic-lean</span><span class="spot-price">~¥100–¥200 · in budget</span>
+      <span class="spot-desc">The darker Y2K sibling of WM / Basement FG, for moodier millennial looks.</span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=ONE%20MOMENT%20clothing%20store%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">YESCCI</span><span class="spot-tag g-w">Womens</span>
+      <span class="spot-cn">cute · affordable</span><span class="spot-price">tops ~¥188 · in budget</span>
+      <span class="spot-desc">A local "Brandy-alike" at low prices — sits near Basement FG, easy to combine.</span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=YESCCI%20store%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">An Action a Day 每日行动</span><span class="spot-tag g-w">Womens</span>
+      <span class="spot-cn">minimalist clean-fit · FFC</span><span class="spot-price">¥200–¥500 · in budget</span>
+      <span class="spot-desc">DTC clean-fit basics in a neutral palette. Wuyuan Rd / Yuyuan Rd stores. Sizing runs small.</span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=An%20Action%20a%20Day%20Wuyuan%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">MAIA ACTIVE 玛伊娅</span><span class="spot-tag g-w">Womens</span>
+      <span class="spot-cn">athleisure / smart-casual · Xintiandi</span><span class="spot-price">¥300–¥700 · mostly in budget</span>
+      <span class="spot-desc">Activewear cut for Asian bodies; the 腰精裤 leggings are the hero product.</span>
+      <span class="spot-links"><a href="https://www.instagram.com/maiaactive/" target="_blank" rel="noopener">🌐 Site</a> <a href="https://www.google.com/maps/search/?api=1&query=MAIA%20ACTIVE%20Xintiandi%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">MARITHÉ</span><span class="spot-tag g-w">Womens</span>
+      <span class="spot-cn">French casual · Y2K edge</span><span class="spot-price">tees ↓ · most ¥300–¥800</span>
+      <span class="spot-desc">A locally-run, Xiaohongshu-driven phenomenon — washed denim and logo tees. Xintiandi / iapm.</span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=MARITHE%20Xintiandi%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+  </div>
+
+  <p class="shop-sub">Menswear</p>
+  <div class="spots-grid">
+    <div class="spot-card">
+      <span class="spot-name">DOE</span><span class="spot-tag g-m">Mens</span>
+      <span class="spot-cn">workwear-street · Xintiandi</span><span class="spot-price">own label affordable</span>
+      <span class="spot-desc">Long-running Shanghai street buyer store with an accessibly-priced own brand.</span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=DOE%20store%20Xintiandi%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">ROARINGWILD 咆哮野兽</span><span class="spot-tag g-m">Mens</span>
+      <span class="spot-cn">guochao street · basics</span><span class="spot-price">¥200–¥400 · in budget</span>
+      <span class="spot-desc">A credible original streetwear label — basics praised as an "Uniqlo-upgrade." Xintiandi / 国贸汇.</span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=ROARINGWILD%20store%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+  </div>
+
+  <p class="shop-sub">Unisex &amp; both</p>
+  <div class="spots-grid">
+    <div class="spot-card">
+      <span class="spot-name">bosie 伯喜</span><span class="spot-tag g-u">Unisex</span>
+      <span class="spot-cn">smart-casual · playful · Huaihai</span><span class="spot-price">tees ¥139–¥359 · in budget</span>
+      <span class="spot-desc">A recognised agender label; mostly post-95 customers. Skip the ¥1,000+ jackets, the rest fits budget.</span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=bosie%20Huaihai%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+    <div class="spot-card budget-out">
+      <span class="spot-name">ICICLE 之禾</span><span class="spot-tag g-u">Men + Women</span>
+      <span class="spot-cn">minimalist · premium</span><span class="spot-price">¥1,000+ · browse / entry</span>
+      <span class="spot-desc">Three decades of Chinese sustainable minimalism. Above budget — included for the aesthetic and entry pieces.</span>
+      <span class="spot-links"><a href="https://www.icicle.com.cn/en/" target="_blank" rel="noopener">🌐 Site</a> <a href="https://www.google.com/maps/search/?api=1&query=ICICLE%201618%20Nanjing%20West%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+    <div class="spot-card budget-out">
+      <span class="spot-name">LABELHOOD 栋梁</span><span class="spot-tag g-u">Designer mix</span>
+      <span class="spot-cn">incubator · discovery</span><span class="spot-price">¥1,000+ · entry / accessories</span>
+      <span class="spot-desc">The pulse of China's designer scene (Shushu/Tong, Mark Gong). Above budget — discover names, grab accessories.</span>
+      <span class="spot-links"><a href="https://www.labelhood.com" target="_blank" rel="noopener">🌐 Site</a> <a href="https://www.google.com/maps/search/?api=1&query=Labelhood%20Fumin%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+  </div>
+
+  <!-- JEWELLERY -->
+  <div class="shop-cat"><span class="accent" style="background:#B08900"></span><h3>Jewellery <span style="font-size:.8rem;color:var(--ink-3)">— second priority</span></h3></div>
+  <div class="spots-grid">
+    <div class="spot-card">
+      <span class="spot-name">HEFANG 何方珠宝</span><span class="spot-tag cat-jw">Designer</span>
+      <span class="spot-cn">minimalist → playful · iapm</span><span class="spot-price">¥300–¥1,500 · mostly in budget</span>
+      <span class="spot-desc">The leading Chinese Gen-Z designer jewellery brand — 70+ stores, fixed price. 925 silver, pearls, K-gold.</span>
+      <span class="spot-links"><a href="https://hefang.net" target="_blank" rel="noopener">🌐 Site</a> <a href="https://www.google.com/maps/search/?api=1&query=HEFANG%20Jewelry%20iapm%20Huaihai%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">Lost In Echo</span><span class="spot-tag cat-jw">Designer</span>
+      <span class="spot-cn">modern minimalist · Anfu Rd</span><span class="spot-price">jewellery ¥300–¥1,500</span>
+      <span class="spot-desc">A Xiaohongshu-born Shanghai label — clean jewellery, footwear and bags. Jewellery sits in budget; shoes higher.</span>
+      <span class="spot-links"><a href="https://www.instagram.com/lostinecho_official/" target="_blank" rel="noopener">🌐 Site</a> <a href="https://www.google.com/maps/search/?api=1&query=Lost%20In%20Echo%20Anfu%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+    <div class="spot-card budget-out">
+      <span class="spot-name">YVMIN 尤目</span><span class="spot-tag cat-jw">Designer</span>
+      <span class="spot-cn">surreal · future-feminine</span><span class="spot-price">¥800–¥4,000 · entry ~¥700</span>
+      <span class="spot-desc">Celebrity-worn "fairy" jewellery, stocked in buyer stores. Entry pieces only within budget.</span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=YVMIN%20jewelry%20LOOKNOW%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">Jing'an Temple Jewelry &amp; Curio Mkt 静安寺珠宝古玩城</span><span class="spot-tag cat-jw">Market</span>
+      <span class="spot-cn">jade &amp; antiques · on Luban Rd</span><span class="spot-price">¥tens → · negotiable</span>
+      <span class="spot-desc">A genuine local jade/antiques hub (despite the name, it's on Luban Rd). Bargain; fakes exist — ask for 鉴定证书.</span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Jingan%20Temple%20Jewelry%20Curio%20Market%20Luban%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">Hongqiao Pearl City 虹桥国际珍珠城</span><span class="spot-tag cat-jw">Market</span>
+      <span class="spot-cn">pearls · tourist-oriented</span><span class="spot-price">sets ~¥320 · haggle</span>
+      <span class="spot-desc">Floor 2 is pearls (freshwater/Akoya/Tahitian). Mostly a Western-tourist venue — value if you know pearls and bargain.</span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Hongqiao%20International%20Pearl%20City%20Hongmei%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+  </div>
+
+  <!-- ACCESSORIES -->
+  <div class="shop-cat"><span class="accent" style="background:#15706B"></span><h3>Accessories <span style="font-size:.8rem;color:var(--ink-3)">— third priority</span></h3></div>
+  <div class="spots-grid">
+    <div class="spot-card">
+      <span class="spot-name">tagi.</span><span class="spot-tag cat-ac">Design objects</span>
+      <span class="spot-cn">Anfu Rd · playful</span><span class="spot-price">affordable · in budget</span>
+      <span class="spot-desc">Cult phone cases, stickers and small accessories. Very Xiaohongshu and easy gifting.</span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=tagi%20Anfu%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">In the Park — 2F 公园里</span><span class="spot-tag cat-ac">Hats + jewellery</span>
+      <span class="spot-cn">Jiaozhou Rd · one-stop</span><span class="spot-price">varies · in budget</span>
+      <span class="spot-desc">A whole accessories floor under one roof — efficient, and right beside Xian Suo.</span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=In%20the%20Park%20Jiaozhou%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">Yongkang Rd vintage 永康路</span><span class="spot-tag cat-ac">Vintage</span>
+      <span class="spot-cn">costume jewellery · caps · sunglasses</span><span class="spot-price">~¥100 · in budget</span>
+      <span class="spot-desc">Vintage accessories at pocket-money prices — hunt alongside the clothing.</span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Yongkang%20Road%20vintage%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+  </div>
+
+  <!-- BAGS -->
+  <div class="shop-cat"><span class="accent" style="background:#6B5CA5"></span><h3>Bags <span style="font-size:.8rem;color:var(--ink-3)">— lowest priority</span></h3></div>
+  <div class="spots-grid">
+    <div class="spot-card budget-out">
+      <span class="spot-name">Songmont 山下有松</span><span class="spot-tag cat-bg">Bags</span>
+      <span class="spot-cn">minimalist · viral · malls</span><span class="spot-price">leather ¥1,500–4,000 · charms ¥150–320</span>
+      <span class="spot-desc">A domestic phenomenon, now criticised as pricey. Buy a small charm/cardholder in budget, or just admire the bags.</span>
+      <span class="spot-links"><a href="https://songmontofficial.com" target="_blank" rel="noopener">🌐 Site</a> <a href="https://www.google.com/maps/search/?api=1&query=Songmont%20store%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+    <div class="spot-card budget-out">
+      <span class="spot-name">FREITAG</span><span class="spot-tag cat-bg">Bags</span>
+      <span class="spot-cn">recycled-tarp · JULU 758</span><span class="spot-price">¥1,000–2,000 · small ↓</span>
+      <span class="spot-desc">Swiss one-of-a-kind tarp bags, China-first store. Not local, but a cult stop — and the building's worth the visit.</span>
+      <span class="spot-links"><a href="https://www.freitag.ch" target="_blank" rel="noopener">🌐 Site</a> <a href="https://www.google.com/maps/search/?api=1&query=FREITAG%20Julu%20758%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+    <div class="spot-card">
+      <span class="spot-name">Markets &amp; vintage totes</span><span class="spot-tag cat-bg">Bags</span>
+      <span class="spot-cn">cheapest · multiple</span><span class="spot-price">¥tens–¥200 · in budget</span>
+      <span class="spot-desc">For genuinely cheap bags, the vintage streets and markets beat any brand. Inspect quality; haggle at markets.</span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Yongkang%20Road%20vintage%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+    </div>
+  </div>
+
+  <!-- KNOW BEFORE YOU BUY -->
+  <div class="sec-head" style="margin-top:2rem"><h2>Know before you buy</h2><span class="pill neu">practical</span></div>
+  <div class="ess-grid">
+    <div class="card"><span class="badge tip">✓ Payment</span><h3>Alipay / WeChat Pay</h3><p>Link a UK Visa/Mastercard — accepted everywhere including markets. Carry a little cash for the smallest vintage stalls.</p></div>
+    <div class="card"><span class="badge tip">✓ Tax refund</span><h3>From ¥200, instant</h3><p>In 2025–26 the departure-refund threshold dropped to ¥200 (same store, same day) with nationwide instant refund (即买即退). Net ≈ 9% after fees. Bring your passport.</p></div>
+    <div class="card"><span class="badge warn">⚠ Bargaining</span><h3>Markets only</h3><p>Haggle at the pearl / jade / Lingshi Rd markets (start ~30–40% of asking). Brand stores and curated vintage are fixed-price.</p></div>
+    <div class="card"><span class="badge note">◷ Timing</span><h3>Weekday afternoons</h3><p>FFC streets are calmest on weekdays; many boutiques open ~11:00 and vintage shops from ~13:00. Re-check hours on Dianping the day you go.</p></div>
   </div>
 </section>
 
@@ -616,6 +932,7 @@
 
 </main>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
   const tabs = document.querySelectorAll('.tab');
   const panels = document.querySelectorAll('.panel');
@@ -638,6 +955,94 @@
     if (saved === 'true') cb.checked = true;
     cb.addEventListener('change', () => localStorage.setItem(cb.id, cb.checked));
   });
+
+  // In-page "go to tab" links (used from the itinerary)
+  document.querySelectorAll('[data-goto]').forEach(el => {
+    el.addEventListener('click', e => {
+      e.preventDefault();
+      const btn = document.querySelector('.tab[data-tab="' + el.getAttribute('data-goto') + '"]');
+      if (btn) btn.click();
+    });
+  });
+
+  // ---- Shopping map (lazy init; fixes Leaflet sizing inside a hidden tab) ----
+  const SHOP_PLACES = [
+    // districts / markets (ar)
+    {n:"Anfu Road",cn:"安福路",c:"ar",lat:31.2155,lng:121.4345,d:"FFC boutique street — go weekday.",q:"Anfu Road Shanghai"},
+    {n:"Wukang Road",cn:"武康路",c:"ar",lat:31.2103,lng:121.4262,d:"Art-Deco café/browse street (on your Day 10).",q:"Wukang Road Shanghai"},
+    {n:"JULU 758",cn:"巨鹿路758",c:"ar",lat:31.2156,lng:121.4475,d:"Concept park — FREITAG + buyer stores.",q:"Julu Road 758 Shanghai"},
+    {n:"Xian Suo",cn:"现所",c:"ar",lat:31.2298,lng:121.4402,d:"50+ brands; locals' favourite cluster.",q:"Xian Suo Yanping Road Shanghai"},
+    {n:"In the Park",cn:"公园里",c:"ar",lat:31.2301,lng:121.4381,d:"Mini-mall: ZUCZUG, streetwear, 2F accessories.",q:"In the Park Jiaozhou Road Shanghai"},
+    {n:"Yongkang Road vintage",cn:"永康路",c:"ar",lat:31.2088,lng:121.4538,d:"Shanghai's vintage street — Y2K & Americana.",q:"Yongkang Road Shanghai"},
+    {n:"Lingshi Road Market",cn:"灵石路",c:"ar",lat:31.2790,lng:121.4360,d:"Cheapest vintage; haggle. Wash everything.",q:"Lingshi Road clothing market Shanghai"},
+    {n:"Xintiandi",cn:"新天地",c:"ar",lat:31.2206,lng:121.4755,d:"MARITHÉ, MAIA, DOE, ROARINGWILD.",q:"Xintiandi Shanghai"},
+    {n:"Huaihai Middle Road",cn:"淮海中路",c:"ar",lat:31.2200,lng:121.4660,d:"bosie, HEFANG, TX Huaihai.",q:"Huaihai Middle Road Shanghai"},
+    {n:"Zhangyuan",cn:"张园",c:"ar",lat:31.2278,lng:121.4540,d:"Photogenic but luxury-only. Optional.",q:"Zhangyuan Shanghai"},
+    {n:"Tianzifang",cn:"田子坊",c:"ar",lat:31.2110,lng:121.4670,d:"Tourist souvenir maze. Skippable.",q:"Tianzifang Shanghai"},
+    // clothes (cl)
+    {n:"W.Management (WM)",cn:"万莫",c:"cl",lat:31.2353,lng:121.4757,d:"Womens · Y2K warehouse · ¥89–¥200.",q:"W.Management WM store Shanghai"},
+    {n:"Basement FG",cn:"",c:"cl",lat:31.2330,lng:121.4730,d:"Womens · American street · ~¥100–¥300.",q:"Basement FG store Shanghai"},
+    {n:"An Action a Day",cn:"每日行动",c:"cl",lat:31.2150,lng:121.4382,d:"Womens · minimalist clean-fit · ¥200–¥500.",q:"An Action a Day Wuyuan Road Shanghai"},
+    {n:"MAIA ACTIVE",cn:"玛伊娅",c:"cl",lat:31.2208,lng:121.4757,d:"Womens · athleisure · ¥300–¥700.",q:"MAIA ACTIVE Xintiandi Shanghai"},
+    {n:"MARITHÉ",cn:"",c:"cl",lat:31.2210,lng:121.4752,d:"Womens · French casual / Y2K · entry ↓.",q:"MARITHE Xintiandi Shanghai"},
+    {n:"bosie",cn:"伯喜",c:"cl",lat:31.2208,lng:121.4690,d:"Unisex · smart-casual · tees ¥139–¥359.",q:"bosie Huaihai Road Shanghai"},
+    {n:"DOE",cn:"",c:"cl",lat:31.2185,lng:121.4760,d:"Mens · workwear-street · own label ↓.",q:"DOE store Xintiandi Shanghai"},
+    {n:"ROARINGWILD",cn:"咆哮野兽",c:"cl",lat:31.2189,lng:121.4756,d:"Mens · guochao street basics · ¥200–¥400.",q:"ROARINGWILD store Shanghai"},
+    {n:"ICICLE",cn:"之禾",c:"cl",lat:31.2236,lng:121.4464,d:"Men+Women · minimalist · premium (browse).",q:"ICICLE 1618 Nanjing West Road Shanghai"},
+    {n:"LABELHOOD",cn:"栋梁",c:"cl",lat:31.2181,lng:121.4517,d:"Designer incubator · above budget · discovery.",q:"Labelhood Fumin Road Shanghai"},
+    // jewellery (jw)
+    {n:"HEFANG Jewelry",cn:"何方珠宝",c:"jw",lat:31.2168,lng:121.4652,d:"Designer · ¥300–¥1,500 · iapm. Fixed price.",q:"HEFANG Jewelry iapm Huaihai Shanghai"},
+    {n:"Lost In Echo",cn:"",c:"jw",lat:31.2156,lng:121.4348,d:"Designer · jewellery ¥300–¥1,500 · Anfu Rd.",q:"Lost In Echo Anfu Road Shanghai"},
+    {n:"Jing'an Temple Jewelry & Curio Mkt",cn:"静安寺珠宝古玩城",c:"jw",lat:31.2050,lng:121.4720,d:"Jade & antiques (on Luban Rd). Bargain; fakes exist.",q:"Jingan Temple Jewelry Curio Market Luban Road Shanghai"},
+    {n:"Hongqiao Pearl City",cn:"虹桥国际珍珠城",c:"jw",lat:31.1916,lng:121.3848,d:"Pearls · tourist-oriented · haggle. Sets ~¥320.",q:"Hongqiao International Pearl City Hongmei Road Shanghai"},
+    // accessories (ac)
+    {n:"tagi.",cn:"",c:"ac",lat:31.2155,lng:121.4350,d:"Design objects · phone cases & gifts · Anfu Rd.",q:"tagi Anfu Road Shanghai"},
+    // bags (bg)
+    {n:"Songmont",cn:"山下有松",c:"bg",lat:31.2202,lng:121.4700,d:"Leather bags · above budget · small charms ↓.",q:"Songmont store Shanghai"},
+    {n:"FREITAG (JULU 758)",cn:"",c:"bg",lat:31.2155,lng:121.4476,d:"Recycled-tarp bags · ¥1,000–2,000.",q:"FREITAG Julu 758 Shanghai"}
+  ];
+
+  let shopMap = null, shopInit = false;
+  function initShopMap(){
+    if (shopInit){ if (shopMap) setTimeout(() => shopMap.invalidateSize(), 60); return; }
+    if (typeof L === 'undefined'){
+      const m = document.getElementById('shopmap'); if (m) m.style.display = 'none';
+      const fb = document.querySelector('.map-fallback'); if (fb) fb.style.display = 'block';
+      return;
+    }
+    shopInit = true;
+    const COL = {cl:'#C2563B',jw:'#B08900',ac:'#15706B',bg:'#6B5CA5',ar:'#6B6459'};
+    shopMap = L.map('shopmap',{scrollWheelZoom:false}).setView([31.219,121.452],13);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+      {attribution:'&copy; OpenStreetMap &copy; CARTO',subdomains:'abcd',maxZoom:19}).addTo(shopMap);
+    const groups = {cl:L.layerGroup(),jw:L.layerGroup(),ac:L.layerGroup(),bg:L.layerGroup(),ar:L.layerGroup()};
+    const bounds = [];
+    SHOP_PLACES.forEach(p => {
+      const maps = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(p.q);
+      const html = '<strong>' + p.n + '</strong>' + (p.cn ? ' <span style="color:#9A9286">' + p.cn + '</span>' : '') +
+        '<br><span style="font-size:.85em">' + p.d + '</span>' +
+        '<br><a href="' + maps + '" target="_blank" rel="noopener" style="font-size:.85em">📍 Directions</a>';
+      L.circleMarker([p.lat,p.lng],{radius:7,color:'#fff',weight:2,fillColor:COL[p.c],fillOpacity:.95})
+        .bindPopup(html).addTo(groups[p.c]);
+      bounds.push([p.lat,p.lng]);
+    });
+    Object.keys(groups).forEach(k => groups[k].addTo(shopMap));
+    if (bounds.length) shopMap.fitBounds(bounds,{padding:[30,30]});
+    document.querySelectorAll('.mapfilters button').forEach(b => {
+      b.addEventListener('click', () => {
+        const f = b.getAttribute('data-f');
+        document.querySelectorAll('.mapfilters button').forEach(x => x.classList.remove('on'));
+        b.classList.add('on');
+        Object.keys(groups).forEach(k => shopMap.removeLayer(groups[k]));
+        if (f === 'all'){ Object.keys(groups).forEach(k => groups[k].addTo(shopMap)); shopMap.fitBounds(bounds,{padding:[30,30]}); }
+        else { groups[f].addTo(shopMap); const bb = []; SHOP_PLACES.forEach(p => { if (p.c === f) bb.push([p.lat,p.lng]); }); if (bb.length) shopMap.fitBounds(bb,{padding:[40,40],maxZoom:15}); }
+      });
+    });
+    shopMap.on('click', () => { if (!shopMap.scrollWheelZoom.enabled()) shopMap.scrollWheelZoom.enable(); });
+    setTimeout(() => shopMap.invalidateSize(), 60);
+  }
+  const shopTabBtn = document.querySelector('.tab[data-tab="shopping"]');
+  if (shopTabBtn) shopTabBtn.addEventListener('click', () => setTimeout(initShopMap, 80));
 </script>
 </body>
 </html>
