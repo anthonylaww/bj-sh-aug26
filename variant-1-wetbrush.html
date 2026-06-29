@@ -275,6 +275,207 @@
     html{scroll-behavior:auto}
   }
 </style>
+<style>
+/* ===================================================================
+   Wet Brush hero — Concept 1 (摹)
+   Scoped to .wbhero; consumes only design tokens from :root.
+   =================================================================== */
+
+/* Derived ink-wet token */
+.wbhero { --ink-wet: rgba(156,51,39,.18); --px: 0; --py: 0; }
+
+/* ── Override base hanIn animations; supply brush-write instead ── */
+.wbhero .han-city {
+  animation: none;           /* cancel .han-city { animation: hanIn ... } */
+  display: inline-block;     /* enables clip-path on this inline span      */
+  position: relative;        /* stacking context for ::after bloom          */
+}
+.wbhero .hero-seal {
+  animation: none;           /* cancel .hero-seal { animation: hanIn ... } */
+  transform: none;           /* remove base transform:rotate(-4deg)         */
+  rotate: -4deg;             /* replicate with individual property          */
+}
+
+/* ── Keyframes ───────────────────────────────────────────────────── */
+
+/* Calligraphic brush wipe: left→right clip-path + blur + opacity   */
+@keyframes wb-brush {
+  from {
+    opacity: 0;
+    filter: blur(6px) saturate(1.4);
+    clip-path: inset(0 100% 0 0 round .06em);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0px) saturate(1);
+    clip-path: inset(0 0% 0 0 round .06em);
+  }
+}
+
+/* Wet-ink bloom behind each glyph: expands and fades              */
+@keyframes wb-bloom {
+  from { opacity: .52; scale: 0.6; }
+  to   { opacity: 0;  scale: 1.18; }
+}
+
+/* Seal press: stamps down with overshoot + cinnabar halo           */
+@keyframes wb-seal {
+  from {
+    scale: 1.25;
+    rotate: -8deg;
+    box-shadow:
+      inset 0 0 0 2px rgba(156,51,39,.12),
+      0 0 0 0 rgba(156,51,39,.35);
+  }
+  to {
+    scale: 1;
+    rotate: -4deg;
+    box-shadow:
+      inset 0 0 0 2px rgba(156,51,39,.12),
+      0 0 0 7px rgba(156,51,39,0);
+  }
+}
+
+/* ── Play-state: .wbplay activates all three ceremony steps ─────── */
+
+/* 京 — first stroke at 120ms */
+.wbhero.wbplay .han-city.bj {
+  animation: wb-brush 720ms cubic-bezier(.22,.61,.36,1) 120ms both;
+}
+/* 沪 — second stroke at 320ms */
+.wbhero.wbplay .han-city.sh {
+  animation: wb-brush 720ms cubic-bezier(.22,.61,.36,1) 320ms both;
+}
+/* 遊 — seal stamps at 980ms */
+.wbhero.wbplay .hero-seal {
+  animation: wb-seal 260ms cubic-bezier(.34,1.56,.64,1) 980ms both;
+}
+
+/* ── Ink bloom ::after (radial soaked-paper halo per glyph) ──────── */
+.wbhero .han-city::after {
+  content: '';
+  position: absolute;
+  inset: -28% -16%;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0; scale: 1;    /* resting state: invisible                  */
+}
+.wbhero .han-city.bj::after {
+  background: radial-gradient(ellipse at 55% 62%,
+    rgba(156,51,39,.3) 0%, transparent 66%);
+}
+.wbhero .han-city.sh::after {
+  background: radial-gradient(ellipse at 45% 62%,
+    rgba(93,132,112,.3) 0%, transparent 66%);
+}
+.wbhero.wbplay .han-city.bj::after {
+  animation: wb-bloom 780ms cubic-bezier(.22,.61,.36,1) 120ms both;
+}
+.wbhero.wbplay .han-city.sh::after {
+  animation: wb-bloom 780ms cubic-bezier(.22,.61,.36,1) 320ms both;
+}
+
+/* ── SVG turbulence ink-wash behind the hanrow ──────────────────── */
+.wb-wash {
+  position: absolute;
+  top: 2.6rem;           /* below the eyebrow */
+  left: 50%;
+  translate: -50% 0;     /* horizontal centre over the hero              */
+  width: min(560px, 88%);
+  height: 116px;
+  pointer-events: none;
+  opacity: .065;
+  z-index: 0;
+  overflow: visible;
+}
+/* Ensure glyph text sits above the wash */
+.wbhero .han-city,
+.wbhero .han-dot,
+.wbhero .hero-seal { position: relative; z-index: 1; }
+.wbhero .hanrow { position: relative; z-index: 1; }
+
+/* ── Multi-depth pointer parallax ───────────────────────────────────
+   Uses CSS individual `translate` property so it composes cleanly
+   with animation's separate `rotate` and `scale` properties.
+   240ms ease-out transition = parchment-under-glass lag.
+   ──────────────────────────────────────────────────────────────── */
+.wbhero .hero-seal {
+  translate: calc(var(--px)*14px) calc(var(--py)*9px);
+  transition: translate 240ms ease-out;
+}
+.wbhero .hanrow {
+  translate: calc(var(--px)*8px) calc(var(--py)*5px);
+  transition: translate 240ms ease-out;
+}
+.wbhero .rule-orn {
+  translate: calc(var(--px)*4px) calc(var(--py)*4px);
+  transition: translate 240ms ease-out;
+}
+.wbhero .route {
+  translate: calc(var(--px)*3px) calc(var(--py)*2px);
+  transition: translate 240ms ease-out;
+}
+.wbhero h1,
+.wbhero .lede {
+  translate: calc(var(--px)*2px) calc(var(--py)*1px);
+  transition: translate 240ms ease-out;
+}
+
+/* Ease home over 600ms when pointer leaves */
+.wbhero.wbp-leaving .hero-seal,
+.wbhero.wbp-leaving .hanrow,
+.wbhero.wbp-leaving .rule-orn,
+.wbhero.wbp-leaving .route,
+.wbhero.wbp-leaving h1,
+.wbhero.wbp-leaving .lede {
+  transition: translate 600ms ease-out;
+}
+
+/* ── Mobile (<600px): halved parallax gain, compressed stagger ──── */
+@media (max-width: 600px) {
+  .wbhero .hero-seal { translate: calc(var(--px)*7px)   calc(var(--py)*4.5px); }
+  .wbhero .hanrow    { translate: calc(var(--px)*4px)   calc(var(--py)*2.5px); }
+  .wbhero .rule-orn  { translate: calc(var(--px)*2px)   calc(var(--py)*2px);   }
+  .wbhero .route     { translate: calc(var(--px)*1.5px) calc(var(--py)*1px);   }
+  .wbhero h1,
+  .wbhero .lede      { translate: calc(var(--px)*1px)   calc(var(--py)*.5px);  }
+
+  /* Tighter stagger on small screens (brief: 140ms) */
+  .wbhero.wbplay .han-city.bj        { animation-delay:  80ms; }
+  .wbhero.wbplay .han-city.sh        { animation-delay: 220ms; }
+  .wbhero.wbplay .han-city.bj::after { animation-delay:  80ms; }
+  .wbhero.wbplay .han-city.sh::after { animation-delay: 220ms; }
+  .wbhero.wbplay .hero-seal          { animation-delay: 740ms; }
+}
+
+/* ── Reduced-motion: static, fully readable ─────────────────────── */
+/* The global rule already collapses duration to .001ms.
+   These rules add belt-and-braces for final computed state.        */
+@media (prefers-reduced-motion: reduce) {
+  .wbhero .han-city {
+    animation: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+    clip-path: none !important;
+  }
+  .wbhero .han-city::after { animation: none !important; opacity: 0 !important; }
+  .wbhero .hero-seal {
+    animation: none !important;
+    scale: 1;
+    rotate: -4deg;
+    box-shadow: inset 0 0 0 2px rgba(156,51,39,.12);
+  }
+  .wbhero .hero-seal,
+  .wbhero .hanrow,
+  .wbhero .rule-orn,
+  .wbhero .route,
+  .wbhero h1,
+  .wbhero .lede {
+    translate: none !important;
+    transition: none !important;
+  }
+}
+</style>
 </head>
 <body>
 
@@ -299,28 +500,46 @@
 
 <!-- HOME -->
 <section class="panel is-active" id="home">
-  <div class="hero">
-    <span class="eyebrow">3–16 August 2026 · a trip for two</span>
+  <div class="hero wbhero">
+    <!-- Turbulence ink-wash behind the hanrow glyphs -->
+    <svg class="wb-wash" aria-hidden="true" focusable="false"
+         xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <linearGradient id="wb-lg" x1="0%" y1="50%" x2="100%" y2="50%">
+          <stop offset="15%" stop-color="#efe1d6"/>
+          <stop offset="85%" stop-color="#e3eae2"/>
+        </linearGradient>
+        <filter id="wb-nf" x="-8%" y="-8%" width="116%" height="116%">
+          <feTurbulence type="fractalNoise" baseFrequency=".07 .018"
+                        numOctaves="3" seed="5" result="noise"/>
+          <feDisplacementMap in="SourceGraphic" in2="noise"
+                             scale="28" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#wb-lg)" filter="url(#wb-nf)"/>
+    </svg>
+
+    <span class="eyebrow">3&#8211;16 August 2026 &middot; a trip for two</span>
     <div class="hanrow">
-      <span class="han-city bj">京</span><span class="han-dot">·</span><span class="han-city sh">沪</span>
-      <span class="hero-seal" aria-hidden="true">遊</span>
+      <span class="han-city bj">&#20140;</span><span class="han-dot">&middot;</span><span class="han-city sh">&#27807;</span>
+      <span class="hero-seal" aria-hidden="true">&#36941;</span>
     </div>
     <h1>Beijing <span class="amp">&amp;</span> Shanghai</h1>
-    <p class="lede">A balanced-pace fortnight built around food, history, and art — picks pulled from what locals actually rate, not the tourist-trap defaults.</p>
+    <p class="lede">A balanced-pace fortnight built around food, history, and art &#8212; picks pulled from what locals actually rate, not the tourist-trap defaults.</p>
     <div class="rule-orn" aria-hidden="true"></div>
     <div class="route">
       <div class="stop">
         <span class="city bj">Beijing</span>
-        <span class="dates">3 – 8 Aug</span>
+        <span class="dates">3 &#8211; 8 Aug</span>
       </div>
       <div class="leg">
         <div class="ln"></div>
         <span class="train-lbl"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="12.5" rx="3"/><path d="M5 11h14"/><path d="M8.5 16.5 6.5 20M15.5 16.5 17.5 20"/></svg>14:00 bullet train</span>
-        <span class="train-lbl">BJS → SHA 18:32</span>
+        <span class="train-lbl">BJS &#8594; SHA 18:32</span>
       </div>
       <div class="stop">
         <span class="city sh">Shanghai</span>
-        <span class="dates">9 – 16 Aug</span>
+        <span class="dates">9 &#8211; 16 Aug</span>
       </div>
     </div>
     <div class="stats">
@@ -1168,6 +1387,117 @@
   }
   const shopTabBtn = document.querySelector('.tab[data-tab="shopping"]');
   if (shopTabBtn) shopTabBtn.addEventListener('click', () => setTimeout(initShopMap, 80));
+</script>
+<script>
+/* === Wet Brush hero JS (摹) ============================================
+   - Triggers brushWrite ceremony on load and on Home-tab re-select.
+   - rAF-throttled pointermove writes --px/--py; CSS transitions handle lag.
+   - Guards parallax and gyro behind prefers-reduced-motion.
+   ====================================================================== */
+(function () {
+  'use strict';
+
+  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var hero           = null;
+  var rafId          = null;
+  var leaveTimer     = null;
+  var targetPx = 0, targetPy = 0;
+
+  /* ── Ceremony: remove .wbplay, force reflow, re-add ── */
+  function playWetBrush () {
+    if (!hero) return;
+    hero.classList.remove('wbplay');
+    void hero.offsetWidth;          /* reflow — restarts CSS animations */
+    hero.classList.add('wbplay');
+  }
+
+  /* ── Pointer move: normalise coords to −1…1 in rAF ── */
+  function onPointerMove (e) {
+    var rect = hero.getBoundingClientRect();
+    targetPx = (e.clientX - rect.left) / rect.width  * 2 - 1;
+    targetPy = (e.clientY - rect.top)  / rect.height * 2 - 1;
+    /* clamp to [−1, 1] */
+    targetPx = Math.max(-1, Math.min(1, targetPx));
+    targetPy = Math.max(-1, Math.min(1, targetPy));
+    if (!rafId) {
+      rafId = requestAnimationFrame(function () {
+        hero.style.setProperty('--px', targetPx.toFixed(3));
+        hero.style.setProperty('--py', targetPy.toFixed(3));
+        rafId = null;
+      });
+    }
+  }
+
+  /* ── Pointer leave: ease back to neutral over 600ms ── */
+  function onPointerLeave () {
+    clearTimeout(leaveTimer);
+    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+    hero.classList.add('wbp-leaving');
+    hero.style.setProperty('--px', '0');
+    hero.style.setProperty('--py', '0');
+    leaveTimer = setTimeout(function () {
+      hero.classList.remove('wbp-leaving');
+    }, 620);
+  }
+
+  /* ── Optional device-orientation at half gain (mobile tilt) ── */
+  function setupGyro () {
+    if (!window.DeviceOrientationEvent) return;
+    var gyroActive = false;
+    function onOrient (e) {
+      if (e.beta == null || e.gamma == null) return;
+      if (!gyroActive) { gyroActive = true; }
+      /* gamma: left/right tilt −90…90; beta: front/back −180…180 */
+      var px = Math.max(-1, Math.min(1, e.gamma / 45)) * 0.5;
+      var py = Math.max(-1, Math.min(1, (e.beta - 20) / 40)) * 0.5;
+      if (!rafId) {
+        var capPx = px, capPy = py;
+        rafId = requestAnimationFrame(function () {
+          hero.style.setProperty('--px', capPx.toFixed(3));
+          hero.style.setProperty('--py', capPy.toFixed(3));
+          rafId = null;
+        });
+      }
+    }
+    /* Only activate if device actually fires events */
+    window.addEventListener('deviceorientation', onOrient, { passive: true });
+  }
+
+  /* ── Bind tab re-select ── */
+  function bindHomeTab () {
+    var homeTab = document.querySelector('.tab[data-tab="home"]');
+    if (!homeTab) return;
+    homeTab.addEventListener('click', function () {
+      /* Small delay so riseIn panel animation starts first */
+      setTimeout(playWetBrush, 80);
+    });
+  }
+
+  /* ── Init ── */
+  function init () {
+    hero = document.querySelector('.wbhero');
+    if (!hero) return;
+
+    /* Fire the opening ceremony */
+    playWetBrush();
+
+    /* Set up parallax only when motion is permitted */
+    if (!prefersReduced.matches) {
+      hero.addEventListener('pointermove', onPointerMove, { passive: true });
+      hero.addEventListener('pointerleave', onPointerLeave,  { passive: true });
+      /* Gyro on small/touch devices — absent on desktop → neutral */
+      if (window.innerWidth < 768) setupGyro();
+    }
+
+    bindHomeTab();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+}());
 </script>
 </body>
 </html>
