@@ -367,6 +367,25 @@
     .gate{width:calc(var(--s)*.32)}
     .gate .g-en{font-size:.76rem}
   }
+  /* small phones — the ring becomes a vertical stack of gate rows */
+  @media(max-width:600px){
+    .gateway{place-items:start center;overflow-y:auto}
+    .gate-plan{display:none}
+    .gate-scene{width:100%;padding:1.5rem 0 4rem}
+    .bagua{width:100%;height:auto;display:flex;flex-direction:column;align-items:stretch}
+    .bagua-art{display:none}
+    .bagua-center{position:static;transform:none;margin:0 auto 1.1rem;width:108px;height:108px}
+    .bagua-center:hover,.bagua-center:focus-visible{transform:scale(1.03)}
+    .bagua-gates{position:static;inset:auto;display:flex;flex-direction:column;gap:.5rem;width:100%}
+    .gate{position:static;transform:none;width:100%;flex-direction:row;justify-content:flex-start;align-items:center;gap:1rem;
+      padding:.85rem 1.1rem;border:1px solid var(--forest-line);border-radius:5px;background:rgba(205,166,89,.05);min-height:54px}
+    .gate:hover,.gate:focus-visible{border-color:var(--gold-2);background:rgba(205,166,89,.1)}
+    .gate .trigram{width:30px;height:21px;margin:0;flex:none}
+    .gate .g-cn{font-size:1.5rem}
+    .gate .g-en{font-size:1rem;margin-left:auto;color:var(--cream-2)}
+    .gateway.is-arriving .gate{animation:gFadeIn .5s both;animation-delay:calc(.85s + var(--i)*.08s)}
+    .gate-skip{position:static;display:block;margin:1.6rem auto 0;text-align:center}
+  }
 
   /* ===== Phase 2 — per-section courtyards (移步换景) ===== */
   .scene{position:relative;margin:.4rem 0 2.3rem;padding-bottom:1.3rem;border-bottom:1px solid var(--line-2);--key:var(--gold);--key-lt:var(--gold-lt)}
