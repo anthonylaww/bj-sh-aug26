@@ -391,6 +391,45 @@
   /* signature treatments — the two flagship courtyards */
   #beijing .timeline::before{background:linear-gradient(var(--bj) 0,var(--bj) 5%,var(--line-2) 15%,var(--line-2) 85%,var(--bj) 95%,var(--bj) 100%)}
   #shanghai .timeline::before{background:linear-gradient(var(--sh) 0,var(--sh) 5%,var(--line-2) 15%,var(--line-2) 85%,var(--sh) 95%,var(--sh) 100%)}
+
+  /* ===== Phase 3 — 行前 Prep courtyard ===== */
+  .prep-head{position:relative;overflow:hidden;color:var(--cream);border-radius:6px;border:1px solid var(--forest-line);
+    padding:clamp(1.6rem,4vw,2.4rem) clamp(1.4rem,4vw,2.2rem);margin:.4rem 0 2.2rem;
+    background:radial-gradient(120% 130% at 12% -10%, #284035 0%, var(--forest) 55%, var(--forest-deep) 100%);
+    box-shadow:0 1px 0 rgba(205,166,89,.22) inset}
+  .prep-head::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.4;
+    background-image:linear-gradient(0deg,rgba(205,166,89,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(205,166,89,.05) 1px,transparent 1px);background-size:26px 26px}
+  .prep-head>*{position:relative}
+  .prep-head .scene-mark{color:var(--gold-lt);margin-bottom:.7rem}
+  .prep-cn{font-family:var(--han);font-size:clamp(2.4rem,7vw,3.4rem);line-height:.95;font-weight:500;color:var(--gold-lt);margin:0;letter-spacing:.08em}
+  .prep-en{font-family:var(--serif);font-style:italic;font-size:clamp(1.1rem,2.6vw,1.4rem);font-weight:500;color:var(--cream-2);margin:.1rem 0 0}
+  .prep-count{display:flex;align-items:baseline;gap:.7rem;margin:1.1rem 0 .3rem;flex-wrap:wrap}
+  .prep-n{font-family:var(--serif);font-size:clamp(2.8rem,9vw,4.4rem);font-weight:600;line-height:.85;color:var(--cream)}
+  .prep-unit{font-family:var(--mono);font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cream-2)}
+  .prep-next{font-family:var(--serif);font-style:italic;font-size:1.05rem;color:var(--gold-lt);margin:.55rem 0 0;line-height:1.45}
+
+  .prep-group{margin:1.8rem 0}
+  .prep-glabel{display:flex;align-items:baseline;gap:.7rem;font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);margin:0 0 .3rem}
+  .prep-glabel::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line-2),transparent)}
+  .prep-gcount{color:var(--ink-3);letter-spacing:.1em}
+  .prep-list{list-style:none;margin:0;padding:0}
+  .prep-item{display:grid;grid-template-columns:auto 1fr auto;gap:.85rem;align-items:start;padding:.95rem .2rem;border-bottom:1px solid var(--hair)}
+  .prep-item:last-child{border-bottom:none}
+  .prep-item input[type=checkbox]{margin-top:.3rem;accent-color:var(--gold);width:1.05rem;height:1.05rem;flex-shrink:0}
+  .prep-body{cursor:pointer}
+  .prep-title{display:block;font-family:var(--serif);font-size:1.1rem;color:var(--ink);font-weight:600}
+  .prep-why{display:block;font-size:.9rem;color:var(--ink-2);line-height:1.55;margin-top:.15rem}
+  .prep-stamp{align-self:start;white-space:nowrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;
+    padding:.22rem .5rem;border-radius:2px;border:1px solid var(--line-2);color:var(--ink-3);background:var(--surface)}
+  .prep-stamp.act{color:var(--bj-deep);border-color:#d8b3aa;background:var(--bj-soft)}
+  .prep-stamp.soon{color:var(--gold-deep);border-color:#d8c08a;background:var(--gold-soft)}
+  .prep-stamp.ground{color:var(--sh-deep);border-color:#bcd0c2;background:var(--sh-soft)}
+  .prep-item.is-done{opacity:.5}
+  .prep-item.is-done .prep-title{text-decoration:line-through;text-decoration-color:var(--line-2)}
+  .prep-item.is-done .prep-stamp{color:var(--sh-deep);border-color:#bcd0c2;background:var(--sh-soft)}
+  .prep-ready{text-align:center;font-family:var(--han);font-size:1.4rem;color:var(--sh-deep);margin:2.2rem 0 1rem;letter-spacing:.12em}
+  .prep-ready .en{display:block;font-family:var(--serif);font-style:italic;font-size:1rem;color:var(--ink-3);letter-spacing:0;margin-top:.35rem}
+  .panel.is-active .prep-head{animation:sceneIris .85s cubic-bezier(.2,.7,.2,1) both}
 </style>
 <script>try{if(sessionStorage.getItem('gateEntered')==='1')document.documentElement.classList.add('gate-skip-initial');}catch(e){}</script>
 </head>
@@ -425,11 +464,12 @@
         <polygon points="250.5,78 322,149.5 322,250.5 250.5,322 149.5,322 78,250.5 78,149.5 149.5,78" stroke="currentColor" stroke-width="1" opacity=".4"/>
         <circle cx="200" cy="200" r="60" stroke="currentColor" stroke-width="1.4" opacity=".7"/>
         <g stroke="currentColor" stroke-width="1" opacity=".4" stroke-linecap="round">
-          <line x1="200" y1="136" x2="200" y2="40"/>
-          <line x1="260.9" y1="180.2" x2="350" y2="151"/>
-          <line x1="237.6" y1="251.8" x2="293" y2="328"/>
-          <line x1="162.4" y1="251.8" x2="107" y2="328"/>
-          <line x1="139.1" y1="180.2" x2="50" y2="151"/>
+          <line x1="200" y1="136" x2="200" y2="20"/>
+          <line x1="255.4" y1="168" x2="355.9" y2="110"/>
+          <line x1="255.4" y1="232" x2="355.9" y2="290"/>
+          <line x1="200" y1="264" x2="200" y2="380"/>
+          <line x1="144.6" y1="232" x2="44.1" y2="290"/>
+          <line x1="144.6" y1="168" x2="44.1" y2="110"/>
         </g>
       </svg>
 
@@ -443,19 +483,23 @@
           <svg class="trigram" viewBox="0 0 26 18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M3 4h20M3 9h20M3 14h7M16 14h7"/></svg>
           <span class="g-cn">须知</span><span class="g-en">Essentials</span>
         </button>
-        <button class="gate" type="button" data-gate="beijing" data-ink="bj" style="--a:72deg;--i:1" aria-label="Beijing — 6 nights">
+        <button class="gate" type="button" data-gate="prep" data-ink="gold" style="--a:60deg;--i:1" aria-label="Prep — countdown and book-ahead list">
+          <svg class="trigram" viewBox="0 0 26 18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M3 4h7M16 4h7M3 9h7M16 9h7M3 14h20"/></svg>
+          <span class="g-cn">行前</span><span class="g-en">Prep</span>
+        </button>
+        <button class="gate" type="button" data-gate="beijing" data-ink="bj" style="--a:120deg;--i:2" aria-label="Beijing — 6 nights">
           <svg class="trigram" viewBox="0 0 26 18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M3 4h20M3 9h7M16 9h7M3 14h20"/></svg>
           <span class="g-cn">北京</span><span class="g-en">Beijing</span>
         </button>
-        <button class="gate" type="button" data-gate="shanghai" data-ink="sh" style="--a:144deg;--i:2" aria-label="Shanghai — 7 nights">
+        <button class="gate" type="button" data-gate="shanghai" data-ink="sh" style="--a:180deg;--i:3" aria-label="Shanghai — 7 nights">
           <svg class="trigram" viewBox="0 0 26 18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M3 4h7M16 4h7M3 9h20M3 14h7M16 14h7"/></svg>
           <span class="g-cn">上海</span><span class="g-en">Shanghai</span>
         </button>
-        <button class="gate" type="button" data-gate="spots" data-ink="gold" style="--a:216deg;--i:3" aria-label="Spots — food and places">
+        <button class="gate" type="button" data-gate="spots" data-ink="gold" style="--a:240deg;--i:4" aria-label="Spots — food and places">
           <svg class="trigram" viewBox="0 0 26 18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M3 4h20M3 9h7M16 9h7M3 14h7M16 14h7"/></svg>
           <span class="g-cn">名胜</span><span class="g-en">Spots</span>
         </button>
-        <button class="gate" type="button" data-gate="shopping" data-ink="gold" style="--a:288deg;--i:4" aria-label="Shopping — Shanghai fashion">
+        <button class="gate" type="button" data-gate="shopping" data-ink="gold" style="--a:300deg;--i:5" aria-label="Shopping — Shanghai fashion">
           <svg class="trigram" viewBox="0 0 26 18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M3 4h7M16 4h7M3 9h20M3 14h20"/></svg>
           <span class="g-cn">购物</span><span class="g-en">Shopping</span>
         </button>
@@ -477,6 +521,7 @@
     <nav class="tabs" role="tablist">
       <button class="tab active" data-tab="home"><span class="t-cn">首页</span><span class="t-en">Home</span></button>
       <button class="tab" data-tab="essentials"><span class="t-cn">须知</span><span class="t-en">Essentials</span></button>
+      <button class="tab" data-tab="prep"><span class="t-cn">行前</span><span class="t-en">Prep</span></button>
       <button class="tab" data-tab="beijing"><span class="t-cn">北京</span><span class="t-en">Beijing</span></button>
       <button class="tab" data-tab="shanghai"><span class="t-cn">上海</span><span class="t-en">Shanghai</span></button>
       <button class="tab" data-tab="shopping"><span class="t-cn">购物</span><span class="t-en">Shopping</span></button>
@@ -527,16 +572,10 @@
   </div>
 
   <div class="sec-head"><h2>Book-ahead checklist</h2><span class="pill warn">time-sensitive</span></div>
-  <ul class="checklist" id="checklist">
-    <li><input type="checkbox" id="c1"><label for="c1" class="cl-label"><strong>Forbidden City tickets</strong> — release 7 days before your visit at 20:00 Beijing time. Book on bookingticket.dpm.org.cn (passport required). Also book Tiananmen Square separately (free).</label></li>
-    <li><input type="checkbox" id="c2"><label for="c2" class="cl-label"><strong>Bullet train BJS→SHA</strong> — book on Trip.com or 12306.cn. 3 Aug + 60 days ≈ opens around 2 Jul. Second class fine; it's a fast 4.5 hr ride.</label></li>
-    <li><input type="checkbox" id="c3"><label for="c3" class="cl-label"><strong>Suzhou gardens</strong> — Humble Administrator's Garden and Tiger Hill both have daily caps. Book on the Suzhou tourism app or Trip.com 1–3 days out.</label></li>
-    <li><input type="checkbox" id="c4"><label for="c4" class="cl-label"><strong>Shanghai Museum East</strong> — timed entry; reserve on the museum's WeChat mini-programme or website. Closed Mondays.</label></li>
-    <li><input type="checkbox" id="c5"><label for="c5" class="cl-label"><strong>Alipay / WeChat Pay</strong> — link a UK Visa/Mastercard before landing. This is how you pay for everything including street food.</label></li>
-    <li><input type="checkbox" id="c6"><label for="c6" class="cl-label"><strong>China eSIM with VPN</strong> — buy before travel. Google, WhatsApp, Instagram blocked without it.</label></li>
-    <li><input type="checkbox" id="c7"><label for="c7" class="cl-label"><strong>Summer Palace</strong> — no advance booking required but go early (before 09:00) in August to beat heat and crowds.</label></li>
-    <li><input type="checkbox" id="c8"><label for="c8" class="cl-label"><strong>Dianping app</strong> — install and practice navigating before landing. Use for restaurant queues, ratings, and table booking.</label></li>
-  </ul>
+  <div class="card">
+    <p style="font-size:.92rem;color:var(--ink-2)">The time-sensitive bookings (the Forbidden City's 7-day ticket drop, the bullet-train window) and everything to set up before you fly now live in their own room, with a live countdown to Beijing.</p>
+    <p class="goto-line"><a href="#" data-goto="prep">→ 行前 · Prep: countdown &amp; book-ahead list</a></p>
+  </div>
 </section>
 
 <!-- ESSENTIALS -->
@@ -596,6 +635,101 @@
 </section>
 
 <!-- BEIJING -->
+<!-- PREP -->
+<section class="panel" id="prep">
+  <header class="prep-head" data-scene="prep">
+    <svg class="scene-mark" viewBox="0 0 26 18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M3 4h7M16 4h7M3 9h7M16 9h7M3 14h20"/></svg>
+    <p class="prep-cn">行前</p>
+    <p class="prep-en">Before you go</p>
+    <div class="prep-count"><span class="prep-n" id="prepDays">—</span><span class="prep-unit">days to Beijing</span></div>
+    <p class="prep-next" id="prepNext"></p>
+  </header>
+
+  <div class="prep-group">
+    <p class="prep-glabel">Time-critical <span class="prep-gcount">booking windows</span></p>
+    <ul class="prep-list">
+      <li class="prep-item">
+        <input type="checkbox" id="c1">
+        <label for="c1" class="prep-body">
+          <span class="prep-title">Forbidden City tickets</span>
+          <span class="prep-why">Release 7 days before your visit at 20:00 Beijing time. Book on bookingticket.dpm.org.cn (passport required). Book Tiananmen Square separately (free).</span>
+        </label>
+        <span class="prep-stamp soon" id="stamp-c1">release 29 Jul</span>
+      </li>
+      <li class="prep-item">
+        <input type="checkbox" id="c2">
+        <label for="c2" class="prep-body">
+          <span class="prep-title">Bullet train BJS→SHA</span>
+          <span class="prep-why">Book on Trip.com or 12306.cn. The 9 Aug seats open about 2 Jul. Second class is fine; a fast 4.5 hr ride.</span>
+        </label>
+        <span class="prep-stamp soon" id="stamp-c2">opens 2 Jul</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="prep-group">
+    <p class="prep-glabel">Before you fly <span class="prep-gcount">by 3 Aug</span></p>
+    <ul class="prep-list">
+      <li class="prep-item">
+        <input type="checkbox" id="c5">
+        <label for="c5" class="prep-body">
+          <span class="prep-title">Alipay / WeChat Pay</span>
+          <span class="prep-why">Link a UK Visa/Mastercard before landing. This is how you pay for everything, including street food.</span>
+        </label>
+        <span class="prep-stamp" id="stamp-c5">before you fly</span>
+      </li>
+      <li class="prep-item">
+        <input type="checkbox" id="c6">
+        <label for="c6" class="prep-body">
+          <span class="prep-title">China eSIM with VPN</span>
+          <span class="prep-why">Buy before travel. Google, WhatsApp and Instagram are blocked without it.</span>
+        </label>
+        <span class="prep-stamp" id="stamp-c6">before you fly</span>
+      </li>
+      <li class="prep-item">
+        <input type="checkbox" id="c8">
+        <label for="c8" class="prep-body">
+          <span class="prep-title">Dianping app</span>
+          <span class="prep-why">Install and practise navigating before landing. Use it for restaurant queues, ratings and table booking.</span>
+        </label>
+        <span class="prep-stamp" id="stamp-c8">before you fly</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="prep-group">
+    <p class="prep-glabel">Book on the ground <span class="prep-gcount">once you're there</span></p>
+    <ul class="prep-list">
+      <li class="prep-item">
+        <input type="checkbox" id="c3">
+        <label for="c3" class="prep-body">
+          <span class="prep-title">Suzhou gardens</span>
+          <span class="prep-why">Humble Administrator's Garden and Tiger Hill both have daily caps. Book on the Suzhou tourism app or Trip.com 1–3 days out.</span>
+        </label>
+        <span class="prep-stamp ground" id="stamp-c3">1–3 days out</span>
+      </li>
+      <li class="prep-item">
+        <input type="checkbox" id="c4">
+        <label for="c4" class="prep-body">
+          <span class="prep-title">Shanghai Museum East</span>
+          <span class="prep-why">Timed entry; reserve on the museum's WeChat mini-programme or website. Closed Mondays.</span>
+        </label>
+        <span class="prep-stamp ground" id="stamp-c4">reserve ahead</span>
+      </li>
+      <li class="prep-item">
+        <input type="checkbox" id="c7">
+        <label for="c7" class="prep-body">
+          <span class="prep-title">Summer Palace</span>
+          <span class="prep-why">No advance booking required, but go early (before 09:00) in August to beat the heat and crowds.</span>
+        </label>
+        <span class="prep-stamp ground" id="stamp-c7">go early</span>
+      </li>
+    </ul>
+  </div>
+
+  <p class="prep-ready" id="prepReady" hidden>你们都准备好了<span class="en">Everything is handled. You're ready.</span></p>
+</section>
+
 <section class="panel" id="beijing">
   <header class="scene scene--bj" data-scene="beijing">
     <svg class="scene-mark" viewBox="0 0 26 18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M3 4h20M3 9h7M16 9h7M3 14h20"/></svg>
@@ -1315,13 +1449,62 @@
     });
   });
 
-  // Persist checklist state
-  const checkboxes = document.querySelectorAll('#checklist input[type=checkbox]');
-  checkboxes.forEach(cb => {
-    const saved = localStorage.getItem(cb.id);
-    if (saved === 'true') cb.checked = true;
-    cb.addEventListener('change', () => localStorage.setItem(cb.id, cb.checked));
-  });
+  // ===== 行前 Prep — countdown + persisted, dated book-ahead list (Phase 3) =====
+  (function(){
+    const boxes = [].slice.call(document.querySelectorAll('#prep input[type=checkbox]'));
+    if(!boxes.length) return;
+    const now = new Date();
+    const DAY = 86400000;
+    const tripStart = new Date(2026, 7, 3);        // 3 Aug 2026
+    const trainOpen = new Date(2026, 6, 2);        // ~2 Jul, 9 Aug seats open
+    const fcRelease = new Date(2026, 6, 29, 20, 0); // 29 Jul 20:00, Forbidden City drop
+    const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const fmt = d => d.getDate() + ' ' + MON[d.getMonth()];
+    const dleft = d => Math.max(0, Math.ceil((d - now) / DAY));
+    const isChecked = id => { const b = document.getElementById(id); return !!(b && b.checked); };
+
+    const days = document.getElementById('prepDays');
+    if(days) days.textContent = Math.max(0, Math.ceil((tripStart - now) / DAY));
+
+    // live stamps for the two time-critical windows
+    const s1 = document.getElementById('stamp-c1');
+    if(s1){ if(now >= fcRelease){ s1.textContent = 'tickets live'; s1.className = 'prep-stamp act'; }
+      else { s1.textContent = 'release ' + fmt(fcRelease); s1.className = 'prep-stamp ' + (dleft(fcRelease) <= 7 ? 'act' : 'soon'); } }
+    const s2 = document.getElementById('stamp-c2');
+    if(s2){ if(now >= trainOpen){ s2.textContent = 'book now'; s2.className = 'prep-stamp act'; }
+      else { s2.textContent = 'opens ' + fmt(trainOpen); s2.className = 'prep-stamp soon'; } }
+
+    const next = document.getElementById('prepNext');
+    function refresh(){
+      let allDone = true;
+      boxes.forEach(cb => {
+        const done = cb.checked;
+        if(!done) allDone = false;
+        const li = cb.closest('.prep-item');
+        if(li) li.classList.toggle('is-done', done);
+        const stamp = document.getElementById('stamp-' + cb.id);
+        if(stamp){
+          if(done){ if(!stamp.dataset.base) stamp.dataset.base = stamp.textContent; stamp.textContent = 'handled'; }
+          else if(stamp.dataset.base){ stamp.textContent = stamp.dataset.base; }
+        }
+      });
+      if(next){
+        const up = [];
+        if(!isChecked('c2')) up.push({w:trainOpen, t: now < trainOpen ? ('Bullet-train seats open ' + fmt(trainOpen)) : 'Book the bullet train now'});
+        if(!isChecked('c1')) up.push({w:fcRelease, t: now < fcRelease ? ('Forbidden City tickets release ' + fmt(fcRelease) + ', 20:00 Beijing') : 'Forbidden City tickets are live'});
+        up.sort((a,b) => a.w - b.w);
+        next.textContent = up.length ? ('Next · ' + up[0].t) : 'Every time-critical booking is handled.';
+      }
+      const ready = document.getElementById('prepReady');
+      if(ready) ready.hidden = !allDone;
+    }
+
+    boxes.forEach(cb => {
+      if(localStorage.getItem(cb.id) === 'true') cb.checked = true;
+      cb.addEventListener('change', () => { localStorage.setItem(cb.id, cb.checked); refresh(); });
+    });
+    refresh();
+  })();
 
   // In-page "go to tab" links (used from the itinerary)
   document.querySelectorAll('[data-goto]').forEach(el => {
