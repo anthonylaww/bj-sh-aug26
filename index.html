@@ -16,8 +16,8 @@
     --paper:#f1ece0;--surface:#faf7ee;--surface-2:#eae3d2;--surface-3:#e0d8c2;
     /* forest ink — the dominant hue */
     --forest:#1d2b22;--forest-2:#27392e;--forest-deep:#152019;--forest-line:#3c4f43;
-    --cream:#f1ece0;--cream-2:rgba(241,236,224,.7);--cream-3:rgba(241,236,224,.5);
-    --ink:#222a23;--ink-2:#4c574d;--ink-3:#7c8579;
+    --cream:#f1ece0;--cream-2:rgba(241,236,224,.7);--cream-3:rgba(241,236,224,.6);
+    --ink:#222a23;--ink-2:#4c574d;--ink-3:#646b62;
     --line:#ddd5c2;--line-2:#c7bca1;--hair:#d4cab2;
     /* brass — the universal cartographic accent */
     --gold:#9c7e35;--gold-2:#bd9c4e;--gold-deep:#765d20;--gold-soft:#e7dcc0;--gold-lt:#cda659;
@@ -459,6 +459,17 @@
   .prep-ready{text-align:center;font-family:var(--han);font-size:1.4rem;color:var(--sh-deep);margin:2.2rem 0 1rem;letter-spacing:.12em}
   .prep-ready .en{display:block;font-family:var(--serif);font-style:italic;font-size:1rem;color:var(--ink-3);letter-spacing:0;margin-top:.35rem}
   .panel.is-active .prep-head{animation:sceneIris .85s cubic-bezier(.2,.7,.2,1) both}
+
+  /* ===== Print — the whole guide as one offline PDF (every room un-hidden) ===== */
+  @media print{
+    .gateway,.gate-skip,.topbar{display:none!important}
+    .panel{display:block!important;animation:none!important;margin-bottom:2.4rem}
+    .panel .scene,.panel .prep-head{animation:none!important;clip-path:none!important;opacity:1!important}
+    #shopmap,.day-map,.map-fallback,.mapfilters{display:none!important}
+    .scene,.prep-head,.hero,.day-inner,.card,.spot-card,.transit-strip{break-inside:avoid}
+    a[href^="http"]::after{content:" ("attr(href)")";font-size:.74em;color:var(--ink-3);word-break:break-all}
+    body{background:#fff}
+  }
 </style>
 <script>try{if(sessionStorage.getItem('gateEntered')==='1')document.documentElement.classList.add('gate-skip-initial');}catch(e){}</script>
 </head>
@@ -850,10 +861,10 @@
         <div class="day-sub">Full day · cable car up · toboggan optional</div>
         <div class="day-body">
           <ul>
-            <li>Breakfast: <strong>慕田峪 (Mutianyu)</strong> — grab something quick or eat on the road; leave by 07:30 to beat crowds and heat. Shared van (book via hotel or Klook ~¥300pp return) or Didi + public bus.</li>
-            <li>Morning: <strong>慕田峪 (Mutianyu)</strong> — the best-preserved, least crowded stretch with forest backdrop. Cable car up, toboggan down (¥100, genuinely fun).</li>
-            <li>Lunch: <strong>慕田峪 (Mutianyu)</strong> — eat near the base village; allow 3–4 hrs on the wall. Bring water, sunscreen, and sturdy shoes.</li>
-            <li>Afternoon: <strong>慕田峪 (Mutianyu)</strong> — finish the wall and head back, in Beijing by ~17:00.</li>
+            <li>Early start — grab something quick or eat on the road; leave by 07:30 to beat the crowds and heat. Shared van (book via hotel or Klook, ~¥300pp return) or Didi + public bus.</li>
+            <li>Morning: <strong>慕田峪 (Mutianyu)</strong> — the best-preserved, least crowded stretch, with a forest backdrop. Cable car up, toboggan down (¥100, genuinely fun).</li>
+            <li>Lunch at the base village; allow 3–4 hrs up on the wall. Bring water, sunscreen, and sturdy shoes.</li>
+            <li>Head back in the afternoon, in Beijing by ~17:00.</li>
             <li>Dinner: near the hotel — keep it easy after a long day.</li>
             <li>Evening: sleep — rest up.</li>
           </ul>
@@ -1467,15 +1478,66 @@
   const tabs = document.querySelectorAll('.tab');
   const panels = document.querySelectorAll('.panel');
 
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ARIA tablist wiring (roles, selected state, roving tabindex)
   tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      const target = tab.dataset.tab;
-      tabs.forEach(t => t.classList.remove('active'));
-      panels.forEach(p => p.classList.remove('is-active'));
-      tab.classList.add('active');
-      document.getElementById(target).classList.add('is-active');
-      window.scrollTo({top:0,behavior:'smooth'});
+    const name = tab.dataset.tab;
+    tab.setAttribute('role', 'tab');
+    tab.id = 'tab-' + name;
+    tab.setAttribute('aria-controls', name);
+    const on = tab.classList.contains('active');
+    tab.setAttribute('aria-selected', on ? 'true' : 'false');
+    tab.tabIndex = on ? 0 : -1;
+  });
+  panels.forEach(p => {
+    p.setAttribute('role', 'tabpanel');
+    p.setAttribute('aria-labelledby', 'tab-' + p.id);
+    if(!p.hasAttribute('tabindex')) p.setAttribute('tabindex', '-1');
+  });
+
+  function activateTab(name, opts){
+    opts = opts || {};
+    const tab = document.querySelector('.tab[data-tab="' + name + '"]');
+    const panel = document.getElementById(name);
+    if(!tab || !panel) return;
+    tabs.forEach(t => {
+      const on = t === tab;
+      t.classList.toggle('active', on);
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
     });
+    panels.forEach(p => p.classList.toggle('is-active', p === panel));
+    if(name === 'shopping') setTimeout(initShopMap, 80);
+    if(name === 'beijing') setTimeout(() => initDayMaps('bj'), 80);
+    if(name === 'shanghai') setTimeout(() => initDayMaps('sh'), 80);
+    if(opts.updateHash !== false){ try{ history.replaceState(null, '', '#' + name); }catch(e){ location.hash = name; } }
+    if(opts.scroll !== false) window.scrollTo({top:0, behavior: prefersReduced ? 'auto' : 'smooth'});
+    if(opts.focusPanel) panel.focus({preventScroll:true});
+  }
+
+  tabs.forEach(tab => tab.addEventListener('click', () => activateTab(tab.dataset.tab)));
+
+  // arrow-key roving across the tablist (focus stays on the tabs)
+  const tablistEl = document.querySelector('.tabs');
+  if(tablistEl) tablistEl.addEventListener('keydown', e => {
+    const list = [].slice.call(tabs);
+    const cur = list.indexOf(document.activeElement);
+    if(cur < 0) return;
+    let ni = -1;
+    if(e.key === 'ArrowRight' || e.key === 'ArrowDown') ni = (cur + 1) % list.length;
+    else if(e.key === 'ArrowLeft' || e.key === 'ArrowUp') ni = (cur - 1 + list.length) % list.length;
+    else if(e.key === 'Home') ni = 0;
+    else if(e.key === 'End') ni = list.length - 1;
+    if(ni >= 0){ e.preventDefault(); activateTab(list[ni].dataset.tab, {scroll:false}); list[ni].focus(); }
+  });
+
+  // deep-linking: honour #section on load and on hashchange (Back works, sections are shareable)
+  const initialHash = location.hash.slice(1);
+  if(initialHash && document.querySelector('.tab[data-tab="' + initialHash + '"]')) activateTab(initialHash, {scroll:false, updateHash:false});
+  window.addEventListener('hashchange', () => {
+    const n = location.hash.slice(1);
+    if(n && document.querySelector('.tab[data-tab="' + n + '"]')) activateTab(n, {scroll:false, updateHash:false});
   });
 
   // ===== 行前 Prep — countdown + persisted, dated book-ahead list (Phase 3) =====
@@ -1620,8 +1682,7 @@
     shopMap.on('click', () => { if (!shopMap.scrollWheelZoom.enabled()) shopMap.scrollWheelZoom.enable(); });
     setTimeout(() => shopMap.invalidateSize(), 60);
   }
-  const shopTabBtn = document.querySelector('.tab[data-tab="shopping"]');
-  if (shopTabBtn) shopTabBtn.addEventListener('click', () => setTimeout(initShopMap, 80));
+  // shop map initialises via activateTab('shopping')
 
   // ---- Per-day itinerary maps (Beijing & Shanghai; travel days excluded) ----
   const DAY_MAPS = {
@@ -1732,10 +1793,7 @@
       setTimeout(() => map.invalidateSize(), 60);
     });
   }
-  const bjTabBtn = document.querySelector('.tab[data-tab="beijing"]');
-  if (bjTabBtn) bjTabBtn.addEventListener('click', () => setTimeout(() => initDayMaps('bj'), 80));
-  const shTabBtn = document.querySelector('.tab[data-tab="shanghai"]');
-  if (shTabBtn) shTabBtn.addEventListener('click', () => setTimeout(() => initDayMaps('sh'), 80));
+  // per-day maps initialise via activateTab('beijing' | 'shanghai')
 
   // ===== Gateway — the courtyard threshold (Phase 1) =====
   (function(){
@@ -1769,14 +1827,8 @@
       setTimeout(fin, 750);
     }
     function enter(tab){
-      const btn = document.querySelector('.tab[data-tab="' + tab + '"]');
-      if(btn) btn.click();
+      activateTab(tab, {focusPanel:true});
       closeGateway();
-      requestAnimationFrame(() => {
-        const p = document.getElementById(tab);
-        if(p){ p.setAttribute('tabindex','-1'); p.focus({preventScroll:true}); }
-        else if(lastFocus){ lastFocus.focus(); }
-      });
     }
     gw.querySelectorAll('[data-gate]').forEach(el =>
       el.addEventListener('click', () => enter(el.getAttribute('data-gate'))));
@@ -1794,8 +1846,10 @@
     });
     const ret = document.getElementById('toCourtyard');
     if(ret) ret.addEventListener('click', () => openGateway(false));
-    // first load shows the arrival; same-session revisits skip straight in
-    if(sessionStorage.getItem('gateEntered') === '1'){ finishClose(); }
+    // first load shows the arrival; same-session revisits and deep-links skip straight in
+    const deep = location.hash.slice(1);
+    const isDeepLink = deep && deep !== 'home' && document.querySelector('.tab[data-tab="' + deep + '"]');
+    if(isDeepLink || sessionStorage.getItem('gateEntered') === '1'){ finishClose(); }
     else { try{ sessionStorage.setItem('gateEntered','1'); }catch(e){} openGateway(true); }
   })();
 </script>
