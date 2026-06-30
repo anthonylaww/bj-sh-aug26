@@ -3,185 +3,569 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#F4F2EC">
+<meta name="theme-color" content="#152019">
 <title>Beijing &amp; Shanghai · 3–16 August 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Noto+Serif+SC:wght@300;400;500;600;700&display=swap">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231d2b22'/><rect x='2.5' y='2.5' width='27' height='27' rx='4.5' fill='none' stroke='%239c7e35' stroke-width='1'/><text x='16' y='23' font-family='Georgia,serif' font-size='18' fill='%23cda659' text-anchor='middle'>京</text></svg>">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" crossorigin="" />
 <style>
   :root{
-    --paper:#F4F2EC;--surface:#FBFAF6;--surface-2:#F0EDE4;
-    --ink:#211C16;--ink-2:#6B6459;--ink-3:#9A9286;
-    --line:#E3DED2;--line-2:#D6D0C2;
-    --bj:#BC3B2A;--bj-deep:#9A2A1C;--bj-soft:#F6E7E2;
-    --sh:#15706B;--sh-deep:#0D544F;--sh-soft:#E0EEEC;
-    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
-    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,system-ui,sans-serif;
+    /* paper — warm cartographic cream */
+    --paper:#f1ece0;--surface:#faf7ee;--surface-2:#eae3d2;--surface-3:#e0d8c2;
+    /* forest ink — the dominant hue */
+    --forest:#1d2b22;--forest-2:#27392e;--forest-deep:#152019;--forest-line:#3c4f43;
+    --cream:#f1ece0;--cream-2:rgba(241,236,224,.7);--cream-3:rgba(241,236,224,.6);
+    --ink:#222a23;--ink-2:#4c574d;--ink-3:#646b62;
+    --line:#ddd5c2;--line-2:#c7bca1;--hair:#d4cab2;
+    /* brass — the universal cartographic accent */
+    --gold:#9c7e35;--gold-2:#bd9c4e;--gold-deep:#765d20;--gold-soft:#e7dcc0;--gold-lt:#cda659;
+    /* regional inks: Beijing lacquer-oxblood, Shanghai verdigris */
+    --bj:#9e4630;--bj-deep:#7c3522;--bj-soft:#efddd3;--bj-lt:#cf7b5e;
+    --sh:#2f7a6b;--sh-deep:#225a4e;--sh-soft:#dce8e2;--sh-lt:#63b09c;
+    --accent:#9c7e35;--char-bj:#9e4630;--char-sh:#2f7a6b;
+    --serif:"Cormorant Garamond",Georgia,"Noto Serif SC",serif;
+    --body:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Noto Serif SC",serif;
+    --han:"Noto Serif SC","Songti SC","Source Han Serif SC",serif;
+    --label:"Cormorant Garamond",Georgia,serif;
     --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
-    --maxw:940px;--pad:clamp(1.1rem,4vw,2.2rem);
+    --maxw:920px;--pad:clamp(1.2rem,5vw,3rem);
   }
   *{box-sizing:border-box}
-  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
-  h1,h2,h3,h4{margin:0;font-weight:600}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.68;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    background-color:var(--paper);
+    background-image:
+      linear-gradient(0deg, rgba(29,43,34,.026) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(29,43,34,.026) 1px, transparent 1px),
+      radial-gradient(125% 90% at 50% -8%, #f7f2e7 0%, var(--paper) 62%);
+    background-size:32px 32px,32px 32px,auto;
+  }
+  h1,h2,h3,h4{margin:0;font-weight:600;letter-spacing:.005em}
   p{margin:0}a{color:inherit}
-  /* TOPBAR */
-  .topbar{position:sticky;top:0;z-index:50;background:rgba(244,242,236,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-  .topbar-in{max-width:var(--maxw);margin:0 auto;padding:.6rem var(--pad);display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
-  .brand{display:flex;align-items:center;gap:.5rem;font-weight:700;font-size:.95rem;white-space:nowrap}
-  .brand span{font-weight:400;color:var(--ink-2)}
-  .seals{display:flex;gap:3px}
-  .seals i{display:block;width:10px;height:10px;border-radius:50%;background:var(--bj)}
-  .seals i:last-child{background:var(--sh)}
-  .tabs{display:flex;gap:.2rem;flex-wrap:wrap}
-  .tab{background:none;border:none;cursor:pointer;padding:.35rem .75rem;border-radius:6px;font-size:.85rem;font-family:var(--sans);color:var(--ink-2);transition:background .15s,color .15s}
-  .tab:hover{background:var(--surface-2);color:var(--ink)}
-  .tab.active{background:var(--ink);color:var(--paper)}
+  ::selection{background:rgba(156,126,53,.22)}
+  .eyebrow,.label{font-family:var(--mono);font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;color:var(--ink-3)}
+
+  /* reusable hairline ornament: brass rule + field-guide lozenge */
+  .rule-orn{height:22px;margin:1.7rem auto 1.1rem;background-repeat:no-repeat;background-position:center;
+    background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='22' viewBox='0 0 240 22'><g stroke='%239c7e35' stroke-width='1' fill='none' stroke-linecap='round'><line x1='0' y1='11' x2='102' y2='11'/><line x1='138' y1='11' x2='240' y2='11'/><path d='M104 11 l16 -7 l16 7 l-16 7 z' fill='%231d2b22' stroke='%239c7e35'/></g><circle cx='120' cy='11' r='1.7' fill='%23cda659' stroke='none'/></svg>")}
+
+  /* TOPBAR — dark forest field-guide header */
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(21,32,25,.92);backdrop-filter:blur(12px) saturate(1.1);
+    border-bottom:1px solid var(--forest-line);box-shadow:0 1px 0 rgba(156,126,53,.18)}
+  .topbar-in{max-width:var(--maxw);margin:0 auto;padding:.7rem var(--pad);display:flex;align-items:center;gap:1.6rem;flex-wrap:wrap}
+  .brand{display:flex;align-items:baseline;gap:.55rem;white-space:nowrap}
+  .brand b{font-family:var(--han);font-weight:500;font-size:1.06rem;color:var(--cream);letter-spacing:.14em}
+  .brand .en{font-family:var(--label);font-style:italic;font-size:.92rem;color:var(--gold-lt);letter-spacing:.02em}
+  .brand-seal{display:none}
+  .tabs{display:flex;gap:.1rem;flex-wrap:wrap;margin-left:auto}
+  .tab{position:relative;cursor:pointer;border:0;background:none;padding:.4rem .75rem .55rem;
+    display:flex;flex-direction:column;align-items:center;gap:.06rem;line-height:1.1;color:var(--cream-2);transition:color .25s}
+  .tab .t-cn{font-family:var(--han);font-size:.62rem;letter-spacing:.22em;color:var(--cream-3);transition:color .25s}
+  .tab .t-en{font-family:var(--label);font-size:.96rem;letter-spacing:.01em}
+  .tab::after{content:"";position:absolute;left:.75rem;right:.75rem;bottom:.18rem;height:1.5px;background:var(--gold-2);
+    transform:scaleX(0);transform-origin:center;transition:transform .28s cubic-bezier(.2,.7,.2,1)}
+  .tab:hover{color:var(--cream)}
+  .tab:hover::after{transform:scaleX(.5)}
+  .tab.active{color:var(--cream)}
+  .tab.active .t-cn{color:var(--gold-lt)}
+  .tab.active::after{transform:scaleX(1)}
+
   /* PANELS */
-  .panel{display:none;max-width:var(--maxw);margin:0 auto;padding:2rem var(--pad) 4rem}
-  .panel.is-active{display:block}
-  /* HERO */
-  .hero{text-align:center;padding:3rem 1rem 2.5rem;border-bottom:1px solid var(--line);margin-bottom:2.5rem}
-  .eyebrow{display:block;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:.75rem}
-  .hero h1{font-family:var(--serif);font-size:clamp(2.2rem,6vw,3.8rem);font-weight:400;line-height:1.1;margin-bottom:1rem}
-  .hero h1 .amp{color:var(--ink-3)}
-  .lede{font-size:1.05rem;color:var(--ink-2);max-width:540px;margin:0 auto 2rem}
+  @keyframes riseIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  .panel{display:none;max-width:var(--maxw);margin:0 auto;padding:2.6rem var(--pad) 4.5rem}
+  .panel.is-active{display:block;animation:riseIn .55s cubic-bezier(.2,.7,.2,1) both}
+
+  /* HERO — dark forest cartouche, the cover of the travelogue */
+  .hero{position:relative;text-align:center;margin-bottom:2.8rem;padding:clamp(2.4rem,6vw,3.6rem) clamp(1.2rem,5vw,3rem) clamp(2rem,5vw,2.8rem);
+    color:var(--cream);background:
+      radial-gradient(120% 130% at 50% -10%, #284035 0%, var(--forest) 55%, var(--forest-deep) 100%);
+    border-radius:6px;border:1px solid var(--forest-line);
+    box-shadow:0 1px 0 rgba(205,166,89,.25) inset,0 18px 44px -22px rgba(21,32,25,.7);overflow:hidden}
+  .hero::before{content:"";position:absolute;inset:9px;border:1px solid rgba(205,166,89,.32);border-radius:3px;pointer-events:none}
+  .hero::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+    background-image:linear-gradient(0deg,rgba(205,166,89,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(205,166,89,.05) 1px,transparent 1px);
+    background-size:26px 26px}
+  .hero>*{position:relative;z-index:1}
+  .hero .eyebrow{display:block;margin-bottom:1.4rem;color:var(--gold-lt)}
+  .hanrow{position:relative;display:inline-flex;align-items:baseline;justify-content:center;gap:.7rem;margin:0 0 .2rem}
+  .han-city{font-family:var(--han);font-weight:400;font-size:clamp(3rem,10vw,5.2rem);line-height:1;letter-spacing:.04em}
+  .han-city.bj{color:var(--bj-lt)}.han-city.sh{color:var(--sh-lt)}
+  .han-dot{font-family:var(--serif);font-size:clamp(1.5rem,4vw,2.4rem);color:var(--gold-2);transform:translateY(-.1em)}
+  .hero-seal{position:absolute;top:-.4rem;right:-2.4rem;width:32px;height:32px;border-radius:4px;
+    display:flex;align-items:center;justify-content:center;transform:rotate(-4deg);
+    font-family:var(--han);font-weight:500;font-size:.96rem;color:var(--gold-lt);background:transparent;
+    border:1px solid var(--gold);box-shadow:inset 0 0 0 2px rgba(205,166,89,.16)}
+  .hero h1{font-family:var(--serif);font-size:clamp(2.2rem,6vw,3.6rem);font-weight:500;line-height:1.04;margin:.5rem 0 1rem;color:var(--cream);letter-spacing:-.01em}
+  .hero h1 .amp{font-style:italic;font-weight:400;color:var(--gold-lt)}
+  .lede{font-family:var(--serif);font-size:clamp(1.2rem,2.8vw,1.5rem);font-style:italic;color:var(--cream-2);max-width:580px;margin:0 auto;line-height:1.5}
+  .hero .rule-orn{filter:saturate(1.2) brightness(1.15)}
+
   /* ROUTE */
-  .route{display:flex;align-items:stretch;gap:0;justify-content:center;margin:0 auto 1.5rem;max-width:580px}
-  .stop{display:flex;flex-direction:column;align-items:center;gap:.3rem}
-  .city{font-family:var(--serif);font-size:1.6rem;font-weight:400}
-  .city.bj{color:var(--bj)}
-  .city.sh{color:var(--sh)}
-  .dates{font-size:.75rem;color:var(--ink-3);font-family:var(--mono)}
-  .leg{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 1rem;gap:.2rem}
-  .ln{width:80px;height:2px;background:var(--line-2);position:relative}
-  .ln::after{content:"→";position:absolute;right:-8px;top:-10px;color:var(--ink-3);font-size:.85rem}
-  .train-lbl{font-size:.7rem;color:var(--ink-3);font-family:var(--mono);white-space:nowrap}
-  /* QUICK STATS */
-  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.75rem;margin-top:1.5rem}
-  .stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.9rem 1rem;text-align:center}
-  .stat .n{font-family:var(--serif);font-size:1.8rem;font-weight:400;line-height:1}
-  .stat .n.bj{color:var(--bj)}.stat .n.sh{color:var(--sh)}
-  .stat .l{font-size:.75rem;color:var(--ink-3);margin-top:.25rem}
-  /* SECTION HEADINGS */
-  .sec-head{display:flex;align-items:baseline;gap:.75rem;margin:2.5rem 0 1.25rem}
-  .sec-head h2{font-family:var(--serif);font-size:1.4rem;font-weight:400}
-  .sec-head .pill{font-size:.7rem;padding:.2rem .6rem;border-radius:20px;font-family:var(--mono);letter-spacing:.04em}
-  .pill.bj{background:var(--bj-soft);color:var(--bj-deep)}
-  .pill.sh{background:var(--sh-soft);color:var(--sh-deep)}
-  .pill.neu{background:var(--surface-2);color:var(--ink-2)}
+  .route{display:flex;align-items:center;gap:0;justify-content:center;margin:.6rem auto 1.8rem;max-width:600px}
+  .stop{display:flex;flex-direction:column;align-items:center;gap:.35rem}
+  .city{font-family:var(--serif);font-size:1.85rem;font-weight:600}
+  .city.bj{color:var(--bj-lt)}.city.sh{color:var(--sh-lt)}
+  .dates{font-size:.74rem;color:var(--cream-2);font-family:var(--mono);letter-spacing:.05em}
+  .leg{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 1.2rem;gap:.25rem}
+  .ln{width:96px;height:0;border-top:1px solid rgba(205,166,89,.5);position:relative}
+  .ln::after{content:"\2022";position:absolute;right:-4px;top:-.62em;color:var(--gold-2);font-size:.7rem}
+  .train-lbl{font-size:.68rem;color:var(--cream-2);font-family:var(--mono);white-space:nowrap;letter-spacing:.03em}
+
+  /* STATS — inset data cells on the cartouche */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:1px;margin-top:1.8rem;
+    background:rgba(205,166,89,.28);border:1px solid rgba(205,166,89,.32);border-radius:3px;overflow:hidden}
+  .stat{background:rgba(21,32,25,.55);padding:1.1rem 1rem;text-align:center}
+  .stat .n{font-family:var(--serif);font-size:2.4rem;font-weight:500;line-height:1;color:var(--cream)}
+  .stat .n.bj{color:var(--bj-lt)}.stat .n.sh{color:var(--sh-lt)}
+  .stat .l{font-size:.72rem;color:var(--cream-2);margin-top:.4rem;letter-spacing:.04em}
+
+  /* SECTION HEADINGS — field-guide entry rules */
+  .sec-head{display:flex;align-items:center;gap:.9rem;margin:3rem 0 1.4rem}
+  .sec-head h2{font-family:var(--serif);font-size:2rem;font-weight:600;color:var(--ink);flex:0 0 auto;letter-spacing:-.005em}
+  .sec-head .pill{font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
+    padding:.2rem .2rem;flex:0 0 auto}
+  .sec-head .pill.bj{color:var(--bj-deep)}.sec-head .pill.sh{color:var(--sh-deep)}.sec-head .pill.warn{color:var(--gold-deep)}
+  .sec-head::after{content:"";flex:1 1 auto;height:1px;background:linear-gradient(90deg,var(--gold) 0,var(--line-2) 22%,transparent)}
+
   /* CARDS */
-  .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:1.25rem 1.4rem;margin-bottom:.75rem}
-  .card h3{font-size:1rem;margin-bottom:.4rem}
-  .card p,.card li{font-size:.9rem;color:var(--ink-2)}
-  .card ul{margin:.4rem 0 0 1rem;padding:0}
-  .card li{margin-bottom:.2rem}
-  .badge{display:inline-block;font-size:.7rem;padding:.15rem .5rem;border-radius:4px;font-family:var(--mono);margin-bottom:.5rem}
-  .badge.warn{background:#FEF3CD;color:#7A5C00}
-  .badge.tip{background:var(--sh-soft);color:var(--sh-deep)}
-  .badge.note{background:var(--surface-2);color:var(--ink-2)}
-  /* DAY TIMELINE */
-  .timeline{position:relative;padding-left:3.5rem}
-  .timeline::before{content:'';position:absolute;left:1.15rem;top:.5rem;bottom:.5rem;width:2px;background:var(--line)}
-  .day-block{position:relative;margin-bottom:1.75rem}
-  .chop{position:absolute;left:-3.5rem;top:0;width:2.3rem;height:2.3rem;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
-  .chop.bj{background:var(--bj);color:#fff}
-  .chop.sh{background:var(--sh);color:#fff}
-  .chop.transit{background:var(--ink);color:#fff}
-  .chop .d{font-family:var(--serif);font-size:1.05rem;font-weight:400}
-  .chop .m{font-size:.55rem;letter-spacing:.05em;text-transform:uppercase;opacity:.8}
-  .day-inner{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:1.1rem 1.3rem}
-  .day-inner h3{font-size:1rem;margin-bottom:.15rem;display:flex;align-items:center;gap:.5rem}
-  .pace{font-size:.65rem;padding:.15rem .45rem;border-radius:3px;font-family:var(--mono);font-weight:400}
-  .pace.easy{background:var(--sh-soft);color:var(--sh-deep)}
-  .pace.active{background:var(--bj-soft);color:var(--bj-deep)}
-  .day-sub{font-size:.78rem;color:var(--ink-3);margin-bottom:.6rem}
-  .day-body{font-size:.88rem;color:var(--ink-2);line-height:1.65}
-  .day-body strong{color:var(--ink)}
-  .day-body ul{margin:.4rem 0 0 1rem;padding:0}
-  .day-body li{margin-bottom:.2rem}
-  /* SPOTS TABLE */
-  .spots-grid{display:grid;gap:.65rem}
-  .spot-card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:1rem 1.2rem;display:grid;grid-template-columns:1fr auto;gap:.25rem .75rem;align-items:start}
-  .spot-name{font-weight:600;font-size:.92rem}
-  .spot-cn{font-size:.8rem;color:var(--ink-3)}
-  .spot-desc{font-size:.83rem;color:var(--ink-2);grid-column:1/-1}
-  .spot-tag{font-size:.68rem;padding:.15rem .45rem;border-radius:4px;font-family:var(--mono);align-self:start;white-space:nowrap}
-  .spot-tag.food{background:#FEF3CD;color:#7A5C00}
-  .spot-tag.sight{background:var(--bj-soft);color:var(--bj-deep)}
-  .spot-tag.art{background:var(--sh-soft);color:var(--sh-deep)}
-  .spot-tag.shop{background:var(--surface-2);color:var(--ink-2)}
-  .skip{border-left:3px solid var(--bj);padding-left:.75rem;margin:.5rem 0;font-size:.85rem;color:var(--ink-2)}
+  .card{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:1.5rem 1.7rem;margin-bottom:1rem;
+    box-shadow:0 1px 2px rgba(21,32,25,.04);transition:transform .28s ease,box-shadow .28s ease,border-color .28s ease}
+  .card:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(21,32,25,.09);border-color:var(--line-2)}
+  .card h3{font-family:var(--serif);font-size:1.34rem;font-weight:600;margin-bottom:.5rem;color:var(--ink)}
+  .card p,.card li{font-size:.96rem;color:var(--ink-2)}
+  .card ul{margin:.5rem 0 0 1.1rem;padding:0}
+  .card li{margin-bottom:.3rem}
+  .card li::marker{color:var(--gold)}
+  .badge{display:inline-block;font-family:var(--mono);font-size:.66rem;letter-spacing:.05em;padding:.18rem .55rem;border-radius:2px;margin-bottom:.7rem;
+    border:1px solid var(--line-2);color:var(--ink-3);background:var(--surface-2)}
+  .badge.warn{color:var(--gold-deep);border-color:#d8c08a}
+  .badge.tip{color:var(--sh-deep);border-color:#bcd0c2}
+  .badge.note{color:var(--ink-3)}
+
+  /* TIMELINE */
+  .timeline{position:relative;padding-left:4rem}
+  .timeline::before{content:'';position:absolute;left:1.35rem;top:1rem;bottom:1rem;width:1px;background:linear-gradient(var(--gold) 0,var(--line-2) 12%,var(--line-2) 88%,var(--gold) 100%)}
+  .day-block{position:relative;margin-bottom:2rem}
+  .chop{position:absolute;left:-4rem;top:.2rem;width:2.7rem;height:2.7rem;border-radius:50%;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;
+    background:var(--surface);border:1px solid var(--line-2);box-shadow:0 0 0 3px var(--paper),0 1px 3px rgba(21,32,25,.12)}
+  .chop.bj{border-color:var(--bj);color:var(--bj-deep)}
+  .chop.sh{border-color:var(--sh);color:var(--sh-deep)}
+  .chop.transit{border-color:var(--gold);color:var(--gold-deep)}
+  .chop .d{font-family:var(--serif);font-size:1.3rem;font-weight:600}
+  .chop .m{font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-top:.06rem}
+  .day-inner{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:1.4rem 1.6rem;
+    box-shadow:0 1px 2px rgba(21,32,25,.04);transition:transform .28s ease,box-shadow .28s ease,border-color .28s ease}
+  .day-inner:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(21,32,25,.09);border-color:var(--line-2)}
+  .day-inner h3{font-family:var(--serif);font-size:1.5rem;font-weight:600;margin-bottom:.2rem;display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap;color:var(--ink);letter-spacing:-.005em}
+  .pace{font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;padding:.12rem 0;color:var(--ink-3)}
+  .pace.easy{color:var(--sh-deep)}
+  .pace.easy::before,.pace.active::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:.4rem;vertical-align:middle}
+  .pace.easy::before{background:var(--sh)}
+  .pace.active{color:var(--bj-deep)}
+  .pace.active::before{background:var(--bj)}
+  .day-sub{font-family:var(--serif);font-style:italic;font-size:.98rem;color:var(--ink-3);margin-bottom:.7rem}
+  .day-body{font-size:.96rem;color:var(--ink-2);line-height:1.72}
+  .day-body strong{color:var(--ink);font-weight:600}
+  .day-body ul{margin:.5rem 0 0 1.1rem;padding:0}
+  .day-body li{margin-bottom:.32rem}
+  .day-body li::marker{color:var(--gold)}
+
+  /* SPOTS */
+  .spots-grid{display:grid;gap:.8rem}
+  .spot-card{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:1.25rem 1.45rem;
+    display:grid;grid-template-columns:1fr auto;gap:.3rem .9rem;align-items:start;
+    transition:transform .28s ease,box-shadow .28s ease,border-color .28s ease}
+  .spot-card:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(38,34,25,.07);border-color:var(--line-2)}
+  .spot-name{font-family:var(--serif);font-weight:600;font-size:1.2rem;color:var(--ink)}
+  .spot-cn{font-family:var(--han);font-weight:400;font-size:.82rem;color:var(--ink-3)}
+  .spot-desc{font-size:.92rem;color:var(--ink-2);grid-column:1/-1;line-height:1.62}
+  .spot-tag{font-family:var(--mono);font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;padding:.16rem .5rem;border-radius:2px;
+    align-self:start;white-space:nowrap;border:1px solid var(--line-2);color:var(--ink-3);background:var(--surface-2)}
+  .spot-tag.food{color:var(--gold-deep);border-color:#dcc593}
+  .spot-tag.sight{color:var(--bj-deep);border-color:#d8b3aa}
+  .spot-tag.art{color:var(--sh-deep);border-color:#bcd0c2}
+  .spot-tag.shop{color:var(--ink-3)}
+  .skip{position:relative;padding:.75rem 1.1rem .75rem 1.5rem;margin:1rem 0;font-size:.92rem;color:var(--ink-2);background:var(--bj-soft);border:1px solid #e3c8bc;border-radius:4px}
+  .skip::before{content:"";position:absolute;left:.7rem;top:.95rem;width:6px;height:6px;border-radius:50%;background:var(--bj)}
+  .skip strong{color:var(--bj-deep);font-family:var(--serif);font-size:1rem}
+
   /* CHECKLIST */
   .checklist{list-style:none;padding:0;margin:0}
-  .checklist li{display:flex;align-items:flex-start;gap:.65rem;padding:.6rem 0;border-bottom:1px solid var(--line);font-size:.9rem}
+  .checklist li{display:flex;align-items:flex-start;gap:.8rem;padding:.85rem .2rem;border-bottom:1px solid var(--hair);font-size:.96rem}
   .checklist li:last-child{border-bottom:none}
-  .checklist input[type=checkbox]{margin-top:.15rem;accent-color:var(--bj);width:1rem;height:1rem;flex-shrink:0}
-  .checklist .cl-label{color:var(--ink-2)}
-  .checklist .cl-label strong{color:var(--ink)}
-  /* ESSENTIALS GRID */
-  .ess-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.75rem}
-  /* TRANSIT STRIP */
-  .transit-strip{background:var(--ink);color:var(--paper);border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:1.75rem;font-size:.88rem}
-  .transit-strip h3{color:#fff;font-size:.95rem;margin-bottom:.35rem}
-  .transit-strip p{color:rgba(255,255,255,.75);line-height:1.6}
-  /* RESPONSIVE */
-  @media(max-width:600px){
-    .route{flex-direction:column;align-items:stretch;gap:.2rem}
-    .leg{flex-direction:row;width:100%;justify-content:flex-start;gap:.5rem;padding:.15rem .1rem}
-    .leg .ln{width:34px;height:1px}
-    .leg .ln::after{content:"↓";right:auto;left:13px;top:-.7em}
-    .stop{flex-direction:row;align-items:baseline;justify-content:space-between;padding:.45rem .1rem}
-    .stop .city{font-size:1.25rem}
-    .timeline{padding-left:3rem}
-    .chop{left:-3rem;width:2rem;height:2rem}
-    .chop .d{font-size:.95rem}
-    .chop .m{font-size:.5rem}
-  }
+  .checklist input[type=checkbox]{margin-top:.2rem;accent-color:var(--gold);width:1.05rem;height:1.05rem;flex-shrink:0}
+  .checklist .cl-label{color:var(--ink-2);transition:opacity .25s}
+  .checklist input:checked + .cl-label{opacity:.5}
+  .checklist .cl-label strong{color:var(--ink);font-weight:600}
+
+  /* ESSENTIALS */
+  .ess-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1rem}
+
+  /* TRANSIT — forest field-note panel */
+  .transit-strip{position:relative;overflow:hidden;background:
+      radial-gradient(120% 140% at 0% 0%, #284035 0%, var(--forest) 60%, var(--forest-deep) 100%);
+    color:var(--cream);border-radius:4px;padding:1.9rem 1.7rem 1.5rem;margin-bottom:2rem;font-size:.96rem;border:1px solid var(--forest-line);box-shadow:inset 0 0 0 1px rgba(205,166,89,.16)}
+  .transit-strip::before{content:"";position:absolute;left:0;right:0;top:0;height:11px;opacity:.55;pointer-events:none;background-repeat:repeat-x;background-position:left top;
+    background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='11'><path d='M0 10 H18 M4 10 V4 H14 V10 M7 10 V7 H11 V10' fill='none' stroke='%239c7e35' stroke-width='1'/></svg>")}
+  .transit-strip h3{font-family:var(--serif);color:var(--cream);font-size:1.34rem;font-weight:600;margin-bottom:.4rem}
+  .transit-strip p{color:var(--cream-2);line-height:1.66}
+  .transit-strip strong{color:#fff}
+
   /* SHOPPING */
-  .shop-intro{font-size:.9rem;color:var(--ink-2)}
-  .legend{display:flex;flex-wrap:wrap;gap:.45rem 1.1rem;margin:.4rem 0 .55rem;font-size:.78rem;color:var(--ink-2)}
-  .legend span{display:inline-flex;align-items:center;gap:.4rem}
-  .legend i{width:11px;height:11px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--line-2)}
-  .mapfilters{display:flex;flex-wrap:wrap;gap:.3rem;margin:.1rem 0 .8rem}
-  .mapfilters button{font-family:var(--sans);font-size:.78rem;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);padding:.3rem .7rem;border-radius:20px;transition:background .15s,color .15s}
-  .mapfilters button:hover{background:var(--surface-2);color:var(--ink)}
-  .mapfilters button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
-  #shopmap{height:420px;width:100%;border:1px solid var(--line);border-radius:12px;margin-bottom:.4rem;z-index:1;background:var(--surface-2)}
-  .map-fallback{display:none;padding:.9rem 1.2rem;font-size:.85rem;color:var(--ink-2);background:var(--surface);border:1px dashed var(--line-2);border-radius:12px;margin-bottom:.4rem}
-  .map-note{font-size:.74rem;color:var(--ink-3);margin:.1rem 0 1.4rem}
-  .shop-cat{display:flex;align-items:center;gap:.65rem;margin:2rem 0 .5rem}
-  .shop-cat h3{font-family:var(--serif);font-size:1.2rem;font-weight:400}
-  .shop-cat .accent{width:32px;height:3px;border-radius:3px;flex-shrink:0}
-  .shop-sub{font-size:.72rem;color:var(--ink-3);text-transform:uppercase;letter-spacing:.1em;margin:1.1rem 0 .5rem;font-family:var(--mono)}
-  .spot-card .spot-price{font-size:.78rem;font-family:var(--mono);color:var(--ink-2);align-self:start}
+  .shop-intro{font-size:.96rem;color:var(--ink-2)}
+  .legend{display:flex;flex-wrap:wrap;gap:.5rem 1.3rem;margin:.5rem 0 .7rem;font-size:.8rem;color:var(--ink-2)}
+  .legend span{display:inline-flex;align-items:center;gap:.45rem}
+  .legend i{width:9px;height:9px;border-radius:50%}
+  .mapfilters{display:flex;flex-wrap:wrap;gap:.4rem;margin:.2rem 0 1rem}
+  .mapfilters button{font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;cursor:pointer;border:1px solid var(--line-2);background:var(--surface);color:var(--ink-2);padding:.32rem .8rem;border-radius:2px;transition:all .2s}
+  .mapfilters button:hover{border-color:var(--gold);color:var(--ink)}
+  .mapfilters button.on{background:var(--forest);color:var(--cream);border-color:var(--forest)}
+  #shopmap{height:440px;width:100%;border:1px solid var(--line-2);border-radius:4px;margin-bottom:.5rem;z-index:1;background:var(--surface-2)}
+  #shopmap .leaflet-tile-pane{filter:sepia(.18) saturate(.72) hue-rotate(8deg) brightness(1.02) contrast(.95)}
+  .leaflet-popup-content-wrapper{background:var(--surface)!important;color:var(--ink)!important;border:1px solid var(--line-2);border-radius:3px;font-family:var(--body);box-shadow:0 8px 24px rgba(21,32,25,.16)}
+  .leaflet-popup-tip{background:var(--surface)!important}
+  .leaflet-popup-content strong{font-family:var(--serif);font-size:1.05em}
+  .map-fallback{display:none;padding:1rem 1.2rem;font-size:.9rem;color:var(--ink-2);background:var(--surface-2);border:1px dashed var(--line-2);border-radius:4px;margin-bottom:.5rem}
+  .map-note{font-size:.76rem;color:var(--ink-3);margin:.2rem 0 1.6rem;line-height:1.55}
+  .shop-cat{display:flex;align-items:baseline;gap:.8rem;margin:2.4rem 0 .6rem}
+  .shop-cat h3{font-family:var(--serif);font-size:1.55rem;font-weight:600;color:var(--ink)}
+  .shop-cat .accent{width:22px;height:2px;border-radius:2px;flex:0 0 auto;align-self:center}
+  .shop-sub{font-family:var(--mono);font-size:.7rem;color:var(--ink-3);text-transform:uppercase;letter-spacing:.16em;margin:1.4rem 0 .6rem}
+  .spot-card .spot-price{font-family:var(--mono);font-size:.74rem;color:var(--ink-2);align-self:start;letter-spacing:.02em}
   .spot-card.budget-out .spot-price{color:var(--bj-deep)}
-  .spot-links{grid-column:1/-1;display:flex;gap:.7rem;margin-top:.35rem}
-  .spot-links a{font-size:.76rem;font-family:var(--mono);text-decoration:none;color:var(--sh-deep);border-bottom:1px solid var(--sh-soft)}
-  .spot-links a:hover{border-color:var(--sh)}
-  .spot-tag.cat-jw{background:#F0E6C8;color:#7A5C00}
-  .spot-tag.cat-ac{background:var(--sh-soft);color:var(--sh-deep)}
-  .spot-tag.cat-bg{background:#E5E1F0;color:#4A3F78}
-  .spot-tag.g-w{background:#F6E7E2;color:#9A2A1C}
-  .spot-tag.g-m{background:#E0EEEC;color:#0D544F}
-  .spot-tag.g-u{background:var(--surface-2);color:var(--ink-2)}
-  .goto-line{margin-top:.6rem;font-size:.82rem}
-  .goto-line a{color:var(--sh-deep);font-weight:600;text-decoration:none;border-bottom:1px solid var(--sh-soft)}
-  .goto-line a:hover{border-color:var(--sh)}
+  .spot-links{grid-column:1/-1;display:flex;gap:1rem;margin-top:.5rem}
+  .spot-links a{font-family:var(--mono);font-size:.74rem;text-decoration:none;color:var(--ink-3);border-bottom:1px solid var(--line-2);padding-bottom:1px;transition:color .2s,border-color .2s}
+  .spot-links a:hover{color:var(--gold-deep);border-color:var(--gold)}
+  .spot-tag.cat-jw{color:var(--gold-deep);border-color:#dcc593}
+  .spot-tag.cat-ac{color:var(--sh-deep);border-color:#bcd0c2}
+  .spot-tag.cat-bg{color:#3e5560;border-color:#b3c0c4}
+  .spot-tag.g-w{color:var(--bj-deep);border-color:#d8b3aa}
+  .spot-tag.g-m{color:var(--sh-deep);border-color:#bcd0c2}
+  .spot-tag.g-u{color:var(--ink-3)}
+  .goto-line{margin-top:.8rem;font-family:var(--serif);font-style:italic;font-size:1.05rem}
+  .goto-line a{color:var(--gold-deep);text-decoration:none;border-bottom:1px solid var(--line-2);transition:border-color .2s}
+  .goto-line a:hover{border-color:var(--gold)}
+
+  /* FOOTER — fine brass field-guide rule */
+  .imperial-foot{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad)}
+  .wave-band{height:22px;border:0;box-shadow:none;background:transparent;background-repeat:repeat-x;background-position:center;
+    background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='44' height='14'><path d='M0 12 q11 -12 22 0 q11 12 22 0' fill='none' stroke='%239c7e35' stroke-width='1' opacity='0.55'/></svg>")}
+
+  @media(max-width:600px){
+    body{font-size:16px}
+    .panel{padding:1.8rem 1.2rem 3rem}
+    .hero-seal{right:-1.4rem}
+    .route{flex-direction:column;align-items:stretch;gap:.3rem;max-width:340px}
+    .leg{flex-direction:row;width:100%;justify-content:flex-start;gap:.6rem;padding:.2rem .1rem}
+    .leg .ln{width:40px}
+    .leg .ln::after{content:"";right:-3px}
+    .stop{flex-direction:row;align-items:baseline;justify-content:space-between;padding:.5rem .1rem}
+    .stop .city{font-size:1.4rem}
+    .sec-head{flex-wrap:wrap;gap:.5rem .9rem}
+    .timeline{padding-left:3.4rem}
+    .chop{left:-3.4rem;width:2.3rem;height:2.3rem}
+    .chop .d{font-size:1.1rem}
+    .tabs{margin-left:0;width:100%;justify-content:space-between;gap:0}
+    .tab{padding:.4rem .35rem .55rem}
+  }
+  /* refined line-icons (replace emoji) */
+  .ico{display:inline-block;width:.82em;height:.82em;vertical-align:-.1em;margin-right:.4em;flex:none}
+  .ix{display:inline-block;width:.82em;height:.82em;margin-right:.32em;vertical-align:-.1em;background:center/contain no-repeat;opacity:.92}
+  .ix-pin{background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239c7e35' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'><path d='M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z'/><circle cx='12' cy='10' r='2.6'/></svg>")}
+  .ix-globe{background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239c7e35' stroke-width='1.6'><circle cx='12' cy='12' r='9'/><path d='M3 12h18'/><path d='M12 3c2.8 2.4 4.2 5.6 4.2 9s-1.4 6.6-4.2 9c-2.8-2.4-4.2-5.6-4.2-9S9.2 5.4 12 3Z'/></svg>")}
+  /* map seal-diamond markers */
+  .mk-wrap{background:none!important;border:0!important}
+  .mk{display:block;width:13px;height:13px;border-radius:3px;background:var(--mkc);transform:rotate(45deg);box-shadow:0 0 0 1.5px #faf7ee,0 1px 4px rgba(21,32,25,.45);transition:transform .15s ease}
+  .mk:hover{transform:rotate(45deg) scale(1.2)}
+  /* per-day itinerary maps */
+  .day-map{height:200px;width:100%;border:1px solid var(--line-2);border-radius:4px;margin:1rem 0 .3rem;z-index:1;background:var(--surface-2)}
+  .day-map .leaflet-tile-pane{filter:sepia(.18) saturate(.72) hue-rotate(8deg) brightness(1.02) contrast(.95)}
+  .map-cap{font-family:var(--mono);font-size:.68rem;letter-spacing:.03em;color:var(--ink-3);margin:0}
+  .day-map-fb{display:flex;align-items:center;justify-content:center;height:100%;padding:0 1.2rem;text-align:center;font-size:.82rem;line-height:1.45;color:var(--ink-2)}
+  .mk-num{display:flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-family:var(--mono);font-size:.74rem;font-weight:600;color:#faf7ee;background:var(--mkc);box-shadow:0 0 0 1.5px #faf7ee,0 1px 4px rgba(21,32,25,.4)}
+  /* hero ceremony + accessibility */
+  @keyframes hanIn{from{opacity:0;filter:blur(7px)}to{opacity:1;filter:blur(0)}}
+  .han-city{animation:hanIn .8s ease both}
+  .han-city.sh{animation-delay:.14s}
+  .hero-seal{animation:hanIn 1s ease .45s both}
+  :where(a,button,input,[tabindex]):focus-visible{outline:2px solid var(--bj);outline-offset:2px;border-radius:2px}
+  .topbar :where(button):focus-visible{outline-color:var(--gold-2)}
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+    html{scroll-behavior:auto}
+  }
+
+  /* ===== GATEWAY — the courtyard threshold (Phase 1) =====
+     z-scale: content 1 · sticky topbar 50 · gateway overlay 200 */
+  .gate-skip-initial .gateway{display:none!important}
+  body.gate-open{overflow:hidden}
+  .brand{appearance:none;-webkit-appearance:none;border:0;background:none;text-align:left;font:inherit;color:inherit;cursor:pointer}
+  .gateway{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:max(1rem,4vh) 1rem;color:var(--cream);overflow:hidden;
+    background:radial-gradient(125% 120% at 50% 16%, #29412f 0%, var(--forest) 46%, var(--forest-deep) 100%)}
+  .gateway[hidden]{display:none}
+  .gateway::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+    background-image:linear-gradient(0deg,rgba(205,166,89,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(205,166,89,.045) 1px,transparent 1px);
+    background-size:30px 30px}
+  .gateway :focus-visible{outline-color:var(--gold-2)}
+  .gate-plan{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:0;width:min(150%,620px);aspect-ratio:3/4;opacity:.15;color:var(--gold-2);pointer-events:none}
+  .gate-plan svg{width:100%;height:100%;display:block}
+  .gate-scene{position:relative;z-index:1;display:grid;place-items:center}
+
+  .bagua{--s:clamp(286px,74vmin,460px);--r:calc(var(--s)*.455);position:relative;width:var(--s);height:var(--s)}
+  .bagua-art{position:absolute;inset:0;width:100%;height:100%;overflow:visible;color:var(--gold-2)}
+  .bagua-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:calc(var(--s)*.3);height:calc(var(--s)*.3);
+    border-radius:50%;border:0;cursor:pointer;display:grid;place-items:center;gap:.15rem;text-align:center;line-height:1;color:var(--cream);
+    background:radial-gradient(circle at 50% 36%, #32503e 0%, var(--forest) 72%);
+    box-shadow:0 0 0 1px rgba(205,166,89,.5),inset 0 0 24px rgba(0,0,0,.42),inset 0 0 0 5px rgba(205,166,89,.12);
+    transition:box-shadow .3s,transform .3s}
+  .bagua-center .seal{font-family:var(--han);font-size:calc(var(--s)*.058);letter-spacing:.14em;color:var(--gold-lt)}
+  .bagua-center .enter{font-family:var(--mono);font-size:.58rem;letter-spacing:.26em;text-transform:uppercase;color:var(--cream-2)}
+  .bagua-center:hover,.bagua-center:focus-visible{box-shadow:0 0 0 1px var(--gold-2),inset 0 0 24px rgba(0,0,0,.34),inset 0 0 0 5px rgba(205,166,89,.22);transform:translate(-50%,-50%) scale(1.03)}
+
+  .bagua-gates{position:absolute;inset:0}
+  .gate{position:absolute;left:50%;top:50%;width:calc(var(--s)*.28);
+    transform:translate(-50%,-50%) rotate(var(--a)) translateY(calc(-1*var(--r))) rotate(calc(-1*var(--a)));
+    display:flex;flex-direction:column;align-items:center;gap:.2rem;background:none;border:0;cursor:pointer;color:var(--cream);padding:.35rem}
+  .gate .trigram{width:26px;height:18px;color:var(--gold-lt);opacity:.72;transition:opacity .25s,transform .25s,color .25s}
+  .gate .g-cn{font-family:var(--han);font-size:calc(var(--s)*.052);letter-spacing:.1em;line-height:1;transition:color .25s}
+  .gate .g-en{font-family:var(--label);font-style:italic;font-size:.84rem;color:var(--cream-2);transition:color .25s}
+  .gate:hover .trigram,.gate:focus-visible .trigram{opacity:1;transform:translateY(-2px)}
+  .gate:hover .g-en,.gate:focus-visible .g-en{color:var(--cream)}
+  .gate[data-ink=bj]:hover .g-cn,.gate[data-ink=bj]:focus-visible .g-cn{color:var(--bj-lt)}
+  .gate[data-ink=bj]:hover .trigram,.gate[data-ink=bj]:focus-visible .trigram{color:var(--bj-lt)}
+  .gate[data-ink=sh]:hover .g-cn,.gate[data-ink=sh]:focus-visible .g-cn{color:var(--sh-lt)}
+  .gate[data-ink=sh]:hover .trigram,.gate[data-ink=sh]:focus-visible .trigram{color:var(--sh-lt)}
+
+  .gate-dates{margin-top:1.5rem;font-family:var(--mono);font-size:.7rem;letter-spacing:.26em;text-transform:uppercase;color:var(--cream-2);text-align:center}
+  .gate-skip{position:absolute;right:max(1rem,3vw);bottom:max(1rem,3.2vh);z-index:2;background:none;border:0;cursor:pointer;
+    font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cream-3);transition:color .25s}
+  .gate-skip:hover,.gate-skip:focus-visible{color:var(--cream)}
+
+  /* arrival — a slow, layered materialisation of the courtyard (~3.3s, skippable) */
+  @keyframes gateArrive{from{transform:scale(1.07);filter:blur(9px)}to{transform:none;filter:blur(0)}}
+  @keyframes gFadeIn{from{opacity:0}}
+  @keyframes gateNodeIn{from{opacity:0;transform:translate(-50%,-50%) rotate(var(--a)) translateY(calc(-1*var(--r) + 10px)) rotate(calc(-1*var(--a)))}}
+  @keyframes gateLeaveScene{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(2)}}
+  @keyframes gateLeaveBg{to{opacity:0}}
+  .gateway.is-arriving .gate-plan{animation:gFadeIn 1.5s .1s both}
+  .gateway.is-arriving .gate-scene{animation:gateArrive 1.7s cubic-bezier(.2,.7,.2,1) both}
+  .gateway.is-arriving .bagua-art{animation:gFadeIn 1.3s .5s both}
+  .gateway.is-arriving .bagua-center{animation:gFadeIn 1s .95s both}
+  .gateway.is-arriving .gate{animation:gateNodeIn .65s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(1.35s + var(--i)*.15s)}
+  .gateway.is-arriving .gate-dates{animation:gFadeIn 1s 2.35s both}
+  .gateway.is-leaving{pointer-events:none;animation:gateLeaveBg .65s ease both}
+  .gateway.is-leaving .gate-scene{animation:gateLeaveScene .6s cubic-bezier(.5,0,.75,0) both}
+
+  @media(max-width:680px){
+    .gate-plan{opacity:.1}
+    .bagua{--s:min(88vw,360px);--r:calc(var(--s)*.47)}
+    .gate{width:calc(var(--s)*.32)}
+    .gate .g-en{font-size:.76rem}
+  }
+  /* small phones — the ring becomes a vertical stack of gate rows */
+  @media(max-width:600px){
+    .gateway{place-items:start center;overflow-y:auto}
+    .gate-plan{display:none}
+    .gate-scene{width:100%;padding:1.5rem 0 4rem}
+    .bagua{width:100%;height:auto;display:flex;flex-direction:column;align-items:stretch}
+    .bagua-art{display:none}
+    .bagua-center{position:static;transform:none;margin:0 auto 1.1rem;width:108px;height:108px}
+    .bagua-center:hover,.bagua-center:focus-visible{transform:scale(1.03)}
+    .bagua-gates{position:static;inset:auto;display:flex;flex-direction:column;gap:.5rem;width:100%}
+    .gate{position:static;transform:none;width:100%;flex-direction:row;justify-content:flex-start;align-items:center;gap:1rem;
+      padding:.85rem 1.1rem;border:1px solid var(--forest-line);border-radius:5px;background:rgba(205,166,89,.05);min-height:54px}
+    .gate:hover,.gate:focus-visible{border-color:var(--gold-2);background:rgba(205,166,89,.1)}
+    .gate .trigram{width:30px;height:21px;margin:0;flex:none}
+    .gate .g-cn{font-size:1.5rem}
+    .gate .g-en{font-size:1rem;margin-left:auto;color:var(--cream-2)}
+    .gateway.is-arriving .gate{animation:gFadeIn .5s both;animation-delay:calc(.85s + var(--i)*.08s)}
+    .gate-skip{position:static;display:block;margin:1.6rem auto 0;text-align:center}
+  }
+
+  /* ===== Phase 2 — per-section courtyards (移步换景) ===== */
+  .scene{position:relative;margin:.4rem 0 2.3rem;padding-bottom:1.3rem;border-bottom:1px solid var(--line-2);--key:var(--gold);--key-lt:var(--gold-lt)}
+  .scene--bj{--key:var(--bj);--key-lt:var(--bj-lt)}
+  .scene--sh{--key:var(--sh);--key-lt:var(--sh-lt)}
+  .scene::after{content:"";position:absolute;left:0;bottom:-1.5px;width:56px;height:2.5px;border-radius:2px;background:var(--key)}
+  .scene-mark{display:block;width:30px;height:21px;color:var(--key);margin-bottom:.8rem;opacity:.92}
+  .scene-cn{font-family:var(--han);font-size:clamp(2.6rem,8vw,4rem);line-height:.92;font-weight:500;color:var(--key);letter-spacing:.02em;margin:0}
+  .scene-en{font-family:var(--serif);font-size:clamp(1.45rem,3.6vw,2.1rem);font-weight:600;color:var(--ink);margin:.15rem 0 0;display:flex;align-items:baseline;gap:.85rem;flex-wrap:wrap;letter-spacing:-.005em}
+  .scene-meta{font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);font-weight:400}
+  .scene-line{font-family:var(--serif);font-style:italic;font-size:clamp(1.05rem,2.2vw,1.25rem);color:var(--ink-2);margin:.75rem 0 0;max-width:60ch;line-height:1.5}
+  .scene--sh::after{width:120px;height:8px;border-radius:0;bottom:-4px;background:transparent;
+    background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='8'><path d='M0 6 q10 -8 20 0 q10 8 20 0' fill='none' stroke='%232f7a6b' stroke-width='1.4'/></svg>");
+    background-repeat:repeat-x;background-position:left center}
+  /* signature motifs for the brass-keyed rooms: lattice 花窗 / garment seam / specimen register */
+  .scene[data-scene="essentials"]::after{width:132px;height:10px;border-radius:0;bottom:-5px;background:transparent;
+    background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='10'><path d='M0 1.2h22M0 8.8h22M5.5 1.2v7.6M11 1.2v7.6M16.5 1.2v7.6' fill='none' stroke='%239c7e35' stroke-width='1.2'/></svg>");
+    background-repeat:repeat-x;background-position:left center}
+  .scene[data-scene="shopping"]::after{width:132px;height:9px;border-radius:0;bottom:-4.5px;background:transparent;
+    background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='9'><path d='M0 4.5h6M14 4.5h6M8 1.5l4 6M12 1.5l-4 6' fill='none' stroke='%239c7e35' stroke-width='1.2' stroke-linecap='round'/></svg>");
+    background-repeat:repeat-x;background-position:left center}
+  .scene[data-scene="spots"]::after{width:132px;height:10px;border-radius:0;bottom:-5px;background:transparent;
+    background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='10'><path d='M9 1v8M5 5h8' fill='none' stroke='%239c7e35' stroke-width='1.2' stroke-linecap='round'/></svg>");
+    background-repeat:repeat-x;background-position:left center}
+
+  /* framed-view arrival — the nameplate irises in through a moon gate, content rises under it */
+  @keyframes sceneIris{from{clip-path:circle(0% at 30% 58%);opacity:.4}to{clip-path:circle(155% at 30% 58%);opacity:1}}
+  @keyframes sceneCnRise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .panel.is-active .scene{animation:sceneIris .85s cubic-bezier(.2,.7,.2,1) both}
+  .panel.is-active .scene-cn{animation:sceneCnRise .7s .12s cubic-bezier(.2,.7,.2,1) both}
+
+  /* signature treatments — the two flagship courtyards */
+  #beijing .timeline::before{background:linear-gradient(var(--bj) 0,var(--bj) 5%,var(--line-2) 15%,var(--line-2) 85%,var(--bj) 95%,var(--bj) 100%)}
+  #shanghai .timeline::before{background:linear-gradient(var(--sh) 0,var(--sh) 5%,var(--line-2) 15%,var(--line-2) 85%,var(--sh) 95%,var(--sh) 100%)}
+
+  /* ===== Phase 3 — 行前 Prep courtyard ===== */
+  .prep-head{position:relative;overflow:hidden;color:var(--cream);border-radius:6px;border:1px solid var(--forest-line);
+    padding:clamp(1.6rem,4vw,2.4rem) clamp(1.4rem,4vw,2.2rem);margin:.4rem 0 2.2rem;
+    background:radial-gradient(120% 130% at 12% -10%, #284035 0%, var(--forest) 55%, var(--forest-deep) 100%);
+    box-shadow:0 1px 0 rgba(205,166,89,.22) inset}
+  .prep-head::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.4;
+    background-image:linear-gradient(0deg,rgba(205,166,89,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(205,166,89,.05) 1px,transparent 1px);background-size:26px 26px}
+  .prep-head>*{position:relative}
+  .prep-head .scene-mark{color:var(--gold-lt);margin-bottom:.7rem}
+  .prep-cn{font-family:var(--han);font-size:clamp(2.4rem,7vw,3.4rem);line-height:.95;font-weight:500;color:var(--gold-lt);margin:0;letter-spacing:.08em}
+  .prep-en{font-family:var(--serif);font-style:italic;font-size:clamp(1.1rem,2.6vw,1.4rem);font-weight:500;color:var(--cream-2);margin:.1rem 0 0}
+  .prep-count{display:flex;align-items:baseline;gap:.7rem;margin:1.1rem 0 .3rem;flex-wrap:wrap}
+  .prep-n{font-family:var(--serif);font-size:clamp(2.8rem,9vw,4.4rem);font-weight:600;line-height:.85;color:var(--cream)}
+  .prep-unit{font-family:var(--mono);font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cream-2)}
+  .prep-next{font-family:var(--serif);font-style:italic;font-size:1.05rem;color:var(--gold-lt);margin:.55rem 0 0;line-height:1.45}
+
+  .prep-group{margin:1.8rem 0}
+  .prep-glabel{display:flex;align-items:baseline;gap:.7rem;font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);margin:0 0 .3rem}
+  .prep-glabel::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line-2),transparent)}
+  .prep-gcount{color:var(--ink-3);letter-spacing:.1em}
+  .prep-list{list-style:none;margin:0;padding:0}
+  .prep-item{display:grid;grid-template-columns:auto 1fr auto;gap:.85rem;align-items:start;padding:.95rem .2rem;border-bottom:1px solid var(--hair)}
+  .prep-item:last-child{border-bottom:none}
+  .prep-item input[type=checkbox]{margin-top:.3rem;accent-color:var(--gold);width:1.05rem;height:1.05rem;flex-shrink:0}
+  .prep-body{cursor:pointer}
+  .prep-title{display:block;font-family:var(--serif);font-size:1.1rem;color:var(--ink);font-weight:600}
+  .prep-why{display:block;font-size:.9rem;color:var(--ink-2);line-height:1.55;margin-top:.15rem}
+  .prep-stamp{align-self:start;white-space:nowrap;font-family:var(--mono);font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;
+    padding:.22rem .5rem;border-radius:2px;border:1px solid var(--line-2);color:var(--ink-3);background:var(--surface)}
+  .prep-stamp.act{color:var(--bj-deep);border-color:#d8b3aa;background:var(--bj-soft)}
+  .prep-stamp.soon{color:var(--gold-deep);border-color:#d8c08a;background:var(--gold-soft)}
+  .prep-stamp.ground{color:var(--sh-deep);border-color:#bcd0c2;background:var(--sh-soft)}
+  .prep-item.is-done{opacity:.5}
+  .prep-item.is-done .prep-title{text-decoration:line-through;text-decoration-color:var(--line-2)}
+  .prep-item.is-done .prep-stamp{color:var(--sh-deep);border-color:#bcd0c2;background:var(--sh-soft)}
+  .prep-ready{text-align:center;font-family:var(--han);font-size:1.4rem;color:var(--sh-deep);margin:2.2rem 0 1rem;letter-spacing:.12em}
+  .prep-ready .en{display:block;font-family:var(--serif);font-style:italic;font-size:1rem;color:var(--ink-3);letter-spacing:0;margin-top:.35rem}
+  .panel.is-active .prep-head{animation:sceneIris .85s cubic-bezier(.2,.7,.2,1) both}
+
+  /* ===== Print — the whole guide as one offline PDF (every room un-hidden) ===== */
+  @media print{
+    .gateway,.gate-skip,.topbar{display:none!important}
+    .panel{display:block!important;animation:none!important;margin-bottom:2.4rem}
+    .panel .scene,.panel .prep-head{animation:none!important;clip-path:none!important;opacity:1!important}
+    #shopmap,.day-map,.map-fallback,.mapfilters{display:none!important}
+    .scene,.prep-head,.hero,.day-inner,.card,.spot-card,.transit-strip{break-inside:avoid}
+    a[href^="http"]::after{content:" ("attr(href)")";font-size:.74em;color:var(--ink-3);word-break:break-all}
+    body{background:#fff}
+  }
 </style>
+<script>try{if(sessionStorage.getItem('gateEntered')==='1')document.documentElement.classList.add('gate-skip-initial');}catch(e){}</script>
 </head>
 <body>
 
+<div class="gateway is-arriving" id="gateway" role="dialog" aria-modal="true" aria-label="The garden courtyard — choose where to begin">
+  <div class="gate-plan" aria-hidden="true">
+    <svg viewBox="0 0 300 400" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round">
+      <rect x="24" y="24" width="252" height="352" rx="5"/>
+      <rect x="46" y="46" width="208" height="308"/>
+      <line x1="150" y1="92" x2="150" y2="320"/>
+      <rect x="116" y="58" width="68" height="34"/>
+      <path d="M108 58 L150 40 L192 58"/>
+      <rect x="60" y="70" width="40" height="56"/>
+      <rect x="200" y="70" width="40" height="56"/>
+      <rect x="64" y="150" width="56" height="34"/>
+      <rect x="180" y="150" width="56" height="34"/>
+      <polygon points="107.7,182.1 115.9,190.3 115.9,201.7 107.7,209.9 96.3,209.9 88.1,201.7 88.1,190.3 96.3,182.1"/>
+      <polygon points="203.7,182.1 211.9,190.3 211.9,201.7 203.7,209.9 192.3,209.9 184.1,201.7 184.1,190.3 192.3,182.1"/>
+      <ellipse cx="150" cy="300" rx="64" ry="40"/>
+      <path d="M122 300 Q150 282 178 300"/>
+      <path d="M122 306 Q150 288 178 306"/>
+      <path d="M126 352 L150 340 L174 352"/>
+      <rect x="134" y="352" width="32" height="24"/>
+    </svg>
+  </div>
+
+  <div class="gate-scene">
+    <div class="bagua">
+      <svg class="bagua-art" viewBox="0 0 400 400" fill="none" aria-hidden="true">
+        <polygon points="257.4,61.4 338.6,142.6 338.6,257.4 257.4,338.6 142.6,338.6 61.4,257.4 61.4,142.6 142.6,61.4" stroke="currentColor" stroke-width="1.4" opacity=".85"/>
+        <polygon points="250.5,78 322,149.5 322,250.5 250.5,322 149.5,322 78,250.5 78,149.5 149.5,78" stroke="currentColor" stroke-width="1" opacity=".4"/>
+        <circle cx="200" cy="200" r="60" stroke="currentColor" stroke-width="1.4" opacity=".7"/>
+        <g stroke="currentColor" stroke-width="1" opacity=".4" stroke-linecap="round">
+          <line x1="200" y1="136" x2="200" y2="20"/>
+          <line x1="255.4" y1="168" x2="355.9" y2="110"/>
+          <line x1="255.4" y1="232" x2="355.9" y2="290"/>
+          <line x1="200" y1="264" x2="200" y2="380"/>
+          <line x1="144.6" y1="232" x2="44.1" y2="290"/>
+          <line x1="144.6" y1="168" x2="44.1" y2="110"/>
+        </g>
+      </svg>
+
+      <button class="bagua-center" type="button" data-gate="home" aria-label="Enter — trip overview (Home)">
+        <span class="seal">京沪</span>
+        <span class="enter">Enter</span>
+      </button>
+
+      <div class="bagua-gates">
+        <button class="gate" type="button" data-gate="essentials" data-ink="gold" style="--a:0deg;--i:0" aria-label="Essentials — before you go">
+          <svg class="trigram" viewBox="0 0 26 18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M3 4h20M3 9h20M3 14h7M16 14h7"/></svg>
+          <span class="g-cn">须知</span><span class="g-en">Essentials</span>
+        </button>
+        <button class="gate" type="button" data-gate="prep" data-ink="gold" style="--a:60deg;--i:1" aria-label="Prep — countdown and book-ahead list">
+          <svg class="trigram" viewBox="0 0 26 18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M3 4h7M16 4h7M3 9h7M16 9h7M3 14h20"/></svg>
+          <span class="g-cn">行前</span><span class="g-en">Prep</span>
+        </button>
+        <button class="gate" type="button" data-gate="beijing" data-ink="bj" style="--a:120deg;--i:2" aria-label="Beijing — 6 nights">
+          <svg class="trigram" viewBox="0 0 26 18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M3 4h20M3 9h7M16 9h7M3 14h20"/></svg>
+          <span class="g-cn">北京</span><span class="g-en">Beijing</span>
+        </button>
+        <button class="gate" type="button" data-gate="shanghai" data-ink="sh" style="--a:180deg;--i:3" aria-label="Shanghai — 7 nights">
+          <svg class="trigram" viewBox="0 0 26 18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M3 4h7M16 4h7M3 9h20M3 14h7M16 14h7"/></svg>
+          <span class="g-cn">上海</span><span class="g-en">Shanghai</span>
+        </button>
+        <button class="gate" type="button" data-gate="spots" data-ink="gold" style="--a:240deg;--i:4" aria-label="Spots — food and places">
+          <svg class="trigram" viewBox="0 0 26 18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M3 4h20M3 9h7M16 9h7M3 14h7M16 14h7"/></svg>
+          <span class="g-cn">名胜</span><span class="g-en">Spots</span>
+        </button>
+        <button class="gate" type="button" data-gate="shopping" data-ink="gold" style="--a:300deg;--i:5" aria-label="Shopping — Shanghai fashion">
+          <svg class="trigram" viewBox="0 0 26 18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M3 4h7M16 4h7M3 9h20M3 14h20"/></svg>
+          <span class="g-cn">购物</span><span class="g-en">Shopping</span>
+        </button>
+      </div>
+    </div>
+    <p class="gate-dates" aria-hidden="true">3 – 16 August 2026</p>
+  </div>
+
+  <button class="gate-skip" type="button">Skip &rsaquo;</button>
+</div>
+<noscript><style>.gateway{display:none}</style></noscript>
+
 <header class="topbar">
   <div class="topbar-in">
-    <div class="brand">
-      <span class="seals" aria-hidden="true"><i></i><i></i></span>
-      <b>BJ→SH&nbsp;<span>· Aug 2026</span></b>
-    </div>
+    <button class="brand" id="toCourtyard" type="button" aria-label="Return to the courtyard">
+      <b>京沪纪行</b>
+      <span class="en">Beijing &amp; Shanghai · 2026</span>
+    </button>
     <nav class="tabs" role="tablist">
-      <button class="tab active" data-tab="home">Home</button>
-      <button class="tab" data-tab="essentials">Essentials</button>
-      <button class="tab" data-tab="beijing">Beijing</button>
-      <button class="tab" data-tab="shanghai">Shanghai</button>
-      <button class="tab" data-tab="shopping">Shopping</button>
-      <button class="tab" data-tab="spots">Spots</button>
+      <button class="tab active" data-tab="home"><span class="t-cn">首页</span><span class="t-en">Home</span></button>
+      <button class="tab" data-tab="essentials"><span class="t-cn">须知</span><span class="t-en">Essentials</span></button>
+      <button class="tab" data-tab="prep"><span class="t-cn">行前</span><span class="t-en">Prep</span></button>
+      <button class="tab" data-tab="beijing"><span class="t-cn">北京</span><span class="t-en">Beijing</span></button>
+      <button class="tab" data-tab="shanghai"><span class="t-cn">上海</span><span class="t-en">Shanghai</span></button>
+      <button class="tab" data-tab="shopping"><span class="t-cn">购物</span><span class="t-en">Shopping</span></button>
+      <button class="tab" data-tab="spots"><span class="t-cn">名胜</span><span class="t-en">Spots</span></button>
     </nav>
   </div>
 </header>
@@ -192,8 +576,13 @@
 <section class="panel is-active" id="home">
   <div class="hero">
     <span class="eyebrow">3–16 August 2026 · a trip for two</span>
+    <div class="hanrow">
+      <span class="han-city bj">京</span><span class="han-dot">·</span><span class="han-city sh">沪</span>
+      <span class="hero-seal" aria-hidden="true">遊</span>
+    </div>
     <h1>Beijing <span class="amp">&amp;</span> Shanghai</h1>
     <p class="lede">A balanced-pace fortnight built around food, history, and art — picks pulled from what locals actually rate, not the tourist-trap defaults.</p>
+    <div class="rule-orn" aria-hidden="true"></div>
     <div class="route">
       <div class="stop">
         <span class="city bj">Beijing</span>
@@ -201,7 +590,7 @@
       </div>
       <div class="leg">
         <div class="ln"></div>
-        <span class="train-lbl">🚄 14:00 bullet train</span>
+        <span class="train-lbl"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="12.5" rx="3"/><path d="M5 11h14"/><path d="M8.5 16.5 6.5 20M15.5 16.5 17.5 20"/></svg>14:00 bullet train</span>
         <span class="train-lbl">BJS → SHA 18:32</span>
       </div>
       <div class="stop">
@@ -223,30 +612,29 @@
   </div>
 
   <div class="sec-head"><h2>Book-ahead checklist</h2><span class="pill warn">time-sensitive</span></div>
-  <ul class="checklist" id="checklist">
-    <li><input type="checkbox" id="c1"><label for="c1" class="cl-label"><strong>Forbidden City tickets</strong> — release 7 days before your visit at 20:00 Beijing time. Book on bookingticket.dpm.org.cn (passport required). Also book Tiananmen Square separately (free).</label></li>
-    <li><input type="checkbox" id="c2"><label for="c2" class="cl-label"><strong>Bullet train BJS→SHA</strong> — book on Trip.com or 12306.cn. 3 Aug + 60 days ≈ opens around 2 Jul. Second class fine; it's a fast 4.5 hr ride.</label></li>
-    <li><input type="checkbox" id="c3"><label for="c3" class="cl-label"><strong>Suzhou gardens</strong> — Humble Administrator's Garden and Tiger Hill both have daily caps. Book on the Suzhou tourism app or Trip.com 1–3 days out.</label></li>
-    <li><input type="checkbox" id="c4"><label for="c4" class="cl-label"><strong>Shanghai Museum East</strong> — timed entry; reserve on the museum's WeChat mini-programme or website. Closed Mondays.</label></li>
-    <li><input type="checkbox" id="c5"><label for="c5" class="cl-label"><strong>Alipay / WeChat Pay</strong> — link a UK Visa/Mastercard before landing. This is how you pay for everything including street food.</label></li>
-    <li><input type="checkbox" id="c6"><label for="c6" class="cl-label"><strong>China eSIM with VPN</strong> — buy before travel. Google, WhatsApp, Instagram blocked without it.</label></li>
-    <li><input type="checkbox" id="c7"><label for="c7" class="cl-label"><strong>Summer Palace</strong> — no advance booking required but go early (before 09:00) in August to beat heat and crowds.</label></li>
-    <li><input type="checkbox" id="c8"><label for="c8" class="cl-label"><strong>Dianping app</strong> — install and practice navigating before landing. Use for restaurant queues, ratings, and table booking.</label></li>
-  </ul>
+  <div class="card">
+    <p style="font-size:.92rem;color:var(--ink-2)">The time-sensitive bookings (the Forbidden City's 7-day ticket drop, the bullet-train window) and everything to set up before you fly now live in their own room, with a live countdown to Beijing.</p>
+    <p class="goto-line"><a href="#" data-goto="prep">→ 行前 · Prep: countdown &amp; book-ahead list</a></p>
+  </div>
 </section>
 
 <!-- ESSENTIALS -->
 <section class="panel" id="essentials">
-  <div class="sec-head"><h2>Before you go</h2><span class="pill neu">must-read</span></div>
+  <header class="scene" data-scene="essentials">
+    <svg class="scene-mark" viewBox="0 0 26 18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M3 4h20M3 9h20M3 14h7M16 14h7"/></svg>
+    <p class="scene-cn">须知</p>
+    <h2 class="scene-en">Essentials <span class="scene-meta">must-read</span></h2>
+    <p class="scene-line">What to settle before you fly: visas, payments, the booking that sells out in minutes.</p>
+  </header>
 
   <div class="ess-grid">
     <div class="card">
-      <span class="badge tip">✓ No visa needed</span>
+      <span class="badge tip">No visa needed</span>
       <h3>Entry — UK passports</h3>
       <p>UK ordinary passport holders enter China visa-free for up to 30 days (tourism) through 31 Dec 2026. Passport must be valid 6+ months beyond entry with 2 blank pages. Fill the free online arrival card before flying. If either of you holds a non-UK passport, check that nationality separately.</p>
     </div>
     <div class="card">
-      <span class="badge warn">⚠ Set up before landing</span>
+      <span class="badge warn">Set up before landing</span>
       <h3>Phone, payments &amp; maps</h3>
       <ul>
         <li><strong>eSIM with built-in VPN</strong> — Google, WhatsApp, Instagram all blocked without it</li>
@@ -257,12 +645,12 @@
       </ul>
     </div>
     <div class="card">
-      <span class="badge warn">⚠ Book 7 days out exactly</span>
+      <span class="badge warn">Book 7 days out exactly</span>
       <h3>Forbidden City</h3>
       <p>Walk-up tickets are gone. Daily cap is 40,000 and sells out minutes after release. Tickets open at <strong>20:00 Beijing time, exactly 7 days before your visit</strong>. Book at bookingticket.dpm.org.cn (English, passport number, no Chinese phone needed) or via Klook. Book Tiananmen Square separately (free but also requires reservation). Bring the physical passport you booked with — it's your entry scan. Closed Mondays.</p>
     </div>
     <div class="card">
-      <span class="badge note">🌡 August weather</span>
+      <span class="badge note">August weather</span>
       <h3>Climate &amp; packing</h3>
       <p>Beijing: 28–35°C, humid, afternoon thunderstorms possible. Shanghai: 30–38°C, very humid, typhoon season. Both cities: build in midday rests (13:00–15:00). Pack light breathable clothes, a compact umbrella, and sunscreen. Most indoor spaces are heavily air-conditioned — a light layer helps.</p>
     </div>
@@ -287,8 +675,108 @@
 </section>
 
 <!-- BEIJING -->
+<!-- PREP -->
+<section class="panel" id="prep">
+  <header class="prep-head" data-scene="prep">
+    <svg class="scene-mark" viewBox="0 0 26 18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M3 4h7M16 4h7M3 9h7M16 9h7M3 14h20"/></svg>
+    <p class="prep-cn">行前</p>
+    <p class="prep-en">Before you go</p>
+    <div class="prep-count"><span class="prep-n" id="prepDays">—</span><span class="prep-unit">days to Beijing</span></div>
+    <p class="prep-next" id="prepNext"></p>
+  </header>
+
+  <div class="prep-group">
+    <p class="prep-glabel">Time-critical <span class="prep-gcount">booking windows</span></p>
+    <ul class="prep-list">
+      <li class="prep-item">
+        <input type="checkbox" id="c1">
+        <label for="c1" class="prep-body">
+          <span class="prep-title">Forbidden City tickets</span>
+          <span class="prep-why">Release 7 days before your visit at 20:00 Beijing time. Book on bookingticket.dpm.org.cn (passport required). Book Tiananmen Square separately (free).</span>
+        </label>
+        <span class="prep-stamp soon" id="stamp-c1">release 29 Jul</span>
+      </li>
+      <li class="prep-item">
+        <input type="checkbox" id="c2">
+        <label for="c2" class="prep-body">
+          <span class="prep-title">Bullet train BJS→SHA</span>
+          <span class="prep-why">Book on Trip.com or 12306.cn. The 9 Aug seats open about 2 Jul. Second class is fine; a fast 4.5 hr ride.</span>
+        </label>
+        <span class="prep-stamp soon" id="stamp-c2">opens 2 Jul</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="prep-group">
+    <p class="prep-glabel">Before you fly <span class="prep-gcount">by 3 Aug</span></p>
+    <ul class="prep-list">
+      <li class="prep-item">
+        <input type="checkbox" id="c5">
+        <label for="c5" class="prep-body">
+          <span class="prep-title">Alipay / WeChat Pay</span>
+          <span class="prep-why">Link a UK Visa/Mastercard before landing. This is how you pay for everything, including street food.</span>
+        </label>
+        <span class="prep-stamp" id="stamp-c5">before you fly</span>
+      </li>
+      <li class="prep-item">
+        <input type="checkbox" id="c6">
+        <label for="c6" class="prep-body">
+          <span class="prep-title">China eSIM with VPN</span>
+          <span class="prep-why">Buy before travel. Google, WhatsApp and Instagram are blocked without it.</span>
+        </label>
+        <span class="prep-stamp" id="stamp-c6">before you fly</span>
+      </li>
+      <li class="prep-item">
+        <input type="checkbox" id="c8">
+        <label for="c8" class="prep-body">
+          <span class="prep-title">Dianping app</span>
+          <span class="prep-why">Install and practise navigating before landing. Use it for restaurant queues, ratings and table booking.</span>
+        </label>
+        <span class="prep-stamp" id="stamp-c8">before you fly</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="prep-group">
+    <p class="prep-glabel">Book on the ground <span class="prep-gcount">once you're there</span></p>
+    <ul class="prep-list">
+      <li class="prep-item">
+        <input type="checkbox" id="c3">
+        <label for="c3" class="prep-body">
+          <span class="prep-title">Suzhou gardens</span>
+          <span class="prep-why">Humble Administrator's Garden and Tiger Hill both have daily caps. Book on the Suzhou tourism app or Trip.com 1–3 days out.</span>
+        </label>
+        <span class="prep-stamp ground" id="stamp-c3">1–3 days out</span>
+      </li>
+      <li class="prep-item">
+        <input type="checkbox" id="c4">
+        <label for="c4" class="prep-body">
+          <span class="prep-title">Shanghai Museum East</span>
+          <span class="prep-why">Timed entry; reserve on the museum's WeChat mini-programme or website. Closed Mondays.</span>
+        </label>
+        <span class="prep-stamp ground" id="stamp-c4">reserve ahead</span>
+      </li>
+      <li class="prep-item">
+        <input type="checkbox" id="c7">
+        <label for="c7" class="prep-body">
+          <span class="prep-title">Summer Palace</span>
+          <span class="prep-why">No advance booking required, but go early (before 09:00) in August to beat the heat and crowds.</span>
+        </label>
+        <span class="prep-stamp ground" id="stamp-c7">go early</span>
+      </li>
+    </ul>
+  </div>
+
+  <p class="prep-ready" id="prepReady" hidden>你们都准备好了<span class="en">Everything is handled. You're ready.</span></p>
+</section>
+
 <section class="panel" id="beijing">
-  <div class="sec-head"><h2>Beijing</h2><span class="pill bj">3 – 9 Aug · 6 nights</span></div>
+  <header class="scene scene--bj" data-scene="beijing">
+    <svg class="scene-mark" viewBox="0 0 26 18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M3 4h20M3 9h7M16 9h7M3 14h20"/></svg>
+    <p class="scene-cn">北京</p>
+    <h2 class="scene-en">Beijing <span class="scene-meta">3 – 9 Aug · 6 nights</span></h2>
+    <p class="scene-line">Six nights on the imperial north–south axis: duck, hutongs, the Wall at dawn.</p>
+  </header>
 
   <div class="timeline">
 
@@ -304,6 +792,8 @@
             <li>First dinner: <strong>Siji Minfu (四季民福)</strong> near Wangfujing — roast duck done properly, no frills, beloved on Xiaohongshu. Queue or book on Dianping.</li>
             <li>Download and set up Dianping, Amap, and confirm Alipay is working</li>
           </ul>
+          <div class="day-map" id="dmap-bj-3"></div>
+          <p class="map-cap">Tap a marker for directions</p>
         </div>
       </div>
     </div>
@@ -320,6 +810,8 @@
             <li>Afternoon: <strong>Beijing APM</strong> or nearby Shin Kong Place if you want more retail</li>
             <li>Evening: ramen or hand-pulled noodles in the area — ask Dianping for what's rated nearby</li>
           </ul>
+          <div class="day-map" id="dmap-bj-4"></div>
+          <p class="map-cap">Tap a marker for directions</p>
         </div>
       </div>
     </div>
@@ -337,6 +829,8 @@
             <li>Afternoon: <strong>Jingshan Park (景山公园)</strong> — the hill directly behind the Forbidden City gives the iconic aerial view. ¥2 entry.</li>
             <li>Evening: hutong dinner — <strong>Gulou area</strong>, walk Nanluoguxiang and pick a spot on Dianping</li>
           </ul>
+          <div class="day-map" id="dmap-bj-5"></div>
+          <p class="map-cap">Tap a marker for directions</p>
         </div>
       </div>
     </div>
@@ -354,6 +848,8 @@
             <li>Dinner: <strong>Xin Rong Ji (新荣记)</strong>, Xinyuan South Road flagship — Beijing's only Michelin three-star, premium Taizhou seafood, in the Sanlitun / Workers' Stadium area. Reserve well ahead.</li>
             <li>Evening: <strong>Workers' Stadium night market (工体夜市)</strong> — summer street food around the redeveloped 工体, with Sanlitun's bars nearby.</li>
           </ul>
+          <div class="day-map" id="dmap-bj-6"></div>
+          <p class="map-cap">Tap a marker for directions</p>
         </div>
       </div>
     </div>
@@ -365,13 +861,15 @@
         <div class="day-sub">Full day · cable car up · toboggan optional</div>
         <div class="day-body">
           <ul>
-            <li>Breakfast: <strong>慕田峪 (Mutianyu)</strong> — grab something quick or eat on the road; leave by 07:30 to beat crowds and heat. Shared van (book via hotel or Klook ~¥300pp return) or Didi + public bus.</li>
-            <li>Morning: <strong>慕田峪 (Mutianyu)</strong> — the best-preserved, least crowded stretch with forest backdrop. Cable car up, toboggan down (¥100, genuinely fun).</li>
-            <li>Lunch: <strong>慕田峪 (Mutianyu)</strong> — eat near the base village; allow 3–4 hrs on the wall. Bring water, sunscreen, and sturdy shoes.</li>
-            <li>Afternoon: <strong>慕田峪 (Mutianyu)</strong> — finish the wall and head back, in Beijing by ~17:00.</li>
+            <li>Early start — grab something quick or eat on the road; leave by 07:30 to beat the crowds and heat. Shared van (book via hotel or Klook, ~¥300pp return) or Didi + public bus.</li>
+            <li>Morning: <strong>慕田峪 (Mutianyu)</strong> — the best-preserved, least crowded stretch, with a forest backdrop. Cable car up, toboggan down (¥100, genuinely fun).</li>
+            <li>Lunch at the base village; allow 3–4 hrs up on the wall. Bring water, sunscreen, and sturdy shoes.</li>
+            <li>Head back in the afternoon, in Beijing by ~17:00.</li>
             <li>Dinner: near the hotel — keep it easy after a long day.</li>
             <li>Evening: sleep — rest up.</li>
           </ul>
+          <div class="day-map" id="dmap-bj-7"></div>
+          <p class="map-cap">Tap a marker for directions</p>
         </div>
       </div>
     </div>
@@ -390,6 +888,8 @@
             <li>Dinner: walk around the area and see what catches your eye.</li>
             <li>Evening: back to the hotel and chill — pack for tomorrow's train.</li>
           </ul>
+          <div class="day-map" id="dmap-bj-8"></div>
+          <p class="map-cap">Tap a marker for directions</p>
         </div>
       </div>
     </div>
@@ -397,7 +897,7 @@
     <div class="day-block">
       <div class="chop transit"><span class="d">9</span><span class="m">Sun</span></div>
       <div class="transit-strip">
-        <h3>🚄 Beijing → Shanghai</h3>
+        <h3><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="12.5" rx="3"/><path d="M5 11h14"/><path d="M8.5 16.5 6.5 20M15.5 16.5 17.5 20"/></svg>Beijing → Shanghai</h3>
         <p>Check out in the morning. Light lunch near hotel. Didi to <strong>Beijing South Station (北京南站)</strong> — allow 60 min from central Beijing. Train departs <strong>14:00</strong>, arrives <strong>Shanghai Hongqiao 18:32</strong>. Check in, settle, dinner near the hotel. Rest.</p>
       </div>
     </div>
@@ -407,7 +907,12 @@
 
 <!-- SHANGHAI -->
 <section class="panel" id="shanghai">
-  <div class="sec-head"><h2>Shanghai</h2><span class="pill sh">9 – 16 Aug · 7 nights</span></div>
+  <header class="scene scene--sh" data-scene="shanghai">
+    <svg class="scene-mark" viewBox="0 0 26 18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M3 4h7M16 4h7M3 9h20M3 14h7M16 14h7"/></svg>
+    <p class="scene-cn">上海</p>
+    <h2 class="scene-en">Shanghai <span class="scene-meta">9 – 16 Aug · 7 nights</span></h2>
+    <p class="scene-line">Seven nights along the river: concession lanes, the Bund, art on the West Bund.</p>
+  </header>
 
   <div class="timeline">
 
@@ -418,6 +923,8 @@
         <div class="day-sub">Check in · neighbourhood explore</div>
         <div class="day-body">
           <p>Arrive Hongqiao 18:32. Metro Line 2 or 10 to your hotel (or Didi). Check in, freshen up. Dinner near the hotel — keep it simple tonight. <strong>Jia Jia Tang Bao (佳家汤包)</strong> for soup dumplings if there's one nearby, or a local ramen spot on Dianping.</p>
+          <div class="day-map" id="dmap-sh-9"></div>
+          <p class="map-cap">Tap a marker for directions</p>
         </div>
       </div>
     </div>
@@ -434,6 +941,8 @@
             <li><strong>Xintiandi (新天地)</strong> — renovated Shikumen houses, upscale dining and shopping. Great for afternoon coffee and people-watching.</li>
             <li>Evening: French Concession dinner. <strong>Jesse Restaurant (吉士酒家)</strong> for classic Shanghainese — red-braised pork, drunken chicken. Book ahead on Dianping.</li>
           </ul>
+          <div class="day-map" id="dmap-sh-10"></div>
+          <p class="map-cap">Tap a marker for directions</p>
           <p class="goto-line"><a href="#" data-goto="shopping">→ Full Shanghai shopping guide &amp; map</a></p>
         </div>
       </div>
@@ -452,6 +961,8 @@
             <li>Afternoon: <strong>Yu Garden &amp; Old Town (豫园)</strong> — classical Ming garden, surrounding bazaar. Touristy but the garden itself is genuinely beautiful.</li>
             <li>Evening: Bund rooftop bar for skyline views — <strong>Bar Rouge</strong> or <strong>New Heights</strong> at Three on the Bund.</li>
           </ul>
+          <div class="day-map" id="dmap-sh-11"></div>
+          <p class="map-cap">Tap a marker for directions</p>
         </div>
       </div>
     </div>
@@ -470,6 +981,8 @@
             <li><strong>Pingjiang Road (平江路)</strong> — the canal-lined old street; afternoon wander before the return train.</li>
             <li>Back in Shanghai by 19:00. Light dinner.</li>
           </ul>
+          <div class="day-map" id="dmap-sh-12"></div>
+          <p class="map-cap">Tap a marker for directions · Suzhou day trip</p>
         </div>
       </div>
     </div>
@@ -488,6 +1001,8 @@
             <li>Afternoon: walk the West Bund waterfront. Much quieter than the Bund, great views.</li>
             <li>Evening: dinner in the Jing'an area — <strong>Jing'an Kerry Centre</strong> area has good options across price points.</li>
           </ul>
+          <div class="day-map" id="dmap-sh-13"></div>
+          <p class="map-cap">Tap a marker for directions</p>
         </div>
       </div>
     </div>
@@ -504,6 +1019,8 @@
             <li>Walk along the Pudong waterfront for the reverse Bund view — best at dusk.</li>
             <li>Evening: dinner in Pudong or back in Puxi (Bund side). <strong>Ultraviolet by Paul Pairet</strong> if you booked months ago; otherwise <strong>Hakkasan</strong> or any of the Bund-adjacent restaurants.</li>
           </ul>
+          <div class="day-map" id="dmap-sh-14"></div>
+          <p class="map-cap">Tap a marker for directions</p>
         </div>
       </div>
     </div>
@@ -519,6 +1036,8 @@
             <li><strong>Option B – Rest day</strong>: revisit your favourite neighbourhood, pick up any last gifts, spa afternoon.</li>
             <li>Final dinner: make it a good one. <strong>Ultraviolet</strong> (if booked), or a Shanghainese feast — try <strong>Fuli (福里)</strong> or <strong>The Lost Heaven</strong> for Yunnan cuisine as a different note to end on.</li>
           </ul>
+          <div class="day-map" id="dmap-sh-15"></div>
+          <p class="map-cap">Tap a marker for directions · Zhujiajiao (Option A)</p>
           <p class="goto-line"><a href="#" data-goto="shopping">→ Last-minute gifts? See the Shopping guide</a></p>
         </div>
       </div>
@@ -527,7 +1046,7 @@
     <div class="day-block">
       <div class="chop transit"><span class="d">16</span><span class="m">Sun</span></div>
       <div class="transit-strip">
-        <h3>✈ Fly home to London</h3>
+        <h3><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 3 11 13"/><path d="M21 3 14 21 11 13 4 9 21 3Z"/></svg>Fly home to London</h3>
         <p>Check out, Didi or Metro to <strong>Pudong (PVG)</strong> or <strong>Hongqiao (SHA)</strong> — confirm which airport your flight uses. Allow 2 hrs for international check-in. Safe flight.</p>
       </div>
     </div>
@@ -537,7 +1056,12 @@
 
 <!-- SHOPPING -->
 <section class="panel" id="shopping">
-  <div class="sec-head"><h2>Shanghai shopping</h2><span class="pill sh">fashion · affordable</span></div>
+  <header class="scene" data-scene="shopping">
+    <svg class="scene-mark" viewBox="0 0 26 18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M3 4h7M16 4h7M3 9h20M3 14h20"/></svg>
+    <p class="scene-cn">购物</p>
+    <h2 class="scene-en">Shopping <span class="scene-meta">Shanghai · fashion</span></h2>
+    <p class="scene-line">Homegrown labels and vintage lanes, ranked by what locals actually rate.</p>
+  </header>
 
   <div class="card">
     <p class="shop-intro">Homegrown labels, concept clusters and vintage streets for <strong>smart-casual, minimalist &amp; Y2K</strong> in the <strong>£20–£200</strong> band — ranked by what locals rate on Xiaohongshu, Douyin &amp; Dianping, with tourist hype filtered out. Priority order: <strong>clothes › jewellery › accessories › bags</strong>. Rough guide: ~¥9 ≈ £1.</p>
@@ -545,11 +1069,11 @@
 
   <div class="sec-head" style="margin-top:1.75rem"><h2>Map</h2><span class="pill neu">tap a pin</span></div>
   <div class="legend">
-    <span><i style="background:#C2563B"></i>Clothes</span>
-    <span><i style="background:#B08900"></i>Jewellery</span>
-    <span><i style="background:#15706B"></i>Accessories</span>
-    <span><i style="background:#6B5CA5"></i>Bags</span>
-    <span><i style="background:#6B6459"></i>Districts &amp; markets</span>
+    <span><i style="background:#9e4630"></i>Clothes</span>
+    <span><i style="background:#9c7e35"></i>Jewellery</span>
+    <span><i style="background:#2f7a6b"></i>Accessories</span>
+    <span><i style="background:#3e5560"></i>Bags</span>
+    <span><i style="background:#736a51"></i>Districts &amp; markets</span>
   </div>
   <div class="mapfilters">
     <button data-f="all" class="on">All</button>
@@ -560,78 +1084,78 @@
     <button data-f="ar">Districts</button>
   </div>
   <div id="shopmap"></div>
-  <div class="map-fallback">The map needs an internet connection. Every shop below also has a 📍 Map link you can open in Amap or Google Maps instead.</div>
+  <div class="map-fallback">The map needs an internet connection. Every shop below also has a Map link you can open in Amap or Google Maps instead.</div>
   <p class="map-note">Pins are approximate — China's map datum offsets Western coordinates by a few hundred metres. Navigate by the street address / Chinese name in <strong>Amap (高德)</strong> or <strong>Dianping</strong>, which also show live opening hours.</p>
 
   <!-- DISTRICTS -->
-  <div class="shop-cat"><span class="accent" style="background:#6B6459"></span><h3>Where to go — districts &amp; clusters</h3></div>
+  <div class="shop-cat"><span class="accent" style="background:#736a51"></span><h3>Where to go — districts &amp; clusters</h3></div>
   <p class="shop-intro" style="margin-bottom:.6rem">The former French Concession grid (Anfu / Wukang / Changle / Fumin) plus three concept clusters — <strong>Xian Suo</strong>, <strong>In the Park</strong> and <strong>JULU 758</strong> — are the spine. <em>Day 10 of the itinerary already routes you through Wukang &amp; Anfu.</em></p>
   <div class="spots-grid">
     <div class="spot-card">
       <span class="spot-name">Anfu Road 安福路</span><span class="spot-tag shop">Street</span>
       <span class="spot-cn">FFC · boutiques + vintage</span>
       <span class="spot-desc">The hyped epicentre — Lost In Echo, LOOKNOW, Duozhuayu used-clothing. Go on a weekday to dodge the street-photo crowds.</span>
-      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Anfu%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Anfu%20Road%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
     <div class="spot-card">
       <span class="spot-name">Wukang Road 武康路</span><span class="spot-tag shop">Street</span>
       <span class="spot-cn">FFC · café + browse</span>
       <span class="spot-desc">Scenic Art-Deco extension of Anfu (To Summer, LOOKNOW). Already on your Day 10 route — pair the two.</span>
-      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Wukang%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Wukang%20Road%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
     <div class="spot-card">
       <span class="spot-name">JULU 758 巨鹿路758</span><span class="spot-tag shop">Cluster</span>
       <span class="spot-cn">Jing'an · designer triangle</span>
       <span class="spot-desc">Concept park holding FREITAG's China-first store plus buyer/lifestyle shops. Best for discovery.</span>
-      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Julu%20Road%20758%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Julu%20Road%20758%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
     <div class="spot-card">
       <span class="spot-name">Xian Suo 现所</span><span class="spot-tag shop">Cluster</span>
       <span class="spot-cn">Jing'an · 50+ brands</span>
       <span class="spot-desc">The locals' current favourite cluster — quieter than Anfu, with the XC273 buyer store and design accessories.</span>
-      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Xian%20Suo%20Yanping%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Xian%20Suo%20Yanping%20Road%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
     <div class="spot-card">
       <span class="spot-name">In the Park 公园里</span><span class="spot-tag shop">Mall</span>
       <span class="spot-cn">Jing'an · concept mini-mall</span>
       <span class="spot-desc">ZUCZUG (素然) brands and streetwear on 1F, a whole hats-and-jewellery floor on 2F. Beside Xian Suo.</span>
-      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=In%20the%20Park%20Jiaozhou%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=In%20the%20Park%20Jiaozhou%20Road%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
     <div class="spot-card">
       <span class="spot-name">Yongkang Road 永康路</span><span class="spot-tag shop">Vintage</span>
       <span class="spot-cn">FFC · 中古 / 古着</span>
       <span class="spot-desc">"Shanghai's vintage street" — Swing Vintage for Y2K, 宇宙无限 for men's Americana (pieces from ~¥100). A real local scene.</span>
-      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Yongkang%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Yongkang%20Road%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
     <div class="spot-card">
       <span class="spot-name">Lingshi Road Market 灵石路</span><span class="spot-tag shop">Market</span>
       <span class="spot-cn">Jing'an north · cheapest</span>
       <span class="spot-desc">Bulk vintage bargains ("¥720 for 16 items" hauls); bargaining expected. Inspect and wash everything.</span>
-      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Lingshi%20Road%20clothing%20market%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Lingshi%20Road%20clothing%20market%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
     <div class="spot-card">
       <span class="spot-name">Xintiandi 新天地</span><span class="spot-tag shop">Mall</span>
       <span class="spot-cn">Huangpu · polished</span>
       <span class="spot-desc">MARITHÉ's first store, MAIA ACTIVE flagship, DOE, ROARINGWILD, HARMAY. Pricier but central and easy.</span>
-      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Xintiandi%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Xintiandi%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
     <div class="spot-card">
       <span class="spot-name">Huaihai Middle Road 淮海中路</span><span class="spot-tag shop">Street</span>
       <span class="spot-cn">Xuhui · malls</span>
       <span class="spot-desc">The locals' high street — bosie flagship, HEFANG (iapm), and TX Huaihai for Y2K/streetwear.</span>
-      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Huaihai%20Middle%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Huaihai%20Middle%20Road%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
     <div class="spot-card">
       <span class="spot-name">Zhangyuan 张园</span><span class="spot-tag shop">Optional</span>
       <span class="spot-cn">Jing'an · photo walk</span>
       <span class="spot-desc">Beautifully restored shikumen but luxury-only and quiet for actual buying. Worth a stroll, not a shop.</span>
-      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Zhangyuan%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Zhangyuan%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
     <div class="spot-card">
       <span class="spot-name">Tianzifang 田子坊</span><span class="spot-tag shop">Skippable</span>
       <span class="spot-cn">Huangpu · souvenirs</span>
       <span class="spot-desc">Tourist arts-and-crafts maze; dated and souvenir-focused per local platforms. Skip unless you want trinkets.</span>
-      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Tianzifang%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Tianzifang%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
   </div>
 
@@ -640,7 +1164,7 @@
   </div>
 
   <!-- CLOTHES -->
-  <div class="shop-cat"><span class="accent" style="background:#C2563B"></span><h3>Clothes <span style="font-size:.8rem;color:var(--ink-3)">— top priority</span></h3></div>
+  <div class="shop-cat"><span class="accent" style="background:#9e4630"></span><h3>Clothes <span style="font-size:.8rem;color:var(--ink-3)">— top priority</span></h3></div>
 
   <p class="shop-sub">Womenswear</p>
   <div class="spots-grid">
@@ -648,43 +1172,43 @@
       <span class="spot-name">W.Management 万莫</span><span class="spot-tag g-w">Womens</span>
       <span class="spot-cn">Y2K · warehouse · multiple branches</span><span class="spot-price">¥89–¥200 · in budget</span>
       <span class="spot-desc">The viral warehouse-Y2K chain — great value, campus/K-pop looks. Fast-fashion; sizes S/M/L/F.</span>
-      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=W.Management%20WM%20store%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=W.Management%20WM%20store%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
     <div class="spot-card">
       <span class="spot-name">Basement FG</span><span class="spot-tag g-w">Womens</span>
       <span class="spot-cn">Y2K · American street · size-inclusive</span><span class="spot-price">~¥100–¥300 · in budget</span>
       <span class="spot-desc">Oversize street womenswear, more size-inclusive than BM. A "Taobao IRL" favourite — check nearest branch on Dianping.</span>
-      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Basement%20FG%20store%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Basement%20FG%20store%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
     <div class="spot-card">
       <span class="spot-name">ONE MOMENT</span><span class="spot-tag g-w">Womens</span>
       <span class="spot-cn">Y2K · gothic-lean</span><span class="spot-price">~¥100–¥200 · in budget</span>
       <span class="spot-desc">The darker Y2K sibling of WM / Basement FG, for moodier millennial looks.</span>
-      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=ONE%20MOMENT%20clothing%20store%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=ONE%20MOMENT%20clothing%20store%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
     <div class="spot-card">
       <span class="spot-name">YESCCI</span><span class="spot-tag g-w">Womens</span>
       <span class="spot-cn">cute · affordable</span><span class="spot-price">tops ~¥188 · in budget</span>
       <span class="spot-desc">A local "Brandy-alike" at low prices — sits near Basement FG, easy to combine.</span>
-      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=YESCCI%20store%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=YESCCI%20store%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
     <div class="spot-card">
       <span class="spot-name">An Action a Day 每日行动</span><span class="spot-tag g-w">Womens</span>
       <span class="spot-cn">minimalist clean-fit · FFC</span><span class="spot-price">¥200–¥500 · in budget</span>
       <span class="spot-desc">DTC clean-fit basics in a neutral palette. Wuyuan Rd / Yuyuan Rd stores. Sizing runs small.</span>
-      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=An%20Action%20a%20Day%20Wuyuan%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=An%20Action%20a%20Day%20Wuyuan%20Road%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
     <div class="spot-card">
       <span class="spot-name">MAIA ACTIVE 玛伊娅</span><span class="spot-tag g-w">Womens</span>
       <span class="spot-cn">athleisure / smart-casual · Xintiandi</span><span class="spot-price">¥300–¥700 · mostly in budget</span>
       <span class="spot-desc">Activewear cut for Asian bodies; the 腰精裤 leggings are the hero product.</span>
-      <span class="spot-links"><a href="https://www.instagram.com/maiaactive/" target="_blank" rel="noopener">🌐 Site</a> <a href="https://www.google.com/maps/search/?api=1&query=MAIA%20ACTIVE%20Xintiandi%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.instagram.com/maiaactive/" target="_blank" rel="noopener"><span class="ix ix-globe" aria-hidden="true"></span>Site</a> <a href="https://www.google.com/maps/search/?api=1&query=MAIA%20ACTIVE%20Xintiandi%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
     <div class="spot-card">
       <span class="spot-name">MARITHÉ</span><span class="spot-tag g-w">Womens</span>
       <span class="spot-cn">French casual · Y2K edge</span><span class="spot-price">tees ↓ · most ¥300–¥800</span>
       <span class="spot-desc">A locally-run, Xiaohongshu-driven phenomenon — washed denim and logo tees. Xintiandi / iapm.</span>
-      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=MARITHE%20Xintiandi%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=MARITHE%20Xintiandi%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
   </div>
 
@@ -694,13 +1218,13 @@
       <span class="spot-name">DOE</span><span class="spot-tag g-m">Mens</span>
       <span class="spot-cn">workwear-street · Xintiandi</span><span class="spot-price">own label affordable</span>
       <span class="spot-desc">Long-running Shanghai street buyer store with an accessibly-priced own brand.</span>
-      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=DOE%20store%20Xintiandi%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=DOE%20store%20Xintiandi%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
     <div class="spot-card">
       <span class="spot-name">ROARINGWILD 咆哮野兽</span><span class="spot-tag g-m">Mens</span>
       <span class="spot-cn">guochao street · basics</span><span class="spot-price">¥200–¥400 · in budget</span>
       <span class="spot-desc">A credible original streetwear label — basics praised as an "Uniqlo-upgrade." Xintiandi / 国贸汇.</span>
-      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=ROARINGWILD%20store%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=ROARINGWILD%20store%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
   </div>
 
@@ -710,115 +1234,121 @@
       <span class="spot-name">bosie 伯喜</span><span class="spot-tag g-u">Unisex</span>
       <span class="spot-cn">smart-casual · playful · Huaihai</span><span class="spot-price">tees ¥139–¥359 · in budget</span>
       <span class="spot-desc">A recognised agender label; mostly post-95 customers. Skip the ¥1,000+ jackets, the rest fits budget.</span>
-      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=bosie%20Huaihai%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=bosie%20Huaihai%20Road%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
     <div class="spot-card budget-out">
       <span class="spot-name">ICICLE 之禾</span><span class="spot-tag g-u">Men + Women</span>
       <span class="spot-cn">minimalist · premium</span><span class="spot-price">¥1,000+ · browse / entry</span>
       <span class="spot-desc">Three decades of Chinese sustainable minimalism. Above budget — included for the aesthetic and entry pieces.</span>
-      <span class="spot-links"><a href="https://www.icicle.com.cn/en/" target="_blank" rel="noopener">🌐 Site</a> <a href="https://www.google.com/maps/search/?api=1&query=ICICLE%201618%20Nanjing%20West%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.icicle.com.cn/en/" target="_blank" rel="noopener"><span class="ix ix-globe" aria-hidden="true"></span>Site</a> <a href="https://www.google.com/maps/search/?api=1&query=ICICLE%201618%20Nanjing%20West%20Road%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
     <div class="spot-card budget-out">
       <span class="spot-name">LABELHOOD 栋梁</span><span class="spot-tag g-u">Designer mix</span>
       <span class="spot-cn">incubator · discovery</span><span class="spot-price">¥1,000+ · entry / accessories</span>
       <span class="spot-desc">The pulse of China's designer scene (Shushu/Tong, Mark Gong). Above budget — discover names, grab accessories.</span>
-      <span class="spot-links"><a href="https://www.labelhood.com" target="_blank" rel="noopener">🌐 Site</a> <a href="https://www.google.com/maps/search/?api=1&query=Labelhood%20Fumin%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.labelhood.com" target="_blank" rel="noopener"><span class="ix ix-globe" aria-hidden="true"></span>Site</a> <a href="https://www.google.com/maps/search/?api=1&query=Labelhood%20Fumin%20Road%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
   </div>
 
   <!-- JEWELLERY -->
-  <div class="shop-cat"><span class="accent" style="background:#B08900"></span><h3>Jewellery <span style="font-size:.8rem;color:var(--ink-3)">— second priority</span></h3></div>
+  <div class="shop-cat"><span class="accent" style="background:#9c7e35"></span><h3>Jewellery <span style="font-size:.8rem;color:var(--ink-3)">— second priority</span></h3></div>
   <div class="spots-grid">
     <div class="spot-card">
       <span class="spot-name">HEFANG 何方珠宝</span><span class="spot-tag cat-jw">Designer</span>
       <span class="spot-cn">minimalist → playful · iapm</span><span class="spot-price">¥300–¥1,500 · mostly in budget</span>
       <span class="spot-desc">The leading Chinese Gen-Z designer jewellery brand — 70+ stores, fixed price. 925 silver, pearls, K-gold.</span>
-      <span class="spot-links"><a href="https://hefang.net" target="_blank" rel="noopener">🌐 Site</a> <a href="https://www.google.com/maps/search/?api=1&query=HEFANG%20Jewelry%20iapm%20Huaihai%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://hefang.net" target="_blank" rel="noopener"><span class="ix ix-globe" aria-hidden="true"></span>Site</a> <a href="https://www.google.com/maps/search/?api=1&query=HEFANG%20Jewelry%20iapm%20Huaihai%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
     <div class="spot-card">
       <span class="spot-name">Lost In Echo</span><span class="spot-tag cat-jw">Designer</span>
       <span class="spot-cn">modern minimalist · Anfu Rd</span><span class="spot-price">jewellery ¥300–¥1,500</span>
       <span class="spot-desc">A Xiaohongshu-born Shanghai label — clean jewellery, footwear and bags. Jewellery sits in budget; shoes higher.</span>
-      <span class="spot-links"><a href="https://www.instagram.com/lostinecho_official/" target="_blank" rel="noopener">🌐 Site</a> <a href="https://www.google.com/maps/search/?api=1&query=Lost%20In%20Echo%20Anfu%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.instagram.com/lostinecho_official/" target="_blank" rel="noopener"><span class="ix ix-globe" aria-hidden="true"></span>Site</a> <a href="https://www.google.com/maps/search/?api=1&query=Lost%20In%20Echo%20Anfu%20Road%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
     <div class="spot-card budget-out">
       <span class="spot-name">YVMIN 尤目</span><span class="spot-tag cat-jw">Designer</span>
       <span class="spot-cn">surreal · future-feminine</span><span class="spot-price">¥800–¥4,000 · entry ~¥700</span>
       <span class="spot-desc">Celebrity-worn "fairy" jewellery, stocked in buyer stores. Entry pieces only within budget.</span>
-      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=YVMIN%20jewelry%20LOOKNOW%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=YVMIN%20jewelry%20LOOKNOW%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
     <div class="spot-card">
       <span class="spot-name">Jing'an Temple Jewelry &amp; Curio Mkt 静安寺珠宝古玩城</span><span class="spot-tag cat-jw">Market</span>
       <span class="spot-cn">jade &amp; antiques · on Luban Rd</span><span class="spot-price">¥tens → · negotiable</span>
       <span class="spot-desc">A genuine local jade/antiques hub (despite the name, it's on Luban Rd). Bargain; fakes exist — ask for 鉴定证书.</span>
-      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Jingan%20Temple%20Jewelry%20Curio%20Market%20Luban%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Jingan%20Temple%20Jewelry%20Curio%20Market%20Luban%20Road%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
     <div class="spot-card">
       <span class="spot-name">Hongqiao Pearl City 虹桥国际珍珠城</span><span class="spot-tag cat-jw">Market</span>
       <span class="spot-cn">pearls · tourist-oriented</span><span class="spot-price">sets ~¥320 · haggle</span>
       <span class="spot-desc">Floor 2 is pearls (freshwater/Akoya/Tahitian). Mostly a Western-tourist venue — value if you know pearls and bargain.</span>
-      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Hongqiao%20International%20Pearl%20City%20Hongmei%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Hongqiao%20International%20Pearl%20City%20Hongmei%20Road%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
   </div>
 
   <!-- ACCESSORIES -->
-  <div class="shop-cat"><span class="accent" style="background:#15706B"></span><h3>Accessories <span style="font-size:.8rem;color:var(--ink-3)">— third priority</span></h3></div>
+  <div class="shop-cat"><span class="accent" style="background:#2f7a6b"></span><h3>Accessories <span style="font-size:.8rem;color:var(--ink-3)">— third priority</span></h3></div>
   <div class="spots-grid">
     <div class="spot-card">
       <span class="spot-name">tagi.</span><span class="spot-tag cat-ac">Design objects</span>
       <span class="spot-cn">Anfu Rd · playful</span><span class="spot-price">affordable · in budget</span>
       <span class="spot-desc">Cult phone cases, stickers and small accessories. Very Xiaohongshu and easy gifting.</span>
-      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=tagi%20Anfu%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=tagi%20Anfu%20Road%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
     <div class="spot-card">
       <span class="spot-name">In the Park — 2F 公园里</span><span class="spot-tag cat-ac">Hats + jewellery</span>
       <span class="spot-cn">Jiaozhou Rd · one-stop</span><span class="spot-price">varies · in budget</span>
       <span class="spot-desc">A whole accessories floor under one roof — efficient, and right beside Xian Suo.</span>
-      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=In%20the%20Park%20Jiaozhou%20Road%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=In%20the%20Park%20Jiaozhou%20Road%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
     <div class="spot-card">
       <span class="spot-name">Yongkang Rd vintage 永康路</span><span class="spot-tag cat-ac">Vintage</span>
       <span class="spot-cn">costume jewellery · caps · sunglasses</span><span class="spot-price">~¥100 · in budget</span>
       <span class="spot-desc">Vintage accessories at pocket-money prices — hunt alongside the clothing.</span>
-      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Yongkang%20Road%20vintage%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Yongkang%20Road%20vintage%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
   </div>
 
   <!-- BAGS -->
-  <div class="shop-cat"><span class="accent" style="background:#6B5CA5"></span><h3>Bags <span style="font-size:.8rem;color:var(--ink-3)">— lowest priority</span></h3></div>
+  <div class="shop-cat"><span class="accent" style="background:#3e5560"></span><h3>Bags <span style="font-size:.8rem;color:var(--ink-3)">— lowest priority</span></h3></div>
   <div class="spots-grid">
     <div class="spot-card budget-out">
       <span class="spot-name">Songmont 山下有松</span><span class="spot-tag cat-bg">Bags</span>
       <span class="spot-cn">minimalist · viral · malls</span><span class="spot-price">leather ¥1,500–4,000 · charms ¥150–320</span>
       <span class="spot-desc">A domestic phenomenon, now criticised as pricey. Buy a small charm/cardholder in budget, or just admire the bags.</span>
-      <span class="spot-links"><a href="https://songmontofficial.com" target="_blank" rel="noopener">🌐 Site</a> <a href="https://www.google.com/maps/search/?api=1&query=Songmont%20store%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://songmontofficial.com" target="_blank" rel="noopener"><span class="ix ix-globe" aria-hidden="true"></span>Site</a> <a href="https://www.google.com/maps/search/?api=1&query=Songmont%20store%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
     <div class="spot-card budget-out">
       <span class="spot-name">FREITAG</span><span class="spot-tag cat-bg">Bags</span>
       <span class="spot-cn">recycled-tarp · JULU 758</span><span class="spot-price">¥1,000–2,000 · small ↓</span>
       <span class="spot-desc">Swiss one-of-a-kind tarp bags, China-first store. Not local, but a cult stop — and the building's worth the visit.</span>
-      <span class="spot-links"><a href="https://www.freitag.ch" target="_blank" rel="noopener">🌐 Site</a> <a href="https://www.google.com/maps/search/?api=1&query=FREITAG%20Julu%20758%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.freitag.ch" target="_blank" rel="noopener"><span class="ix ix-globe" aria-hidden="true"></span>Site</a> <a href="https://www.google.com/maps/search/?api=1&query=FREITAG%20Julu%20758%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
     <div class="spot-card">
       <span class="spot-name">Markets &amp; vintage totes</span><span class="spot-tag cat-bg">Bags</span>
       <span class="spot-cn">cheapest · multiple</span><span class="spot-price">¥tens–¥200 · in budget</span>
       <span class="spot-desc">For genuinely cheap bags, the vintage streets and markets beat any brand. Inspect quality; haggle at markets.</span>
-      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Yongkang%20Road%20vintage%20Shanghai" target="_blank" rel="noopener">📍 Map</a></span>
+      <span class="spot-links"><a href="https://www.google.com/maps/search/?api=1&query=Yongkang%20Road%20vintage%20Shanghai" target="_blank" rel="noopener"><span class="ix ix-pin" aria-hidden="true"></span>Map</a></span>
     </div>
   </div>
 
   <!-- KNOW BEFORE YOU BUY -->
   <div class="sec-head" style="margin-top:2rem"><h2>Know before you buy</h2><span class="pill neu">practical</span></div>
   <div class="ess-grid">
-    <div class="card"><span class="badge tip">✓ Payment</span><h3>Alipay / WeChat Pay</h3><p>Link a UK Visa/Mastercard — accepted everywhere including markets. Carry a little cash for the smallest vintage stalls.</p></div>
-    <div class="card"><span class="badge tip">✓ Tax refund</span><h3>From ¥200, instant</h3><p>In 2025–26 the departure-refund threshold dropped to ¥200 (same store, same day) with nationwide instant refund (即买即退). Net ≈ 9% after fees. Bring your passport.</p></div>
-    <div class="card"><span class="badge warn">⚠ Bargaining</span><h3>Markets only</h3><p>Haggle at the pearl / jade / Lingshi Rd markets (start ~30–40% of asking). Brand stores and curated vintage are fixed-price.</p></div>
-    <div class="card"><span class="badge note">◷ Timing</span><h3>Weekday afternoons</h3><p>FFC streets are calmest on weekdays; many boutiques open ~11:00 and vintage shops from ~13:00. Re-check hours on Dianping the day you go.</p></div>
+    <div class="card"><span class="badge tip">Payment</span><h3>Alipay / WeChat Pay</h3><p>Link a UK Visa/Mastercard — accepted everywhere including markets. Carry a little cash for the smallest vintage stalls.</p></div>
+    <div class="card"><span class="badge tip">Tax refund</span><h3>From ¥200, instant</h3><p>In 2025–26 the departure-refund threshold dropped to ¥200 (same store, same day) with nationwide instant refund (即买即退). Net ≈ 9% after fees. Bring your passport.</p></div>
+    <div class="card"><span class="badge warn">Bargaining</span><h3>Markets only</h3><p>Haggle at the pearl / jade / Lingshi Rd markets (start ~30–40% of asking). Brand stores and curated vintage are fixed-price.</p></div>
+    <div class="card"><span class="badge note">Timing</span><h3>Weekday afternoons</h3><p>FFC streets are calmest on weekdays; many boutiques open ~11:00 and vintage shops from ~13:00. Re-check hours on Dianping the day you go.</p></div>
   </div>
 </section>
 
 <!-- SPOTS -->
 <section class="panel" id="spots">
+  <header class="scene" data-scene="spots">
+    <svg class="scene-mark" viewBox="0 0 26 18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M3 4h20M3 9h7M16 9h7M3 14h7M16 14h7"/></svg>
+    <p class="scene-cn">名胜</p>
+    <h2 class="scene-en">Spots <span class="scene-meta">food &amp; places</span></h2>
+    <p class="scene-line">The places worth the detour, and the ones worth skipping.</p>
+  </header>
   <div class="sec-head"><h2>Beijing spots</h2><span class="pill bj">food &amp; places</span></div>
 
   <div class="spots-grid">
@@ -941,30 +1471,131 @@
 </section>
 
 </main>
+<div class="imperial-foot" aria-hidden="true"><div class="wave-band"></div></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
   const tabs = document.querySelectorAll('.tab');
   const panels = document.querySelectorAll('.panel');
 
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ARIA tablist wiring (roles, selected state, roving tabindex)
   tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      const target = tab.dataset.tab;
-      tabs.forEach(t => t.classList.remove('active'));
-      panels.forEach(p => p.classList.remove('is-active'));
-      tab.classList.add('active');
-      document.getElementById(target).classList.add('is-active');
-      window.scrollTo({top:0,behavior:'smooth'});
-    });
+    const name = tab.dataset.tab;
+    tab.setAttribute('role', 'tab');
+    tab.id = 'tab-' + name;
+    tab.setAttribute('aria-controls', name);
+    const on = tab.classList.contains('active');
+    tab.setAttribute('aria-selected', on ? 'true' : 'false');
+    tab.tabIndex = on ? 0 : -1;
+  });
+  panels.forEach(p => {
+    p.setAttribute('role', 'tabpanel');
+    p.setAttribute('aria-labelledby', 'tab-' + p.id);
+    if(!p.hasAttribute('tabindex')) p.setAttribute('tabindex', '-1');
   });
 
-  // Persist checklist state
-  const checkboxes = document.querySelectorAll('#checklist input[type=checkbox]');
-  checkboxes.forEach(cb => {
-    const saved = localStorage.getItem(cb.id);
-    if (saved === 'true') cb.checked = true;
-    cb.addEventListener('change', () => localStorage.setItem(cb.id, cb.checked));
+  function activateTab(name, opts){
+    opts = opts || {};
+    const tab = document.querySelector('.tab[data-tab="' + name + '"]');
+    const panel = document.getElementById(name);
+    if(!tab || !panel) return;
+    tabs.forEach(t => {
+      const on = t === tab;
+      t.classList.toggle('active', on);
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+    });
+    panels.forEach(p => p.classList.toggle('is-active', p === panel));
+    if(name === 'shopping') setTimeout(initShopMap, 80);
+    if(name === 'beijing') setTimeout(() => initDayMaps('bj'), 80);
+    if(name === 'shanghai') setTimeout(() => initDayMaps('sh'), 80);
+    if(opts.updateHash !== false){ try{ history.replaceState(null, '', '#' + name); }catch(e){ location.hash = name; } }
+    if(opts.scroll !== false) window.scrollTo({top:0, behavior: prefersReduced ? 'auto' : 'smooth'});
+    if(opts.focusPanel) panel.focus({preventScroll:true});
+  }
+
+  tabs.forEach(tab => tab.addEventListener('click', () => activateTab(tab.dataset.tab)));
+
+  // arrow-key roving across the tablist (focus stays on the tabs)
+  const tablistEl = document.querySelector('.tabs');
+  if(tablistEl) tablistEl.addEventListener('keydown', e => {
+    const list = [].slice.call(tabs);
+    const cur = list.indexOf(document.activeElement);
+    if(cur < 0) return;
+    let ni = -1;
+    if(e.key === 'ArrowRight' || e.key === 'ArrowDown') ni = (cur + 1) % list.length;
+    else if(e.key === 'ArrowLeft' || e.key === 'ArrowUp') ni = (cur - 1 + list.length) % list.length;
+    else if(e.key === 'Home') ni = 0;
+    else if(e.key === 'End') ni = list.length - 1;
+    if(ni >= 0){ e.preventDefault(); activateTab(list[ni].dataset.tab, {scroll:false}); list[ni].focus(); }
   });
+
+  // deep-linking: honour #section on load and on hashchange (Back works, sections are shareable)
+  const initialHash = location.hash.slice(1);
+  if(initialHash && document.querySelector('.tab[data-tab="' + initialHash + '"]')) activateTab(initialHash, {scroll:false, updateHash:false});
+  window.addEventListener('hashchange', () => {
+    const n = location.hash.slice(1);
+    if(n && document.querySelector('.tab[data-tab="' + n + '"]')) activateTab(n, {scroll:false, updateHash:false});
+  });
+
+  // ===== 行前 Prep — countdown + persisted, dated book-ahead list (Phase 3) =====
+  (function(){
+    const boxes = [].slice.call(document.querySelectorAll('#prep input[type=checkbox]'));
+    if(!boxes.length) return;
+    const now = new Date();
+    const DAY = 86400000;
+    const tripStart = new Date(2026, 7, 3);        // 3 Aug 2026
+    const trainOpen = new Date(2026, 6, 2);        // ~2 Jul, 9 Aug seats open
+    const fcRelease = new Date(2026, 6, 29, 20, 0); // 29 Jul 20:00, Forbidden City drop
+    const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const fmt = d => d.getDate() + ' ' + MON[d.getMonth()];
+    const dleft = d => Math.max(0, Math.ceil((d - now) / DAY));
+    const isChecked = id => { const b = document.getElementById(id); return !!(b && b.checked); };
+
+    const days = document.getElementById('prepDays');
+    if(days) days.textContent = Math.max(0, Math.ceil((tripStart - now) / DAY));
+
+    // live stamps for the two time-critical windows
+    const s1 = document.getElementById('stamp-c1');
+    if(s1){ if(now >= fcRelease){ s1.textContent = 'tickets live'; s1.className = 'prep-stamp act'; }
+      else { s1.textContent = 'release ' + fmt(fcRelease); s1.className = 'prep-stamp ' + (dleft(fcRelease) <= 7 ? 'act' : 'soon'); } }
+    const s2 = document.getElementById('stamp-c2');
+    if(s2){ if(now >= trainOpen){ s2.textContent = 'book now'; s2.className = 'prep-stamp act'; }
+      else { s2.textContent = 'opens ' + fmt(trainOpen); s2.className = 'prep-stamp soon'; } }
+
+    const next = document.getElementById('prepNext');
+    function refresh(){
+      let allDone = true;
+      boxes.forEach(cb => {
+        const done = cb.checked;
+        if(!done) allDone = false;
+        const li = cb.closest('.prep-item');
+        if(li) li.classList.toggle('is-done', done);
+        const stamp = document.getElementById('stamp-' + cb.id);
+        if(stamp){
+          if(done){ if(!stamp.dataset.base) stamp.dataset.base = stamp.textContent; stamp.textContent = 'handled'; }
+          else if(stamp.dataset.base){ stamp.textContent = stamp.dataset.base; }
+        }
+      });
+      if(next){
+        const up = [];
+        if(!isChecked('c2')) up.push({w:trainOpen, t: now < trainOpen ? ('Bullet-train seats open ' + fmt(trainOpen)) : 'Book the bullet train now'});
+        if(!isChecked('c1')) up.push({w:fcRelease, t: now < fcRelease ? ('Forbidden City tickets release ' + fmt(fcRelease) + ', 20:00 Beijing') : 'Forbidden City tickets are live'});
+        up.sort((a,b) => a.w - b.w);
+        next.textContent = up.length ? ('Next · ' + up[0].t) : 'Every time-critical booking is handled.';
+      }
+      const ready = document.getElementById('prepReady');
+      if(ready) ready.hidden = !allDone;
+    }
+
+    boxes.forEach(cb => {
+      if(localStorage.getItem(cb.id) === 'true') cb.checked = true;
+      cb.addEventListener('change', () => { localStorage.setItem(cb.id, cb.checked); refresh(); });
+    });
+    refresh();
+  })();
 
   // In-page "go to tab" links (used from the itinerary)
   document.querySelectorAll('[data-goto]').forEach(el => {
@@ -1021,7 +1652,7 @@
       return;
     }
     shopInit = true;
-    const COL = {cl:'#C2563B',jw:'#B08900',ac:'#15706B',bg:'#6B5CA5',ar:'#6B6459'};
+    const COL = {cl:'#9e4630',jw:'#9c7e35',ac:'#2f7a6b',bg:'#3e5560',ar:'#736a51'};
     shopMap = L.map('shopmap',{scrollWheelZoom:false}).setView([31.219,121.452],13);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
       {attribution:'&copy; OpenStreetMap &copy; CARTO',subdomains:'abcd',maxZoom:19}).addTo(shopMap);
@@ -1029,11 +1660,11 @@
     const bounds = [];
     SHOP_PLACES.forEach(p => {
       const maps = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(p.q);
-      const html = '<strong>' + p.n + '</strong>' + (p.cn ? ' <span style="color:#9A9286">' + p.cn + '</span>' : '') +
+      const html = '<strong>' + p.n + '</strong>' + (p.cn ? ' <span style="color:#8d8473">' + p.cn + '</span>' : '') +
         '<br><span style="font-size:.85em">' + p.d + '</span>' +
-        '<br><a href="' + maps + '" target="_blank" rel="noopener" style="font-size:.85em">📍 Directions</a>';
-      L.circleMarker([p.lat,p.lng],{radius:7,color:'#fff',weight:2,fillColor:COL[p.c],fillOpacity:.95})
-        .bindPopup(html).addTo(groups[p.c]);
+        '<br><a href="' + maps + '" target="_blank" rel="noopener" style="font-size:.85em"><span class="ix ix-pin"></span>Directions</a>';
+      const mkIcon = L.divIcon({className:'mk-wrap',html:'<span class="mk" style="--mkc:'+COL[p.c]+'"></span>',iconSize:[15,15],iconAnchor:[7,7],popupAnchor:[0,-8]});
+      L.marker([p.lat,p.lng],{icon:mkIcon}).bindPopup(html).addTo(groups[p.c]);
       bounds.push([p.lat,p.lng]);
     });
     Object.keys(groups).forEach(k => groups[k].addTo(shopMap));
@@ -1051,8 +1682,176 @@
     shopMap.on('click', () => { if (!shopMap.scrollWheelZoom.enabled()) shopMap.scrollWheelZoom.enable(); });
     setTimeout(() => shopMap.invalidateSize(), 60);
   }
-  const shopTabBtn = document.querySelector('.tab[data-tab="shopping"]');
-  if (shopTabBtn) shopTabBtn.addEventListener('click', () => setTimeout(initShopMap, 80));
+  // shop map initialises via activateTab('shopping')
+
+  // ---- Per-day itinerary maps (Beijing & Shanghai; travel days excluded) ----
+  const DAY_MAPS = {
+    'bj-3':{z:14,p:[
+      {n:"Siji Minfu 四季民福",lat:39.9163,lng:116.4118,q:"四季民福 王府井 北京"}
+    ]},
+    'bj-4':{p:[
+      {n:"Oriental Plaza 东方广场",lat:39.9089,lng:116.4109,q:"东方广场 王府井 北京"},
+      {n:"Wangfujing Snack Street 王府井小吃街",lat:39.9150,lng:116.4095,q:"王府井小吃街 北京"},
+      {n:"Beijing APM",lat:39.9156,lng:116.4107,q:"北京apm 王府井"}
+    ]},
+    'bj-5':{p:[
+      {n:"Tiananmen Square 天安门广场",lat:39.9055,lng:116.3976,q:"天安门广场 北京"},
+      {n:"Forbidden City 故宫",lat:39.9163,lng:116.3972,q:"故宫博物院 北京"},
+      {n:"Jingshan Park 景山公园",lat:39.9281,lng:116.3958,q:"景山公园 北京"},
+      {n:"Nanluoguxiang 南锣鼓巷",lat:39.9370,lng:116.4030,q:"南锣鼓巷 北京"}
+    ]},
+    'bj-6':{p:[
+      {n:"Fuding Coffee 福顶咖啡",lat:39.9447,lng:116.4120,q:"福顶咖啡 五道营胡同 北京"},
+      {n:"Confucius Temple & Imperial College 国子监",lat:39.9462,lng:116.4087,q:"国子监 孔庙 北京"},
+      {n:"Hanlin Shuyuan 翰林书院",lat:39.9460,lng:116.4090,q:"翰林书院 国子监 北京"},
+      {n:"Lama Temple 雍和宫",lat:39.9475,lng:116.4172,q:"雍和宫 北京"},
+      {n:"Xin Rong Ji 新荣记",lat:39.9530,lng:116.4555,q:"新荣记 新源南路 北京"},
+      {n:"Workers' Stadium 工体",lat:39.9290,lng:116.4470,q:"工人体育场 北京"}
+    ]},
+    'bj-7':{z:12,p:[
+      {n:"Mutianyu Great Wall 慕田峪长城",lat:40.4319,lng:116.5704,q:"慕田峪长城"}
+    ]},
+    'bj-8':{p:[
+      {n:"Shichahai 什刹海",lat:39.9400,lng:116.3830,q:"什刹海 北京"},
+      {n:"Tangfang Coffee 糖房咖啡",lat:39.9355,lng:116.3870,q:"糖房咖啡 什刹海 北京"},
+      {n:"Nanluoguxiang 南锣鼓巷",lat:39.9370,lng:116.4030,q:"南锣鼓巷 北京"},
+      {n:"Prince Gong's Mansion 恭王府",lat:39.9389,lng:116.3815,q:"恭王府 北京"}
+    ]},
+    'sh-9':{z:12,p:[
+      {n:"Shanghai Hongqiao Station 上海虹桥站",lat:31.1948,lng:121.3200,q:"上海虹桥站"},
+      {n:"Jia Jia Tang Bao 佳家汤包",lat:31.2335,lng:121.4720,q:"佳家汤包 黄河路 上海"}
+    ]},
+    'sh-10':{p:[
+      {n:"Wukang Road 武康路",lat:31.2103,lng:121.4262,q:"武康路 上海"},
+      {n:"Anfu Road 安福路",lat:31.2155,lng:121.4345,q:"安福路 上海"},
+      {n:"Changle Road 长乐路",lat:31.2160,lng:121.4500,q:"长乐路 上海"},
+      {n:"Xintiandi 新天地",lat:31.2206,lng:121.4755,q:"新天地 上海"},
+      {n:"Jesse Restaurant 吉士酒家",lat:31.2070,lng:121.4385,q:"吉士酒家 天平路 上海"}
+    ]},
+    'sh-11':{p:[
+      {n:"Nanjing Road 南京路步行街",lat:31.2353,lng:121.4757,q:"南京路步行街 上海"},
+      {n:"The Bund 外滩",lat:31.2397,lng:121.4900,q:"外滩 上海"},
+      {n:"Yang's Fry-Dumpling 小杨生煎",lat:31.2330,lng:121.4730,q:"小杨生煎 人民广场 上海"},
+      {n:"Yu Garden 豫园",lat:31.2270,lng:121.4920,q:"豫园 上海"}
+    ]},
+    'sh-12':{z:12,p:[
+      {n:"Humble Administrator's Garden 拙政园",lat:31.3260,lng:120.6290,q:"拙政园 苏州"},
+      {n:"Tiger Hill 虎丘",lat:31.3320,lng:120.5760,q:"虎丘 苏州"},
+      {n:"Pingjiang Road 平江路",lat:31.3210,lng:120.6280,q:"平江路 苏州"}
+    ]},
+    'sh-13':{p:[
+      {n:"West Bund 西岸",lat:31.1830,lng:121.4600,q:"西岸 龙腾大道 上海"},
+      {n:"Long Museum West Bund 龙美术馆",lat:31.1735,lng:121.4660,q:"龙美术馆 西岸 上海"},
+      {n:"Yuz Museum 余德耀美术馆",lat:31.1700,lng:121.4530,q:"余德耀美术馆 上海"},
+      {n:"Tank Shanghai 油罐艺术中心",lat:31.1640,lng:121.4560,q:"油罐艺术中心 上海"},
+      {n:"Jing'an Kerry Centre 静安嘉里中心",lat:31.2230,lng:121.4450,q:"静安嘉里中心 上海"}
+    ]},
+    'sh-14':{p:[
+      {n:"Shanghai Museum East 上海博物馆东馆",lat:31.2030,lng:121.5470,q:"上海博物馆东馆"},
+      {n:"Shanghai Tower 上海中心",lat:31.2335,lng:121.5055,q:"上海中心大厦"},
+      {n:"Lujiazui Riverside 陆家嘴滨江",lat:31.2400,lng:121.4990,q:"陆家嘴滨江 上海"}
+    ]},
+    'sh-15':{z:12,p:[
+      {n:"Zhujiajiao Water Town 朱家角",lat:31.1110,lng:121.0510,q:"朱家角古镇 上海"}
+    ]}
+  };
+
+  const dayMapState = {};
+  function initDayMaps(city){
+    if (typeof L === 'undefined'){
+      // No Leaflet (offline / CDN blocked): replace the empty boxes with a useful note
+      document.querySelectorAll('.day-map').forEach(el => {
+        if (el.id.indexOf('dmap-' + city + '-') !== 0 || el.dataset.fallback) return;
+        el.dataset.fallback = '1';
+        el.innerHTML = '<div class="day-map-fb">Map needs an internet connection. Each stop is listed above — search it in Amap or Google Maps.</div>';
+        const cap = el.nextElementSibling;
+        if (cap && cap.classList.contains('map-cap')) cap.style.display = 'none';
+      });
+      return;
+    }
+    const accent = city === 'bj' ? '#9e4630' : '#2f7a6b';
+    Object.keys(DAY_MAPS).forEach(id => {
+      if (id.indexOf(city + '-') !== 0) return;
+      const el = document.getElementById('dmap-' + id);
+      if (!el) return;
+      if (dayMapState[id]){ setTimeout(() => dayMapState[id].invalidateSize(), 60); return; }
+      const cfg = DAY_MAPS[id];
+      const map = L.map(el,{scrollWheelZoom:false}).setView([cfg.p[0].lat,cfg.p[0].lng], cfg.z || 13);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'&copy; OpenStreetMap &copy; CARTO',subdomains:'abcd',maxZoom:19}).addTo(map);
+      const bounds = [];
+      cfg.p.forEach((pt,i) => {
+        const maps = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(pt.q);
+        const html = '<strong>' + (i+1) + '. ' + pt.n + '</strong>' +
+          '<br><a href="' + maps + '" target="_blank" rel="noopener" style="font-size:.85em"><span class="ix ix-pin"></span>Directions</a>';
+        const icon = L.divIcon({className:'mk-wrap',html:'<span class="mk-num" style="--mkc:'+accent+'">'+(i+1)+'</span>',iconSize:[22,22],iconAnchor:[11,11],popupAnchor:[0,-11]});
+        L.marker([pt.lat,pt.lng],{icon:icon}).bindPopup(html).addTo(map);
+        bounds.push([pt.lat,pt.lng]);
+      });
+      if (bounds.length > 1) map.fitBounds(bounds,{padding:[28,28],maxZoom:15});
+      map.on('click', () => { if (!map.scrollWheelZoom.enabled()) map.scrollWheelZoom.enable(); });
+      dayMapState[id] = map;
+      setTimeout(() => map.invalidateSize(), 60);
+    });
+  }
+  // per-day maps initialise via activateTab('beijing' | 'shanghai')
+
+  // ===== Gateway — the courtyard threshold (Phase 1) =====
+  (function(){
+    const gw = document.getElementById('gateway');
+    if(!gw) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const topbar = document.querySelector('.topbar');
+    const main = document.querySelector('main');
+    let lastFocus = null;
+    function setInert(on){
+      [topbar,main].forEach(el => { if(!el) return;
+        if(on){ el.setAttribute('inert',''); el.setAttribute('aria-hidden','true'); }
+        else { el.removeAttribute('inert'); el.removeAttribute('aria-hidden'); }
+      });
+    }
+    function openGateway(arrival){
+      lastFocus = document.activeElement;
+      document.documentElement.classList.remove('gate-skip-initial');
+      gw.hidden = false; gw.classList.remove('is-leaving');
+      document.body.classList.add('gate-open'); setInert(true);
+      gw.classList.toggle('is-arriving', !!arrival && !reduce);
+      requestAnimationFrame(() => { (gw.querySelector('.gate') || gw.querySelector('.bagua-center') || gw).focus({preventScroll:true}); });
+    }
+    function finishClose(){ gw.hidden = true; gw.classList.remove('is-leaving','is-arriving'); }
+    function closeGateway(){
+      document.body.classList.remove('gate-open'); setInert(false);
+      if(reduce){ finishClose(); return; }
+      gw.classList.add('is-leaving');
+      let done = false; const fin = () => { if(done) return; done = true; finishClose(); };
+      gw.addEventListener('animationend', fin, {once:true});
+      setTimeout(fin, 750);
+    }
+    function enter(tab){
+      activateTab(tab, {focusPanel:true});
+      closeGateway();
+    }
+    gw.querySelectorAll('[data-gate]').forEach(el =>
+      el.addEventListener('click', () => enter(el.getAttribute('data-gate'))));
+    const skip = gw.querySelector('.gate-skip');
+    if(skip) skip.addEventListener('click', () => enter('home'));
+    gw.addEventListener('keydown', e => {
+      if(e.key === 'Escape'){ e.preventDefault(); enter('home'); return; }
+      const gates = [].slice.call(gw.querySelectorAll('.gate'));
+      const i = gates.indexOf(document.activeElement);
+      if(i > -1 && /^Arrow/.test(e.key)){
+        e.preventDefault();
+        const dir = (e.key === 'ArrowRight' || e.key === 'ArrowDown') ? 1 : -1;
+        gates[(i + dir + gates.length) % gates.length].focus();
+      }
+    });
+    const ret = document.getElementById('toCourtyard');
+    if(ret) ret.addEventListener('click', () => openGateway(false));
+    // first load shows the arrival; same-session revisits and deep-links skip straight in
+    const deep = location.hash.slice(1);
+    const isDeepLink = deep && deep !== 'home' && document.querySelector('.tab[data-tab="' + deep + '"]');
+    if(isDeepLink || sessionStorage.getItem('gateEntered') === '1'){ finishClose(); }
+    else { try{ sessionStorage.setItem('gateEntered','1'); }catch(e){} openGateway(true); }
+  })();
 </script>
 </body>
 </html>
